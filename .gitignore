@@ -1,0 +1,24 @@
+# IntelliJ
+.idea/
+*.iml
+
+# Gradle
+.gradle/
+build/
+
+# VSCode
+.vscode/
+
+# Node.js (프론트)
+node_modules/
+dist/
+build/
+
+# Python
+__pycache__/
+.venv/
+*.pyc
+
+# Secrets
+application-secret.yml
+.env

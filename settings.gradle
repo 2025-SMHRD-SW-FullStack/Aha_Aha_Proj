@@ -1,0 +1,3 @@
+rootProject.name = 'Global_Go'
+
+include 'api-server'
