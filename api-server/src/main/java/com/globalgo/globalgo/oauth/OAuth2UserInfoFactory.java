@@ -1,6 +1,6 @@
 package com.globalgo.globalgo.oauth;
 
-import com.globalgo.globalgo.user.AuthProvider;
+import com.globalgo.globalgo.auth.AuthProvider;
 
 import java.util.Map;
 

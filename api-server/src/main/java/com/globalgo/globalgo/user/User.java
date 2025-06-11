@@ -1,5 +1,6 @@
 package com.globalgo.globalgo.user;
 
+import com.globalgo.globalgo.auth.AuthProvider;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,6 +32,8 @@ public class User implements UserDetails {
     private AuthProvider provider;
 
     private String providerId; // 구글, 카카오 등에서 제공되는 유저 ID
+
+    private boolean enabled = false; // 인증 전엔 false
 
     @Enumerated(EnumType.STRING)
     private Role role;

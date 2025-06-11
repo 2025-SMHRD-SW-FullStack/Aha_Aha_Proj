@@ -1,5 +1,6 @@
 package com.globalgo.globalgo.user;
 
+import com.globalgo.globalgo.auth.AuthProvider;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

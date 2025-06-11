@@ -1,4 +1,4 @@
-package com.globalgo.globalgo.security;
+package com.globalgo.globalgo.auth;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

@@ -1,4 +1,4 @@
-package com.globalgo.globalgo.security;
+package com.globalgo.globalgo.auth;
 
 import com.globalgo.globalgo.user.User;
 import com.globalgo.globalgo.user.UserRepository;
@@ -17,8 +17,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+
+        return new CustomUserDetails(user);  // 여기에 UserDetails 구현체 넘겨줘야 함
     }
 }
