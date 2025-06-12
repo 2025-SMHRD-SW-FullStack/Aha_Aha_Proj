@@ -2,6 +2,8 @@ package com.globalgo.globalgo.config;
 
 import com.globalgo.globalgo.auth.CustomUserDetailsService;
 import com.globalgo.globalgo.auth.JwtAuthenticationFilter;
+import com.globalgo.globalgo.auth.oauth2.CustomOAuth2SuccessHandler;
+import com.globalgo.globalgo.auth.oauth2.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +25,8 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomUserDetailsService customUserDetailsService; // ✅ 추가
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -34,6 +38,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/test/**",
                                 "/api/auth/**",
+                                "/api/email/**",
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
                                 "/v3/api-docs",
@@ -44,8 +49,16 @@ public class SecurityConfig {
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
-                .userDetailsService(customUserDetailsService) // ✅ 이 줄이 핵심!
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService)
+                        )
+                        .successHandler(customOAuth2SuccessHandler)  // ✅ 여기에 붙이기
+                        .failureUrl("/login?error=true")
+                )
+                .userDetailsService(customUserDetailsService)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
 
         return http.build();
     }

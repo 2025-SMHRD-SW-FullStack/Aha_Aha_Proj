@@ -1,6 +1,7 @@
 package com.globalgo.globalgo.user;
 
 import com.globalgo.globalgo.auth.AuthProvider;
+import com.globalgo.globalgo.user.dto.SignupRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,14 +18,24 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User signup(User user) {
-        if (userRepository.existsByEmail(user.getEmail())) {
+    public boolean isEmailVerified(String email) {
+        return userRepository.findByEmail(email)
+                .map(User::isEnabled)
+                .orElse(false);
+    }
+
+    public User registerUser(SignupRequest request) {
+        if (userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("이미 가입된 이메일입니다.");
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        User user = new User();
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setNickname(request.getNickname());
         user.setProvider(AuthProvider.LOCAL);
         user.setRole(Role.USER);
+        user.setEnabled(true); // 인증 완료 가정
         return userRepository.save(user);
     }
 
@@ -32,3 +43,4 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 }
+

@@ -1,4 +1,4 @@
-package com.globalgo.globalgo.oauth;
+package com.globalgo.globalgo.auth.oauth2;
 
 import java.util.Map;
 
@@ -9,11 +9,7 @@ public abstract class OAuth2UserInfo {
         this.attributes = attributes;
     }
 
-    public abstract String getId();
     public abstract String getEmail();
-    public abstract String getName();
-
-    public Map<String, Object> getAttributes() {
-        return attributes;
-    }
+    public abstract String getProviderId();
+    public abstract String getName();  // 구글에선 name, 카카오는 nickname 등
 }

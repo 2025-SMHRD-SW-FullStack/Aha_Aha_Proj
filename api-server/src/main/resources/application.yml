@@ -3,12 +3,12 @@ server:
 
 spring:
   profiles:
-    include: secret  # ← 이게 핵심! secret.yml 포함시킴
+    include: secret  # 🔑 보안 정보 분리
 
   datasource:
     url: jdbc:mysql://localhost:3306/Global_Go?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: Global_Go
-    password: ${PASSWORD}
+    password: ${PASSWORD}  # secret.yml에서 대입
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -28,6 +28,23 @@ spring:
   jackson:
     serialization:
       fail-on-empty-beans: false
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 816593679414-5sh3tbrgtoo5fk6u14omodb7dlkmv4g5.apps.googleusercontent.com
+            client-secret: ${OAUTH2_GOOGLE_SECRET}  # secret.yml에서 대입
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope:
+              - email
+              - profile
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
 
 logging:
   level:

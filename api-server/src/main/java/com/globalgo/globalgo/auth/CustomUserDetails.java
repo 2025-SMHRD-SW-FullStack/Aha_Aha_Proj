@@ -15,7 +15,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getEmail();  // 로그인 ID
+        return user.getEmail();  // 로그인 기준
     }
 
     @Override
@@ -25,28 +25,28 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // 권한 미사용이면 빈 리스트 반환
+        // 권한 미사용 시 빈 리스트
         return Collections.emptyList();
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;  // 계정 만료 X
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;  // 잠금 X
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;  // 비밀번호 만료 X
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return user.isEnabled();  // 여기! 인증 여부 반영
+        return user.isEnabled(); // 이메일 인증 여부
     }
 
     public User getUser() {
