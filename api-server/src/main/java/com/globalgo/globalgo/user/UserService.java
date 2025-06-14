@@ -1,6 +1,8 @@
 package com.globalgo.globalgo.user;
 
 import com.globalgo.globalgo.auth.AuthProvider;
+import com.globalgo.globalgo.exception.EmailAlreadyExistsException;
+import com.globalgo.globalgo.exception.SocialAccountExistsException;
 import com.globalgo.globalgo.user.dto.SignupRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,29 +20,84 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * 이메일 인증 여부 확인
+     */
     public boolean isEmailVerified(String email) {
         return userRepository.findByEmail(email)
                 .map(User::isEnabled)
                 .orElse(false);
     }
 
+    /**
+     * 일반 회원가입 처리
+     */
     public User registerUser(SignupRequest request) {
-        if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("이미 가입된 이메일입니다.");
+        String email = request.getEmail();
+
+        Optional<User> existing = userRepository.findByEmail(email);
+        if (existing.isPresent()) {
+            User user = existing.get();
+            if (user.getProvider() != AuthProvider.LOCAL) {
+                throw new SocialAccountExistsException("해당 이메일은 소셜 로그인으로 이미 가입되어 있습니다.");
+            }
+            throw new EmailAlreadyExistsException("이미 가입된 이메일입니다.");
         }
 
-        User user = new User();
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setNickname(request.getNickname());
-        user.setProvider(AuthProvider.LOCAL);
-        user.setRole(Role.USER);
-        user.setEnabled(true); // 인증 완료 가정
+        User user = User.builder()
+                .email(email)
+                .password(passwordEncoder.encode(request.getPassword()))
+                .nickname(request.getNickname())
+                .provider(AuthProvider.LOCAL)
+                .role(Role.USER)
+                .enabled(true)
+                .build();
+
         return userRepository.save(user);
     }
 
+    /**
+     * 이메일로 사용자 조회
+     */
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
-}
 
+    /**
+     * provider + providerId 기반 사용자 조회 (소셜 전용)
+     */
+    public Optional<User> findByProviderAndProviderId(AuthProvider provider, String providerId) {
+        return userRepository.findByProviderAndProviderId(provider, providerId);
+    }
+
+    /**
+     * 사용자 정보 업데이트 (ex. 닉네임 변경 등)
+     */
+    public User updateUser(User user, String newNickname) {
+        user.setNickname(newNickname);
+        return userRepository.save(user);
+    }
+
+    /**
+     * 마이페이지 응답용: isSocialUser 여부 포함
+     */
+    public boolean isSocialUser(User user) {
+        return user.getProvider() != null && user.getProvider() != AuthProvider.LOCAL;
+    }
+
+    /**
+     * 일단 닉네임만 수정 가능 // 나중에 회사정보수정이랑 비번수정도 넣을거임
+     */
+    public User updateNickname(String email, String newNickname) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+        user.setNickname(newNickname);
+        return userRepository.save(user);
+    }
+
+    public boolean existsByProviderAndProviderId(AuthProvider provider, String providerId) {
+        return userRepository.existsByProviderAndProviderId(provider, providerId);
+    }
+
+}

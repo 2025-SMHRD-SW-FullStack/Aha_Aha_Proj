@@ -3,20 +3,30 @@ package com.globalgo.globalgo.user;
 import com.globalgo.globalgo.auth.AuthProvider;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor @Builder
+@Table(name = "users", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"provider", "providerId"})
+})
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Setter
+    @Column(nullable = true, length = 255)  // 소셜 로그인은 이메일 없이 가입될 수 있음
     private String email;
 
+    @Setter
     @Column(nullable = false)
     private String nickname;
 
@@ -27,24 +37,23 @@ public class User {
     @Column(nullable = false)
     private AuthProvider provider;
 
-    private String providerId; // 소셜 로그인용
+    @Column(nullable = false, length = 100)
+    private String providerId;
 
-    private boolean enabled = false; // 이메일 인증 여부
+    @Setter
+    @Column(nullable = false)
+    private boolean enabled = false;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    @Column(nullable = false)
+    @Builder.Default
+    private Role role = Role.USER;
 
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(nullable = false)
     private LocalDateTime updatedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
 }

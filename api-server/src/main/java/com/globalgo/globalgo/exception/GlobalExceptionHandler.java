@@ -47,4 +47,14 @@ public class GlobalExceptionHandler {
                 .body("서버 내부 오류가 발생했습니다.");
     }
 
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<String> handleEmailExists(EmailAlreadyExistsException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(SocialAccountExistsException.class)
+    public ResponseEntity<String> handleSocialExists(SocialAccountExistsException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+
 }
