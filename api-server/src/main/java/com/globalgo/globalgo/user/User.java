@@ -1,6 +1,7 @@
 package com.globalgo.globalgo.user;
 
 import com.globalgo.globalgo.auth.AuthProvider;
+import com.globalgo.globalgo.company.Company;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -22,10 +23,17 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     @Setter
-    @Column(nullable = true, length = 255)  // 소셜 로그인은 이메일 없이 가입될 수 있음
+    @Column(nullable = true, length = 255)
     private String email;
 
+    // ✅ 실명 or 전체 이름 (소셜에서 넘어오는 값)
+    @Setter
+    @Column(nullable = false)
+    private String name;
+
+    // ✅ 닉네임 필수 (소셜 초기값 -> 실명)
     @Setter
     @Column(nullable = false)
     private String nickname;
@@ -48,6 +56,24 @@ public class User {
     @Column(nullable = false)
     @Builder.Default
     private Role role = Role.USER;
+
+    // ✅ 추가정보 입력용 필드들 (nullable = true, 소셜은 나중에 입력)
+    @Setter
+    @Column(nullable = true, length = 6)
+    private String birth; // 6자리 YYMMDD
+
+    @Setter
+    @Column(nullable = true, length = 10)
+    private String gender; // "M", "F" 등
+
+    @Setter
+    @Column(nullable = true, length = 20)
+    private String phone;
+
+    @Setter
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "company_id")
+    private Company company;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

@@ -6,9 +6,15 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Schema(description = "회원 정보 수정 요청 DTO")
+@Schema(description = "회원정보 수정 요청 DTO")
 public class UserUpdateRequest {
 
-    @Schema(description = "변경할 닉네임", example = "글로벌고짱")
+    @Schema(description = "닉네임", example = "홍길동")
     private String nickname;
+
+    @Schema(description = "전화번호", example = "010-1234-5678")
+    private String phone;
+
+    @Schema(description = "생년월일", example = "900101")
+    private String birth;
 }

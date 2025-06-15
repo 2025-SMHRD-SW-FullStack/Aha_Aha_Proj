@@ -5,7 +5,6 @@ import com.globalgo.globalgo.user.Role;
 import com.globalgo.globalgo.user.User;
 import com.globalgo.globalgo.user.UserRepository;
 import com.globalgo.globalgo.user.UserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -37,19 +36,21 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) {
         OAuth2User oauth2User = super.loadUser(userRequest);
 
-        String registrationId = userRequest.getClientRegistration().getRegistrationId(); // "google", "kakao", "naver"
+        String registrationId = userRequest.getClientRegistration().getRegistrationId();
         Map<String, Object> attributes = oauth2User.getAttributes();
 
         System.out.println("✅ [" + registrationId + "] OAuth2 attributes: " + attributes);
 
         String email = null;
+        String name = null;
         String nickname = null;
         String providerId = null;
 
         try {
             if ("google".equals(registrationId)) {
                 email = (String) attributes.get("email");
-                nickname = (String) attributes.get("name");
+                name = (String) attributes.get("name");
+                nickname = name;
                 providerId = (String) attributes.get("sub");
 
             } else if ("kakao".equals(registrationId)) {
@@ -58,9 +59,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
 
                 email = (String) kakaoAccount.get("email");
-                nickname = profile != null ? (String) profile.get("nickname") : null;
+                name = profile != null ? (String) profile.get("nickname") : null;
+                nickname = name;
 
-                if (email == null || nickname == null) {
+                if (email == null || name == null) {
                     throw new OAuth2AuthenticationException("카카오에서 필수 정보를 받지 못했습니다.");
                 }
 
@@ -70,17 +72,18 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 if (response == null) {
                     throw new OAuth2AuthenticationException("네이버 응답에서 response 필드 누락");
                 }
-                System.out.println("✅ Naver response: " + response);
 
                 providerId = String.valueOf(response.get("id"));
                 email = (String) response.get("email");
-                nickname = (String) response.get("name");
+                name = (String) response.get("name");
+                nickname = name;
 
                 if (email == null) {
                     email = "naver_" + providerId + "@social.globalgo";
                 }
-                if (nickname == null) {
-                    nickname = "naver_user_" + providerId;
+                if (name == null) {
+                    name = "naver_user_" + providerId;
+                    nickname = name;
                 }
 
             } else {
@@ -88,6 +91,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             }
 
             final String finalEmail = email;
+            final String finalName = name;
             final String finalNickname = nickname;
             final String finalProviderId = providerId;
             final String finalRegistrationId = registrationId.toUpperCase();
@@ -96,11 +100,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 throw new OAuth2AuthenticationException("이미 가입된 소셜 계정입니다.");
             }
 
-            // ✅ DB에서 찾거나 새로 저장
-            User user = userRepository.findByEmail(finalEmail).orElseGet(() ->
+            User user = userRepository.findByProviderAndProviderId(
+                    AuthProvider.valueOf(finalRegistrationId), finalProviderId
+            ).orElseGet(() ->
                     userRepository.save(
                             User.builder()
                                     .email(finalEmail)
+                                    .name(finalName)
                                     .nickname(finalNickname)
                                     .password(UUID.randomUUID().toString())
                                     .provider(AuthProvider.valueOf(finalRegistrationId))
@@ -111,7 +117,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     )
             );
 
-            // ✅ "email" 포함된 새 attributes Map 생성
             Map<String, Object> customAttributes = Map.of(
                     "email", email,
                     "nickname", nickname,
@@ -130,5 +135,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             throw e;
         }
     }
+
 
 }

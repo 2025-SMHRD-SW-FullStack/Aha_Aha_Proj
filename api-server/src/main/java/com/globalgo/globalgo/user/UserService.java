@@ -2,8 +2,11 @@ package com.globalgo.globalgo.user;
 
 import com.globalgo.globalgo.auth.AuthProvider;
 import com.globalgo.globalgo.exception.EmailAlreadyExistsException;
+import com.globalgo.globalgo.exception.PasswordMismatchException;
 import com.globalgo.globalgo.exception.SocialAccountExistsException;
 import com.globalgo.globalgo.user.dto.SignupRequest;
+import com.globalgo.globalgo.user.dto.UserUpdateRequest;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +45,11 @@ public class UserService {
                 throw new SocialAccountExistsException("해당 이메일은 소셜 로그인으로 이미 가입되어 있습니다.");
             }
             throw new EmailAlreadyExistsException("이미 가입된 이메일입니다.");
+        }
+
+        // ✅ 비밀번호와 확인용 비밀번호 일치 검증
+        if (!request.getPassword().equals(request.getConfirmPassword())) {
+            throw new PasswordMismatchException("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
         }
 
         User user = User.builder()
@@ -98,6 +106,29 @@ public class UserService {
 
     public boolean existsByProviderAndProviderId(AuthProvider provider, String providerId) {
         return userRepository.existsByProviderAndProviderId(provider, providerId);
+    }
+
+    /**
+     * 회사정보수정
+     */
+    public User getUserFromPrincipal(UserDetails userDetails) {
+        String email = userDetails.getUsername();
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
+    }
+
+    /**
+     * 회원정보 수정 (닉네임, 이름, 전화번호, 생년월일)
+     */
+    public User updateUserInfo(String email, UserUpdateRequest request) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
+
+        user.setNickname(request.getNickname());
+        user.setPhone(request.getPhone());
+        user.setBirth(request.getBirth());
+
+        return userRepository.save(user);
     }
 
 }
