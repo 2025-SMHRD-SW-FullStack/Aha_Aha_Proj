@@ -1,5 +1,6 @@
 package com.globalgo.globalgo.company;
 
+import com.globalgo.globalgo.user.dto.SignupRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -50,4 +51,16 @@ public class Company {
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
+
+    public static Company createFrom(SignupRequest request) {
+        return Company.builder()
+                .name(request.getCompanyName())
+                .ceoName(request.getCeoName())
+                .businessNumber(request.getBusinessNumber())
+                .industry(request.getIndustry())
+                .product(request.getProduct())
+                .address(request.getAddress())
+                .build(); // createdAt, updatedAt은 @PrePersist로 자동 처리됨
+    }
+
 }

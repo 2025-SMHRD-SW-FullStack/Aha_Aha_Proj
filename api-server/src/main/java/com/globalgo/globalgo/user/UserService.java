@@ -1,6 +1,8 @@
 package com.globalgo.globalgo.user;
 
 import com.globalgo.globalgo.auth.AuthProvider;
+import com.globalgo.globalgo.company.Company;
+import com.globalgo.globalgo.email.EmailVerificationTokenRepository;
 import com.globalgo.globalgo.exception.EmailAlreadyExistsException;
 import com.globalgo.globalgo.exception.PasswordMismatchException;
 import com.globalgo.globalgo.exception.SocialAccountExistsException;
@@ -17,19 +19,21 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailVerificationTokenRepository emailVerificationTokenRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository,
+                       PasswordEncoder passwordEncoder,
+                       EmailVerificationTokenRepository emailVerificationTokenRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.emailVerificationTokenRepository = emailVerificationTokenRepository;
     }
 
     /**
      * 이메일 인증 여부 확인
      */
     public boolean isEmailVerified(String email) {
-        return userRepository.findByEmail(email)
-                .map(User::isEnabled)
-                .orElse(false);
+        return emailVerificationTokenRepository.existsByEmailAndVerifiedTrue(email.toLowerCase());
     }
 
     /**
@@ -52,13 +56,21 @@ public class UserService {
             throw new PasswordMismatchException("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
         }
 
+        Company company = Company.createFrom(request);
+
         User user = User.builder()
                 .email(email)
                 .password(passwordEncoder.encode(request.getPassword()))
+                .name(request.getName())
                 .nickname(request.getNickname())
+                .birth(request.getBirth())
+                .gender(request.getGender())
+                .phone(request.getPhone())
                 .provider(AuthProvider.LOCAL)
+                .providerId("local_" + email)
                 .role(Role.USER)
                 .enabled(true)
+                .company(company)
                 .build();
 
         return userRepository.save(user);

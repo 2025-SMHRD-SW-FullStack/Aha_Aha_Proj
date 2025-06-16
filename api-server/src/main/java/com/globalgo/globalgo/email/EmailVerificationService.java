@@ -27,16 +27,15 @@ public class EmailVerificationService {
             throw new EmailTokenException("이메일 인증 토큰이 만료되었습니다.");
         }
 
-        User user = userRepo.findByEmail(emailToken.getEmail())
-                .orElseThrow(() -> new UserNotFoundException("해당 이메일에 해당하는 사용자가 없습니다."));
-
-        if (user.isEnabled()) {
-            throw new UserAlreadyVerifiedException("이미 인증이 완료된 사용자입니다.");
+        if (emailToken.isVerified()) {
+            throw new UserAlreadyVerifiedException("이미 인증이 완료된 이메일입니다.");
         }
 
-        user.setEnabled(true);
-        userRepo.save(user);
-        tokenRepo.delete(emailToken); // 토큰은 1회용
+        emailToken.markAsVerified();
+        tokenRepo.save(emailToken);
+
+        // 🔒 회원가입 후에만 삭제 가능
+        // tokenRepo.delete(emailToken);
     }
 
     @Transactional

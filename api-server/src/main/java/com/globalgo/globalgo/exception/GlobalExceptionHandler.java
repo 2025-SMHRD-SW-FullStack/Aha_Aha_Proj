@@ -2,6 +2,7 @@ package com.globalgo.globalgo.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -44,6 +45,7 @@ public class GlobalExceptionHandler {
         // 나머지 예외는 그대로 처리
         ex.printStackTrace();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .contentType(MediaType.APPLICATION_JSON)
                 .body("서버 내부 오류가 발생했습니다.");
     }
 

@@ -27,6 +27,9 @@ public class EmailVerificationToken {
     private String email;
 
     @Column(nullable = false)
+    private boolean verified = false;
+
+    @Column(nullable = false)
     private LocalDateTime expiryDate;
 
     @CreationTimestamp
@@ -45,5 +48,10 @@ public class EmailVerificationToken {
         return LocalDateTime.now().isAfter(expiryDate);
     }
 
+    // ✅ 인증 여부 확인
+    public boolean isVerified() { return this.verified; }
+
+    // ✅ 인증 완료 처리
+    public void markAsVerified() { this.verified = true; }
     // getter/setter 생략
 }
