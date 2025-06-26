@@ -1,0 +1,27 @@
+.wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.logo {
+    width: var(--logo-size);
+}
+
+.authButtons a:last-child {
+    margin-left: 20px;
+}
+
+.nav {
+    margin-top: 20px;
+    font-size: var(--font-size-body);
+}
+
+.nav a:nth-child(2n) {
+    margin: 0 30px;
+}
+
+.nav a:hover {
+    color: #6759B6;
+    font-weight: bold;
+}
