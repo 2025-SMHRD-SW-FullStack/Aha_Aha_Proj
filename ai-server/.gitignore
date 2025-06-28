@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Env
+.env
+
+# VSCode
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# ChromaDB 벡터 DB 저장소
+chroma_db/
+*.sqlite3
+*.bin
+*.pickle
+
+# Jupyter/Notebook
+*.ipynb_checkpoints
+
+# Log & Cache
+*.log
+.cache/
+*.tmp
+
+# Virtual Environment (선택)
+venv/
+.env/
+
+# Pytest
+htmlcov/
+.coverage
+
+# 기타
+*.swp
+*.bak
