@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 /** [ 인증 성공 시 액세스 토큰 저장 ]
@@ -8,11 +8,28 @@ import { useNavigate } from 'react-router-dom'
 const OAuthSuccess = () => {
     const navigate = useNavigate();
 
+    useEffect(()=> {
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+
+        if (token) {
+            // accessToken 저장
+            localStorage.setItem("accessToken", token);
+
+            // 메인페이지로 이동
+            navigate("/", {replace: true});
+        } else {
+            alert("토큰이 존재하지 않습니다.");
+            navigate("/login");
+        }
+
+    },[])
+
     
 
     return (
         <div>
-            
+            <p>로그인 처리 중입니다...</p>
         </div>
     )
 }

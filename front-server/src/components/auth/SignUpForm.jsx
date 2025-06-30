@@ -3,6 +3,7 @@ import styles from '../auth/SignUpForm.module.css'
 import logoImg from '../../assets/images/logo.png'
 import { Link, useNavigate } from 'react-router-dom'
 import SocialLoginButtons from './SocialLoginButtons'
+import useGoHome from '../../hooks/useGoHome'
 
 const SignUpForm = () => {
     const navigate = useNavigate();
@@ -14,7 +15,7 @@ const SignUpForm = () => {
 
     return (
         <div className={styles.wrapper}>
-            <img className={styles.logo} src={logoImg}/>
+            <img className={styles.logo} src={logoImg} alt='로고 이미지' onClick={useGoHome()}/>
             <button onClick={emailSignUpPage}>이메일로 회원가입</button>
             <div className={styles.loginRedirect}>
                 <p>이미 계정이 있으신가요?</p>

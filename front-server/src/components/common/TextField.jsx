@@ -5,17 +5,18 @@ const TextField = ({
     label, 
     type = 'text', 
     id,
-    value,
+    value = '',
     mixLength,
     maxLength,
-    onChange,
+    onChange = () => {},
     required,
     isRequiredMark = false,
     inputRef,
     first, 
     last, 
     singleFirst,
-    singleMiddle, 
+    singleMiddle,
+    singleMiddle2,
     singleLast,
     single,
     icon,
@@ -27,6 +28,7 @@ const TextField = ({
     if (last) className.push(styles.last);
     if (singleFirst) className.push(styles.singleFirst);
     if (singleMiddle) className.push(styles.singleMiddle);
+    if (singleMiddle2) className.push(styles.singleMiddle2);
     if (singleLast) className.push(styles.singleLast);
     if (single) className.push(styles.single);
 
@@ -59,7 +61,7 @@ const TextField = ({
                         required={required}
                         placeholder=' '
                         // minLength={type === 'password' ? 8 : undefined}
-                        maxLength={type === 'password' ? 30 : undefined}
+                        maxLength={type === 'password' ? 30 : id === 'birth' ? 6 : undefined}
                         {...rest}
                     />
                     <label htmlFor={id}>

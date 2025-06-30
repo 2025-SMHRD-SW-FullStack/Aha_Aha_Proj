@@ -1,36 +1,52 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 /** [ 회원가입 상태관리 ]
  * - 닉네임, 이메일, 이메일 인증, 비밀번호, 비밀번호 확인, 이름, 생년월일, 성별, 번호
- * - 비밀번호 = 비밀번호 확인 / 생년월일 8자리
+ * - 비밀번호 = 비밀번호 확인 / 생년월일 6자리
  */
 export function useSignUpForm() {
     const [nickname, setNickname] = useState('');
     const [email, setEmail] = useState('');
     const [emailVerified, setEmailVerified] = useState(false);
     const [password, setPassword] = useState('');
-    const [passwordConfirm, setPasswordConfirm] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [name, setName] = useState('');
     const [birth, setBirth] = useState('');
-    const [gender, setGender] = useState('');
+    const [gender, setGender] = useState('남자');
     const [phone, setPhone] = useState('');
 
-    const isValid =
-    email && password && passwordConfirm && 
-    password === passwordConfirm &&
-    name && nickname && birth.length === 8 && 
-    gender && phone && emailVerified;
+    // 에러 메시지 상태 추가
+    const [nicknameError, setNicknameError] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [passwordConfirmError, setPasswordConfirmError] = useState('');
+
+    // 유효성 조건 통합
+    const isValid = useMemo(()=>
+            email && password && confirmPassword && 
+            password === confirmPassword &&
+            name && nickname && birth.length === 6 && 
+            gender && phone && emailVerified &&
+            !nicknameError && !emailError && !passwordError && !passwordConfirmError,
+        [
+            email, password, confirmPassword, name, nickname, birth, gender, phone,
+            nicknameError, emailError, passwordError, passwordConfirmError
+        ]);
 
     return {
         nickname, setNickname,
         email, setEmail,
         emailVerified, setEmailVerified,
         password, setPassword,
-        passwordConfirm, setPasswordConfirm,
+        confirmPassword, setConfirmPassword,
         name, setName,
         birth, setBirth,
         gender, setGender,
         phone, setPhone,
+        nicknameError, setNicknameError,
+        emailError, setEmailError,
+        passwordError, setPasswordError,
+        passwordConfirmError, setPasswordConfirmError,
         isValid,
     };
 }

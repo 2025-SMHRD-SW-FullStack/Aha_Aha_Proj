@@ -8,6 +8,10 @@
     width: var(--logo-size);
 }
 
+.logo:hover {
+    cursor: pointer;
+}
+
 .authButtons a:last-child {
     margin-left: 20px;
 }
@@ -24,4 +28,9 @@
 .nav a:hover {
     color: #6759B6;
     font-weight: bold;
+}
+
+.logoutBtn {
+    color: var(--color-black);
+    margin-left: 20px;
 }
