@@ -17,6 +17,10 @@
     margin-left: calc(50% - 210px);
 }
 
+.logo:hover {
+    cursor: pointer;
+}
+
 .wrapper button {
     width: 400px;
     height: 40px;

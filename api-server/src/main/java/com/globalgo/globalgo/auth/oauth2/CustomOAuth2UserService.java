@@ -96,14 +96,17 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             final String finalProviderId = providerId;
             final String finalRegistrationId = registrationId.toUpperCase();
 
-            if (userService.existsByProviderAndProviderId(AuthProvider.valueOf(finalRegistrationId), finalProviderId)) {
-                throw new OAuth2AuthenticationException("이미 가입된 소셜 계정입니다.");
-            }
+//            if (userService.existsByProviderAndProviderId(AuthProvider.valueOf(finalRegistrationId), finalProviderId)) {
+//                throw new OAuth2AuthenticationException("이미 가입된 소셜 계정입니다.");
+//            }
 
+            // 이미 가입된 소셜 계정이면 예외를 발생시키지 않고 DB에서 불러옴
             User user = userRepository.findByProviderAndProviderId(
                     AuthProvider.valueOf(finalRegistrationId), finalProviderId
-            ).orElseGet(() ->
-                    userRepository.save(
+            ).orElseGet(() -> {
+
+                    // 유저가 없다면 새로 회원가입 처리
+                    return userRepository.save(
                             User.builder()
                                     .email(finalEmail)
                                     .name(finalName)
@@ -114,8 +117,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                                     .role(Role.USER)
                                     .enabled(true)
                                     .build()
-                    )
-            );
+                    );
+            });
 
             Map<String, Object> customAttributes = Map.of(
                     "email", email,

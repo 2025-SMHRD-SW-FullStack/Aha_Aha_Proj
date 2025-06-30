@@ -48,7 +48,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
             response.addCookie(cookie);
 
             // ✅ 리다이렉트
-            String redirectUrl = "http://localhost:3000/oauth-success?token=" + accessToken;
+            String redirectUrl = "http://localhost:5173/oauth-success?token=" + accessToken;
             System.out.println("✅ 액세스 토큰 발급 완료 → 리다이렉트: " + redirectUrl);
             response.sendRedirect(redirectUrl);
 

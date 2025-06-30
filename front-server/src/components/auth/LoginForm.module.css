@@ -13,6 +13,10 @@
     margin-bottom: 50px;
 }
 
+.logo:hover {
+    cursor: pointer;
+}
+
 .form {
     width: 400px;
     display: flex;
@@ -42,4 +46,9 @@
 
 .form a:hover {
     color: var(--color-primary);
+}
+
+.submitBtn:disabled {
+    background-color: var(--color-gray50);
+    cursor: not-allowed;
 }
