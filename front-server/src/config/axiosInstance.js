@@ -1,11 +1,10 @@
 import axios from "axios";
-import axiosInstance from './axiosInstance';
 
 /** [ 공통 요청 설정 파일 ]
  * 
  */
 const axiosInstance = axios.create({
-    baseURL: 'https://localhost:8095', // Spring 서버 주소
+    baseURL: 'http://localhost:8095', // Spring 서버 주소
     timeout: 5000,
     headers: {
         'Content-Type': 'application/json',
