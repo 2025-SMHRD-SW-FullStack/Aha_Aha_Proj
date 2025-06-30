@@ -96,9 +96,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             final String finalProviderId = providerId;
             final String finalRegistrationId = registrationId.toUpperCase();
 
-            if (userService.existsByProviderAndProviderId(AuthProvider.valueOf(finalRegistrationId), finalProviderId)) {
-                throw new OAuth2AuthenticationException("이미 가입된 소셜 계정입니다.");
-            }
+//            if (userService.existsByProviderAndProviderId(AuthProvider.valueOf(finalRegistrationId), finalProviderId)) {
+//                throw new OAuth2AuthenticationException("이미 가입된 소셜 계정입니다.");
+//            }
 
             User user = userRepository.findByProviderAndProviderId(
                     AuthProvider.valueOf(finalRegistrationId), finalProviderId
@@ -135,6 +135,4 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             throw e;
         }
     }
-
-
 }
