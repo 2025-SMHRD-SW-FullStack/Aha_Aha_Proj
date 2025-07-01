@@ -1,0 +1,103 @@
+.container {
+    width: 100%;
+    height: 700px;
+    display: flex;
+    /* align-items: center; */
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.searchBox>hr:nth-child(1) {
+    border: 1px solid var(--color-primary);
+    /* margin-bottom: 10px; */
+}
+
+.searchBox>hr:nth-last-child(1) {
+    border: 1px solid var(--color-primary);
+    /* margin-top: 10px; */
+}
+
+.searchBox {
+    width: 100%;
+    height: 30px;
+    text-align: center;
+}
+
+.itemBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* margin: 10px 0; */
+    /* gap: 20px; */
+}
+
+.itemBox input {
+    font-size: 23px;
+    margin-right: 20px;
+}
+
+.itemBox input::placeholder {
+    font-size: 23px;
+    text-align: center;
+    color: var(--color-gray50);   
+}
+
+.itemBox img {
+    display: flex;
+    height: 30px;
+}
+
+/* .itemBox a {
+    display: flex;
+    align-items: center;
+} */
+
+.itemBox button {
+    margin-left: auto;
+    font-size: 20px;
+    width: 150px;
+    height: 50px;
+    background-color: var(--color-primary);
+    border: none;
+    padding: 0 15px;
+}
+
+.itemBox button:hover {
+    opacity: 0.9;
+}
+
+.feedbackBox {
+    position: absolute;
+    top: -65px;
+    left: 50%;
+    transform: translateX(-18%);
+    animation: fadeInOut 3s ease;
+}
+
+.feedbackBox img {
+    height: 50px;
+}
+
+.iconBox {
+    position: relative;
+    display: inline-block;
+}
+
+.iconBox img:nth-child(1) {
+    margin-right: 20px;
+}
+
+.iconBox img:nth-child(1):hover {
+    cursor: pointer;
+}
+
+.centerBox {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.searchIcon {
+    cursor: pointer;
+}

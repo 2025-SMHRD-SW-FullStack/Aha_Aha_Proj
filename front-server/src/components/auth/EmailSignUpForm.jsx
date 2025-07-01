@@ -1,19 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react'
 import TextField from '../common/TextField';
 import styles from '../auth/EmailSignUpForm.module.css'
-import logoImg from '../../assets/images/logo.png'
-import lockIcon from '../../assets/images/lockIcon.png'
-import checkIcon from '../../assets/images/checkIcon.png'
-import errorIcon from '../../assets/images/error.png'
-import successIcon from '../../assets/images/success.png'
-import { loginRequest, sendEmailVerification, signupRequest } from '../../service/authService'
-import { useSignUpForm } from './../../hooks/useSignupForm';
+import logoImg from '/src/assets/images/logo.png'
+import lockIcon from '/src/assets/images/lockIcon.png'
+import checkIcon from '/src/assets/images/checkIcon.png'
+import errorIcon from '/src/assets/images/error.png'
+import successIcon from '/src/assets/images/success.png'
+import { loginRequest, sendEmailVerification, signupRequest } from '/src/service/authService'
+import { useSignUpForm } from '/src/hooks/useSignupForm';
 import { useNavigate } from 'react-router-dom';
-import useGoHome from '../../hooks/useGoHome';
+import useGoHome from '/src/hooks/useGoHome';
 
 const EmailSignUpForm = () => {
 
     const navigate = useNavigate();
+    const goHome = useGoHome();
 
     const  { 
         nickname, setNickname, 
@@ -185,7 +186,7 @@ const EmailSignUpForm = () => {
 
     return (
         <div className={styles.wrapper}>
-            <img className={styles.logo} src={logoImg} alt='로고이미지' onClick={useGoHome()}/>
+            <img className={styles.logo} src={logoImg} alt='로고이미지' onClick={goHome}/>
 
             <form className={styles.form} onSubmit={handleSubmit}>
                 {/* 회원 정보 탭 */}

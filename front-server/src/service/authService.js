@@ -1,4 +1,4 @@
-import axiosInstance from '../config/axiosInstance';
+import axiosInstance from '/src/config/axiosInstance';
 
 /** 로그인 요청 */
 export async function loginRequest({ email, password }) {

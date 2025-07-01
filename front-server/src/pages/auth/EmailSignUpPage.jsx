@@ -1,5 +1,5 @@
 import React from 'react'
-import EmailSignUpForm from '../../components/auth/EmailSignUpForm'
+import EmailSignUpForm from '/src/components/auth/EmailSignUpForm'
 
 const EmailSignUp = () => {
     return (

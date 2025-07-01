@@ -1,8 +1,11 @@
 import React from 'react'
+import styles from './Footer.module.css'
 
 const Footer = () => {
     return (
-        <div>Footer영역</div>
+        <div className={styles.wrapper}>
+            sdf
+        </div>
     )
 }
 

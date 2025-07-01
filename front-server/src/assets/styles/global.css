@@ -1,5 +1,9 @@
 /* 전역 변수 설정 */
 :root {
+    /* 헤더 크기 */
+    --header-height: 80px;
+    --nav-height: 40px;
+
     /* 폰트 크기 */
     --font-size-h1: 2rem; /* 32px */
     --font-size-h2: 1.75rem; /* 28px */
@@ -22,7 +26,6 @@
     --color-gray30: #C2C1C1;
     --color-gray10: #EBEAEA;
     --color-white: #fff;
-    --color-error: #FF8787;
 
     /* 간격 */
     --spacing-xs: 4px;
