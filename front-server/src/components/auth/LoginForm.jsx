@@ -1,15 +1,16 @@
 import React, { } from 'react'
-import logoImg from './../../assets/images/logo.png'
+import logoImg from '/src/assets/images/logo.png'
 import { Link, useNavigate } from 'react-router-dom'
 import styles from './LoginForm.module.css'
 import SocialLoginButtons from './SocialLoginButtons';
 import TextField from '../common/TextField';
-import { useLoginForm } from './../../hooks/useLoginForm';
-import { loginRequest } from './../../service/authService';
-import useGoHome from '../../hooks/useGoHome';
+import { useLoginForm } from '/src/hooks/useLoginForm';
+import { loginRequest } from '/src/service/authService';
+import useGoHome from '/src/hooks/useGoHome';
 
 const LoginForm = () => {
     const navigate = useNavigate();
+    const goHome = useGoHome();
 
     const {
         email, setEmail,
@@ -48,7 +49,7 @@ const LoginForm = () => {
 
     return (
         <div className={styles.wrapper}>
-            <img className={styles.logo} src={logoImg} alt='로고이미지' onClick={useGoHome()}/>
+            <img className={styles.logo} src={logoImg} alt='로고이미지' onClick={goHome}/>
             <form className={styles.form} onSubmit={handleSubmit}>
                 <TextField id="email" label="이메일" type="email" required singleFirst
                             value={email} onChange={(e) => setEmail(e.target.value)} />

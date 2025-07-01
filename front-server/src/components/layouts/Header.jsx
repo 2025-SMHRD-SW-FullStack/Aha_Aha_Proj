@@ -1,17 +1,18 @@
 import React from 'react'
-import logoImg from '../../assets/images/logo.png'
+import logoImg from '/src/assets/images/logo.png'
 import styles from './Header.module.css'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import useGoHome from '../../hooks/useGoHome'
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
+import useGoHome from '/src/hooks/useGoHome'
 
 const Header = () => {
     const navigate = useNavigate();
-
-    // 메인 페이지에서는 네비바 숨김 처리
     const location = useLocation();
-    const isMainPage = location.pathname === '/';
-    const isLoginPage = location.pathname === '/login';
-    const isSignUpPage = location.pathname === '/signup';
+    const goHome = useGoHome();
+
+    // 메인, 로그인, 회원가입 페이지에서는 네비바 숨김 처리
+    const hideNav = location.pathname === '/' ||
+                location.pathname.startsWith('/login') ||
+                location.pathname.startsWith('/signup');
 
     // 로그인 상태 확인
     const isLoggedIn = !!localStorage.getItem('accessToken');
@@ -26,7 +27,7 @@ const Header = () => {
     return (
         <div>
             <header className={styles.wrapper}>
-                <img className={styles.logo} src={logoImg} alt="로고이미지" onClick={useGoHome()} />
+                <img className={styles.logo} src={logoImg} alt="로고이미지" onClick={goHome} />
                 <div className={styles.authButtons}>
                     {/* 로그인 상태에 따라 버튼 조건부 렌더링 */}
                     {isLoggedIn ? (
@@ -44,12 +45,13 @@ const Header = () => {
                 </div>
             </header>
 
-            {/* 메인 페이지 아니면 네비바 보여주기 */}
-            {!isMainPage && !isLoginPage && !isSignUpPage &&(   
+            {/* 메인,로그인,회원가입 페이지 아니면 네비바 보여주기 */}
+            {!hideNav &&(   
                 <nav className={styles.nav}>
-                    <Link>품목</Link>
-                    <Link>중개 플랫폼</Link>
-                    <Link>마이페이지</Link>
+                    <NavLink to='/item' className={({isActive}) => isActive ? styles.active : ''}>품목</NavLink>
+                    <NavLink to='/board' className={({isActive}) => isActive ? styles.active : ''}>게시판</NavLink>
+                    <NavLink to='/platform' className={({isActive}) => isActive ? styles.active : ''}>중개 플랫폼</NavLink>
+                    <NavLink to='/chatbot' className={({isActive}) => isActive ? styles.active : ''}>챗봇</NavLink>
                 </nav>
             )}
         </div>

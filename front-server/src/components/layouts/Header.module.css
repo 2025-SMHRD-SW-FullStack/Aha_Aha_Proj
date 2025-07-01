@@ -26,11 +26,16 @@
 }
 
 .nav a:hover {
-    color: #6759B6;
+    color: var(--color-primary);
     font-weight: bold;
 }
 
 .logoutBtn {
     color: var(--color-black);
     margin-left: 20px;
+}
+
+.active {
+    font-weight: bold;
+    color: var(--color-primary);
 }

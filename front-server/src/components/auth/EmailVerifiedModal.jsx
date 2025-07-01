@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styles from './EmailVerifiedModal.module.css'
-import { verifyEmail } from '../../service/authService'
-import { useNavigate } from 'react-router-dom';
+import { verifyEmail } from '/src/service/authService'
 
 /** [ 이메일 인증 확인 모달창 ]
  * - 이메일 인증 시 인증됐다는 문구

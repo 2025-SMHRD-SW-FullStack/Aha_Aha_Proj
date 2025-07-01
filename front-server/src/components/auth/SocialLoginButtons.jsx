@@ -1,11 +1,11 @@
 import React from 'react'
-import googleImg from './../../assets/images/google.png'
-import kakaoImg from './../../assets/images/kakao.png'
-import naverImg from './../../assets/images/naver.png'
+import googleImg from '/src/assets/images/google.png'
+import kakaoImg from '/src/assets/images/kakao.png'
+import naverImg from '/src/assets/images/naver.png'
 import styles from '../auth/SocialLoginButtons.module.css'
 
 const SocialLoginButtons = ({title = ""}) => {
-    const backendUrl = import.meta.env.VITE_APP_API_BASE_URL;
+    const backendUrl = import.meta.env.VITE_API_BASE_URL;
 
     return (
         <div className={styles.wrapper}>

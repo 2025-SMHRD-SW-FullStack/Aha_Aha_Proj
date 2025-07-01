@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { verifyEmail } from '../../service/authService';
+import { verifyEmail } from '/src/service/authService';
 
 const EmailVerified = () => {
     const location = useLocation();
