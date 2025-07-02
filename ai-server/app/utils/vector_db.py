@@ -62,3 +62,21 @@ def setup_vector_database(hscode_df, collection_name="hscode_items", chunk_size=
     print("📄 샘플 메타데이터 5개:", metas[:5])
 
     return collection
+
+def search_similar_item(user_input: str, top_k=1) -> str | None:
+    print("🔍 벡터DB 유사 품목 검색 진입")
+    db_client = chromadb.PersistentClient(path="./chroma_db")
+    collection = db_client.get_collection(name="hscode_items")
+
+    # 🔥 기존 벡터 컬렉션이 ada-002 (1536차원)이므로, 동일한 임베딩 차원 사용
+    embedding = client.embeddings.create(
+        input=[user_input],
+        model="text-embedding-ada-002"
+    ).data[0].embedding
+
+    result = collection.query(
+        query_embeddings=[embedding],
+        n_results=top_k
+    )
+
+    return result["metadatas"][0][0]["item_name"]

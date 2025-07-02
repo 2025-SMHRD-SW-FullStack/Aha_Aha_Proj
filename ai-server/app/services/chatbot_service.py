@@ -1,167 +1,79 @@
-# app/services/chatbot_service.py
+from app.core.gpt_client import call_chatgpt
+from app.services.chatbot_state import get_user_context, add_chat_to_redis, get_chat_history
+from app.utils.recommend import get_top_countries_for_item
+from app.repositories.chatbot_repository import save_chat_message
+from app.models.chatbot_message import RoleEnum, ChatbotMessage
+from sqlalchemy.orm import Session
 
-from app.utils.gpt import call_chatgpt
-from app.services.chatbot_state import (
-    get_user_context,
-    update_user_context,
-    get_chat_history,
-    append_chat_message,
-    load_chat_history_to_redis
-)
-from app.services.slidebot_service import get_current_slide, go_to_next_slide
-from app.repositories.chatbot_repository import save_chat_message, get_recent_messages
-from app.models.chatbot_message import RoleEnum
-
-MAX_HISTORY = 6  # Redis에 저장될 대화 수 제한
-
+MAX_HISTORY = 6
 
 class ChatbotService:
-    def handle(self, user_id: str, message: str) -> dict:
-        # ✅ 컨텍스트 불러오기
-        context = get_user_context(user_id)
-        stage = context.get("stage", "start")
+    def handle(self, db: Session, user_id: str, message: str) -> dict:
+        # ✅ 사용자 메시지 저장
+        save_chat_message(db, user_id, RoleEnum.user, message)
+        add_chat_to_redis(user_id, "user", message)
 
-        # ✅ 메시지 저장 (RDB + Redis)
-        save_chat_message(user_id, RoleEnum.user, message)
-        append_chat_message(user_id, "user", message)
+        # ✅ 최근 대화 이력 불러오기
+        # ✅ Redis에서 최근 MAX_HISTORY개만 가져오도록 함수 내에서 슬라이싱
+        chat_history = get_chat_history(user_id)[:MAX_HISTORY]
 
-        # ✅ 대화 히스토리 불러오기 (Redis → 없으면 RDB → Redis 복구)
-        chat_history = get_chat_history(user_id)
-        if not chat_history:
-            db_logs = get_recent_messages(user_id, limit=MAX_HISTORY)
-            messages = [{"role": msg.role.value, "content": msg.content} for msg in db_logs]
-            load_chat_history_to_redis(user_id, messages)
-            chat_history = get_chat_history(user_id)
 
-        # ✅ GPT에게 판단 요청
-        prompt = self._build_prompt(context, message)
-        decision = call_chatgpt(prompt, chat_history=chat_history).lower().strip()
+        # ✅ GPT로부터 품목 추출
+        extract_prompt = f"""사용자와의 대화에서 수출하려는 품목이 무엇인지 파악해줘.
+없으면 "없음"이라고만 답하고, 있으면 품목명만 한 단어로 추출해줘.
+예시: "비누 팔고 싶은데" → "비누"
+사용자 입력: "{message}"
+"""
+        item_response = call_chatgpt(user_id, extract_prompt).strip()
+        item_name = item_response if item_response.lower() != "없음" else None
 
-        # ✅ GPT 판단 로그 저장 (RDB + Redis)
-        system_msg = f"[GPT 판단]: {decision}"
-        save_chat_message(user_id, RoleEnum.system, system_msg)
-        append_chat_message(user_id, "system", system_msg)
+        # ✅ GPT 응답 생성
+        if item_name:
+            countries = get_top_countries_for_item(item_name)
+            if countries:
+                prompt = f"""사용자가 "{item_name}" 품목을 수출하려고 합니다.
+다음은 추천 국가입니다: {', '.join(countries)}
+각 국가가 추천되는 이유를 초보자도 이해하기 쉽게 설명하고, 사용자에게 어느 국가가 궁금한지 질문해줘."""
+                gpt_response = call_chatgpt(user_id, prompt)
+            else:
+                gpt_response = f'"{item_name}"에 대한 수출 데이터를 찾지 못했어요. 다른 품목을 말씀해 주실 수 있을까요?'
+        else:
+            formatted_history = "\n".join(
+                [f"{msg['role']}: {msg['content']}" for msg in chat_history]
+            )
+            prompt = f"""사용자와의 대화는 다음과 같고, 품목이 명확하지 않아요.
+{formatted_history}
+이럴 때는 친절하게 어떤 품목을 수출하고 싶은지 되물어보는 응답을 해줘."""
+            gpt_response = call_chatgpt(user_id, prompt)
 
-        # ✅ 각 단계 분기 처리
-        if decision.startswith("item:"):
-            return self._handle_item(user_id, decision)
 
-        if decision.startswith("country:"):
-            return self._handle_country(user_id, decision)
+        # ✅ 응답 저장
+        save_chat_message(db, user_id, RoleEnum.assistant, gpt_response)
+        add_chat_to_redis(user_id, "assistant", gpt_response)
 
-        if decision.startswith("platform:"):
-            return self._handle_platform(user_id, decision)
+        return {"response": gpt_response}
 
-        if message.strip().lower() in {"다음", "next", "ok", "ㅇㅋ", "넘겨"}:
-            return self._handle_next(user_id)
 
-        if "guide" in decision:
-            return self._handle_guide(user_id)
+    @staticmethod
+    def convert_to_gpt_format(history):
+        return [
+            {"role": h.role.value if hasattr(h.role, "value") else h.role, "content": h.content}
+            for h in history
+        ]
 
-        if decision.startswith("translate:"):
-            return self._handle_translate(user_id)
+    @staticmethod
+    def save_message(db, user_id, role, content):
+        if hasattr(role, "value"):
+            role = role.value
+        db.add(ChatbotMessage(user_id=user_id, role=role, content=content))
+        db.commit()
 
-        if "done" in decision:
-            update_user_context(user_id, {"stage": "done"})
-            final_response = "🎉 모든 수출 절차를 완료했습니다!"
-            self._save_bot_response(user_id, final_response)
-            return {"step": 5, "response": final_response}
-
-        default_response = "🤖 어떤 품목을 수출하고 싶으신가요? (예: 마스크팩, 화장품, 의류 등)"
-        self._save_bot_response(user_id, default_response)
-        return {"step": 0, "response": default_response}
-
-    def _build_prompt(self, context, message):
-        return f"""
-        [사용자 입력]: "{message}"
-        [현재 진행 단계]: {context.get("stage")}
-        [현재 저장 정보]: 품목={context.get('item')}, 국가={context.get('country')}, 플랫폼={context.get('platform')}
-
-        사용자의 입력이 아래 중 어떤 것인지 판단해:
-        - 품목 입력이면 'item:비누'
-        - 수출 국가면 'country:미국'
-        - 플랫폼이면 'platform:Amazon'
-        - 입점 안내 요청이면 'guide'
-        - 영어 번역 요청이면 'translate:제목|내용'
-        - 모두 완료했다면 'done'
-        - 아직 맥락 불분명하면 'ask'
-
-        반드시 위 형식 중 하나만 한 줄로 출력해.
-        """
-
-    def _handle_item(self, user_id, decision):
-        item = decision.split("item:")[1].strip()
-        update_user_context(user_id, {"item": item, "stage": "item"})
-        response = f"✅ '{item}'을(를) 수출할 품목으로 확인했어요.\n어느 나라에 수출하고 싶으세요?"
-        self._save_bot_response(user_id, response)
-        return {"step": 1, "response": response, "context": {"item": item}}
-
-    def _handle_country(self, user_id, decision):
-        country = decision.split("country:")[1].strip()
-        update_user_context(user_id, {"country": country, "stage": "country"})
-        response = f"🌍 '{country}'은 좋은 선택이에요. 어떤 플랫폼으로 수출하고 싶으세요? (예: Amazon, Shopee)"
-        self._save_bot_response(user_id, response)
-        return {"step": 2, "response": response, "context": {"country": country}}
-
-    def _handle_platform(self, user_id, decision):
-        platform = decision.split("platform:")[1].strip()
-        update_user_context(user_id, {"platform": platform, "stage": "platform"})
-        slide = get_current_slide(user_id, platform)
-        response = f"📦 '{platform}' 입점 방법을 안내드릴게요!\n\n{slide['gptExplanation']}"
-        self._save_bot_response(user_id, response)
-        return {
-            "step": 3,
-            "response": response,
-            "image": slide.get("imageUrl"),
-            "context": {
-                "page": slide.get("step"),
-                "title": slide.get("title"),
-                "content": slide.get("content")
-            }
-        }
-
-    def _handle_next(self, user_id):
-        platform = get_user_context(user_id).get("platform", "shopee")
-        slide = go_to_next_slide(user_id, platform)
-        response = (
-            slide["message"]
-            if slide["done"]
-            else f"📄 다음 슬라이드로 넘어갑니다!\n\n{slide['gptExplanation']}"
+    @staticmethod
+    def get_recent_messages(db, user_id, limit=10):
+        return (
+            db.query(ChatbotMessage)
+            .filter(ChatbotMessage.user_id == user_id)
+            .order_by(ChatbotMessage.created_at.asc())
+            .limit(limit)
+            .all()
         )
-        self._save_bot_response(user_id, response)
-        return {
-            "step": 3,
-            "response": response,
-            "image": slide.get("imageUrl"),
-            "context": {
-                "page": slide.get("step"),
-                "title": slide.get("title"),
-                "content": slide.get("content")
-            }
-        }
-
-    def _handle_guide(self, user_id):
-        platform = get_user_context(user_id).get("platform", "shopee")
-        slide = get_current_slide(user_id, platform)
-        response = f"📘 플랫폼 가이드를 이어서 안내드릴게요.\n\n{slide['gptExplanation']}"
-        self._save_bot_response(user_id, response)
-        return {
-            "step": 3,
-            "response": response,
-            "image": slide.get("imageUrl"),
-            "context": {
-                "page": slide.get("step"),
-                "title": slide.get("title"),
-                "content": slide.get("content")
-            }
-        }
-
-    def _handle_translate(self, user_id):
-        update_user_context(user_id, {"stage": "translate"})
-        response = "🌐 번역 기능은 다음 단계에서 연결됩니다."
-        self._save_bot_response(user_id, response)
-        return {"step": 4, "response": response}
-
-    def _save_bot_response(self, user_id: str, content: str):
-        save_chat_message(user_id, RoleEnum.assistant, content)
-        append_chat_message(user_id, "assistant", content)
