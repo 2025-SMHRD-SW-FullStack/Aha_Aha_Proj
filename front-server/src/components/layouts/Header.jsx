@@ -17,13 +17,15 @@ const Header = () => {
 
     // 로그인 상태 확인
     const isLoggedIn = !!localStorage.getItem('accessToken');
+     
+    
 
     /** 로그아웃 처리 함수 */
     const handleLogout = () => {
         logoutHandler();
         alert('로그아웃 되었습니다.');
         navigate('/');
-    }
+    }  
 
     return (
         <div>

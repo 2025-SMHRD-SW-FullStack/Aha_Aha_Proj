@@ -1,0 +1,118 @@
+/* 컨테이너 전체 스타일 */
+.container {
+  padding: 24px;
+  max-width: 1200px; 
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* 제목 */
+.header {
+  font-size: 50px;
+  font-weight: bold;
+  margin-bottom: 24px;
+}
+
+/* 필터 버튼 영역 */
+.filterBar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+/* 전체 버튼 스타일 */
+.filterButton {
+  background-color: #f1efff;
+  color: #5a42f5;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.filterButton:hover {
+  background-color: #5a42f5;
+  color: #fff;
+}
+
+/* 셀렉트박스 공통 */
+.select {
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* 테이블 wrapper 추가 (테이블만 스크롤) */
+.tableWrapper{
+ max-height: 440px;
+ overflow-y: auto;
+ border-top: 1px solid #eee;
+}
+
+/* 테이블 스타일 */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  border-bottom: 1px solid #eee;
+  padding: 12px;
+  text-align: center;
+}
+
+.table tr:hover {
+  background-color: #f9f9ff;
+}
+
+/* ✅ 스크롤 시 헤더 고정 */
+.table th {
+  position: sticky;
+  top: 0;
+  /* 헤더 배경색 (없으면 글씨 겹침) */
+  background-color: white; 
+  z-index: 2; /* 헤더를 위로 올림 */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* 컬럼별 너비 */
+/* 순위 */
+.table th:nth-child(1),
+.table td:nth-child(1) {
+  width: 80px; 
+}
+
+/* 품목명 */
+.table th:nth-child(2),
+.table td:nth-child(2) {
+  width: 300px; 
+}
+
+/* 국가 */
+.table th:nth-child(3),
+.table td:nth-child(3) {
+  width: 100px; 
+}
+
+ /* 예상성공률 */
+.table th:nth-child(4),
+.table td:nth-child(4) {
+  width: 120px;
+}
+
+/* 순위 아이콘 한 줄 처리 */
+.rankIcon {
+  white-space: nowrap;
+}
+
+/* 품목명 안의 설명 */
+.description {
+  font-size: 13px;
+  color: #999;
+  margin-top: 4px;
+  text-align: center;
+  font-weight: 500;
+  line-height: 1.4;
+}
