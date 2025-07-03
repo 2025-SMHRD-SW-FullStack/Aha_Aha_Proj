@@ -1,0 +1,47 @@
+/* .container {
+    display: flex;
+    flex-direction: column;
+} */
+
+/* 안내 박스 */
+.infoBox {
+    border-radius: 5px;
+    padding: 20px;
+    background-color: #f6f6f6;
+    line-height: 28px;
+}
+
+/* 체크박스와 텍스트를 감싸는 영역 */
+.userInputBox {
+    /* border: 1px solid #ccc; */
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.step6Label {
+    font-size: 18px;
+}
+
+/* 텍스트 input */
+.step6Input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #aaa;
+    background-color: white;
+    margin-top: 10px;
+}
+
+/* 체크박스 스타일 */
+.checkbox {
+    transform: scale(1.2);
+    margin-right: 10px;
+}
+
+.step6Btn {
+    margin-top: 20px;
+    border-radius: 10px;
+    padding: 10px 50px;
+    background-color: var(--color-primary);
+    margin-left: 10px;
+}

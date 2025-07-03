@@ -1,9 +1,9 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import '/src/assets/styles/global.css'
-import EmailSignUp from '/src/pages/auth/EmailSignUp';
+import EmailSignUp from '/src/pages/auth/EmailSignUpPage';
 import Main from '/src/pages/Main';
-import Login from '/src/pages/auth/Login';
-import SignUp from '/src/pages/auth/SignUp';
+import Login from '/src/pages/auth/LoginPage';
+import SignUp from '/src/pages/auth/SignUpPage';
 import EmailVerifiedHandler from '/src/pages/auth/EmailVerifiedHandler';
 import OAuthSuccess from '/src/pages/auth/OAuthSuccess';
 import ItemPage from '/src/pages/item/ItemPage';

@@ -28,11 +28,8 @@ const Item = () => {
 
             const spanWidth = spanRef.current.offsetWidth + 10;
 
-            if (inputValue.length <= charLimit) {
-                inputRef.current.style.width = `${spanWidth}px`;
-            } else {
-                inputRef.current.style.width = `300px`
-            }
+            inputRef.current.style.width =
+                inputValue.length <= charLimit ? `${spanWidth}px` : '300px';
         }
     }, [inputValue]);
 
