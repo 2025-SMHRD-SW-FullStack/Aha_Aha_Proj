@@ -1,14 +1,27 @@
-from pathlib import Path
-from typing import List
-import fitz  # PyMuPDF
+from PyPDF2 import PdfReader
+from pdf2image import convert_from_path
+import os
+from dotenv import load_dotenv
 
-def load_pdf_chunks(pdf_path: str) -> List[str]:
-    doc = fitz.open(pdf_path)
-    text = ""
-    for page in doc:
-        text += page.get_text()
-    doc.close()
+load_dotenv()
+POPPLER_PATH = os.getenv("POPPLER_PATH")
 
-    # 문단 기준 분리
-    chunks = [chunk.strip() for chunk in text.split("\n\n") if chunk.strip()]
-    return chunks
+def convert_pdf_to_images(pdf_path: str, output_dir: str) -> list[str]:
+    """
+    PDF 파일을 이미지로 변환하고 파일 경로 리스트를 반환함.
+    """
+    os.makedirs(output_dir, exist_ok=True)
+
+    images = convert_from_path(pdf_path, poppler_path=POPPLER_PATH)
+    image_paths = []
+
+    for i, page in enumerate(images):
+        filename = os.path.join(output_dir, f"slide_{i + 1}.png")
+        page.save(filename, "PNG")
+        image_paths.append(filename)
+
+    return image_paths
+
+def extract_slides_text(pdf_path):
+    reader = PdfReader(pdf_path)
+    return [page.extract_text() for page in reader.pages]

@@ -1,5 +1,5 @@
 from app.utils.io import load_and_clean_export_data, load_hscode_data
-from app.core.vector_db import setup_vector_database
+from app.utils.vector_db import setup_vector_database
 from app.utils.io import preprocess_dataframe
 import pandas as pd
 

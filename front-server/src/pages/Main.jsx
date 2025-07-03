@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import MainLayout from '/src/components/layouts/MainLayout'
 import  styles from './Main.module.css'
 import { Link } from 'react-router-dom'
@@ -7,7 +8,22 @@ import platformImg from '/src/assets/images/platform.png'
 import chatbotImg from '/src/assets/images/chatbot.png'
 import boardImg from '/src/assets/images/board.png'
 
+
 const Main = () => {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+            alert("로그인이 필요합니다.");
+            navigate("/login");
+        }
+    }, [navigate]);
+
+    const handleStartChatbot = () => {
+        navigate("/test-steps");
+    };
+
     return (
         <MainLayout>
             <div className={styles.wrapper}>
