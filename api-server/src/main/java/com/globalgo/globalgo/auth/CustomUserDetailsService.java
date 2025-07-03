@@ -21,4 +21,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         return new CustomUserDetails(user);
     }
+
+    // ✅ userId 기반 조회용 메서드 추가
+    public UserDetails loadUserById(Long userId) {
+        return userRepository.findById(userId)
+                .map(CustomUserDetails::new)
+                .orElseThrow(() -> new UsernameNotFoundException("유저를 찾을 수 없습니다."));
+    }
 }

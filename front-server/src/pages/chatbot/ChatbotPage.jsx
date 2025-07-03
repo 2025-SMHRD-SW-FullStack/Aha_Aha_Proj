@@ -5,6 +5,7 @@ import Chatbot from '../../components/chatbot/Chatbot'
 const ChatbotPage = () => {
     return (
         <div>
+            <Header/>
             <Chatbot/>
         </div>
     )

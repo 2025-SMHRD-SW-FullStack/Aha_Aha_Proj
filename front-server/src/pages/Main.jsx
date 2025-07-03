@@ -54,7 +54,7 @@ const Main = () => {
 
                 <div className={styles.right}>
                     <div className={`${styles.box} ${styles.board}`}>
-                        <Link to='/board'>
+                        <Link to='/exhibition'>
                             <h2>게시판</h2>
                             <p>게시판 입니다.</p>
                             <img src={boardImg} alt="게시판 이미지" />
