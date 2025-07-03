@@ -30,14 +30,10 @@ public class JwtTokenProvider {
     }
 
     // ✅ AccessToken 발금
-    public String createAccessToken(String userId) {
-        return createToken(userId, accessTokenValidityInMillis);
-    }
+    public String createAccessToken(Long userId) {return createToken(userId, accessTokenValidityInMillis);}
 
     // ✅ RefreshToken 발금
-    public String createRefreshToken(String userId) {
-        return createToken(userId, refreshTokenValidityInMillis);
-    }
+    public String createRefreshToken(Long userId) {return createToken(userId, refreshTokenValidityInMillis);}
 
     // 해결: AccessToken vs RefreshToken 발금 구분을 위한 특정 키 추가
     public long getRefreshTokenValidityInMillis() {
@@ -50,8 +46,8 @@ public class JwtTokenProvider {
     }
 
     // 해결: 공통 토큰 생성 메서드
-    private String createToken(String userId, long validityInMillis) {
-        Claims claims = Jwts.claims().setSubject(userId);
+    private String createToken(Long userId, long validityInMillis) {
+        Claims claims = Jwts.claims().setSubject(String.valueOf(userId));
         Date now = new Date();
         Date expiry = new Date(now.getTime() + validityInMillis);
 
@@ -83,11 +79,12 @@ public class JwtTokenProvider {
     }
 
     // ✅ 토큰에서 유저 ID 추출
-    public String getUserId(String token) {
-        return Jwts.parser()
+    public Long getUserId(String token) {
+        String subject = Jwts.parser()
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
+        return Long.parseLong(subject); // ✅ Long으로 변환해서 리턴
     }
 }

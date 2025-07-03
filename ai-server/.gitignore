@@ -19,6 +19,7 @@ Thumbs.db
 chroma_db/
 *.sqlite3
 *.bin
+*.pkl
 *.pickle
 
 # Jupyter/Notebook

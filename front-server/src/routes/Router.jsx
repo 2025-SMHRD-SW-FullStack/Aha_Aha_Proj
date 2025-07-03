@@ -8,9 +8,9 @@ import EmailVerifiedHandler from '/src/pages/auth/EmailVerifiedHandler';
 import OAuthSuccess from '/src/pages/auth/OAuthSuccess';
 import ItemPage from '/src/pages/item/ItemPage';
 import PlatformPage from '/src/pages/platform/PlatformPage';
-import BoardPage from '/src/pages/board/BoardPage';
 import ChatbotPage from '/src/pages/chatbot/ChatbotPage';
 import ItemDetailPage from '/src/pages/item/ItemDetailPage';
+import ExhibitionPage from "../pages/exhibition/ExhibitionPage";
 
 
 const Router = () => {
@@ -34,7 +34,7 @@ const Router = () => {
                 <Route path='/item/:itemId' element={<ItemDetailPage/>}/>
 
                 {/* 게시판 페이지 관련 */}
-                <Route path='/board' element={<BoardPage/>}/>
+                <Route path='/exhibition' element={<ExhibitionPage/>}/>
 
                 {/* 중개플랫폼 페이지 관련 */}
                 <Route path='/platform' element={<PlatformPage/>}/>

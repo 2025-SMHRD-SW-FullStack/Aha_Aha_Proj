@@ -126,11 +126,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     "provider", registrationId
             );
 
-            return new DefaultOAuth2User(
-                    Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
-                    customAttributes,
-                    "email"
-            );
+            return new CustomOAuth2User(user, customAttributes);
 
         } catch (Exception e) {
             System.out.println("❌ OAuth2UserService 예외 발생: " + e.getMessage());
@@ -138,6 +134,4 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             throw e;
         }
     }
-
-
 }
