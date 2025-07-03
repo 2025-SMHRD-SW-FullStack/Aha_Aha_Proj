@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+import os
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -52,4 +53,7 @@ app.add_middleware(
 app.include_router(api_router, prefix="/api")
 
 # ✅ 정적 파일 경로 마운트
-app.mount("/static", StaticFiles(directory="app/static/"), name="static")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_PATH = os.path.join(BASE_DIR, "app", "static")
+
+app.mount("/static", StaticFiles(directory=STATIC_PATH), name="static")
