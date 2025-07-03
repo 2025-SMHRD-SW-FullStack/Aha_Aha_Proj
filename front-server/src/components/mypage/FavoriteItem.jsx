@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
-import axios from "axios";
+import axiosInstance from "../../config/axiosInstance";
 import styles from "./FavoriteItem.module.css";
-import jsonData from "../../assets/data/favorite_items.json";
 import favoriteIcon from "../../assets/images/favorite_on.png";
 
 const FavoriteItem = () => {
@@ -10,35 +9,63 @@ const FavoriteItem = () => {
   const [countries, setCountries] = useState([]);
   const [selected, setSelected] = useState({ product: "전체", country: "전체" });
 
-  // ✅ 로컬 테스트용
+  // ✅ DB에서 데이터 가져오기
   useEffect(() => {
-    setFavorites(jsonData);
+    const fetchFavorites = async () => {
+      try {
+        const res = await axiosInstance.get("/api/favorites");
+        const data = res.data;
 
-    const productList = Array.from(new Set(jsonData.map((item) => item.productName)));
-    const countryList = Array.from(new Set(jsonData.map((item) => item.countryName)));
+        setFavorites(data);
 
-    setProducts(productList);
-    setCountries(countryList);
+        // 제품명 리스트
+        const productList = Array.from(new Set(data.map((item) => item.productName)));
+        setProducts(productList);
+
+        // 국가 리스트
+        const countryList = Array.from(new Set(data.flatMap((item) => item.recommendedCountries.map((rc) => rc.country))));
+        setCountries(countryList);
+      } catch (error) {
+        console.error("즐겨찾기 불러오기 실패:", error);
+      }
+    };
+
+    fetchFavorites();
   }, []);
 
   // ✅ 선택된 품목에 따른 국가 옵션 필터링
   const filteredCountries = useMemo(() => {
     if (selected.product === "전체") return countries;
-    const related = favorites
+
+    const relatedCountries = favorites
       .filter((item) => item.productName === selected.product)
-      .map((item) => item.countryName);
-    return Array.from(new Set(related));
+      .flatMap((item) => item.recommendedCountries.map((rc) => rc.country));
+
+    return Array.from(new Set(relatedCountries));
   }, [selected.product, countries, favorites]);
 
   // ✅ 필터링 + 정렬
   const filteredItems = useMemo(() => {
-    return favorites
-      .filter(
-        (item) =>
+    let items = [];
+
+    favorites.forEach((item) => {
+      item.recommendedCountries.forEach((rc) => {
+        if (
           (selected.product === "전체" || item.productName === selected.product) &&
-          (selected.country === "전체" || item.countryName === selected.country)
-      )
-      .sort((a, b) => b.successRate - a.successRate);
+          (selected.country === "전체" || rc.country === selected.country)
+        ) {
+          items.push({
+            id: item.favoriteId,
+            productName: item.productName,
+            description: item.productDescription,
+            countryName: rc.country,
+            successRate: rc.percent,
+          });
+        }
+      });
+    });
+
+    return items.sort((a, b) => b.successRate - a.successRate);
   }, [favorites, selected]);
 
   const rankIcon = (index) => {
@@ -106,7 +133,7 @@ const FavoriteItem = () => {
           </thead>
           <tbody>
             {filteredItems.map((item, idx) => (
-              <tr key={item.id}>
+              <tr key={`${item.id}-${item.countryName}`}>
                 <td><span className={styles.rankIcon}>{rankIcon(idx)}</span></td>
                 <td>
                   {item.productName}
