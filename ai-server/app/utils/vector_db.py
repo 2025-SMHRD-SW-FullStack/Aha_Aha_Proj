@@ -80,3 +80,15 @@ def search_similar_item(user_input: str, top_k=1) -> str | None:
     )
 
     return result["metadatas"][0][0]["item_name"]
+
+def find_relevant_hs_codes_from_vector_db(item_name: str, collection) -> list:
+    """벡터 DB를 사용하여 의미적으로 가장 유사한 HS코드를 찾아냅니다."""
+    if not collection: return []
+    query_embedding = client.embeddings.create(input=[item_name], model="text-embedding-3-small").data[0].embedding
+    results = collection.query(query_embeddings=[query_embedding], n_results=5)
+    hs_codes = set()
+    if results['metadatas'] and results['metadatas'][0]:
+        for metadata in results['metadatas'][0]:
+            hscode = str(metadata.get('hscode', ''))
+            hs_codes.add(hscode[:2].zfill(2))
+    return list(hs_codes)

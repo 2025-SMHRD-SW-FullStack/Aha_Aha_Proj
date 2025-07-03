@@ -27,3 +27,4 @@ def chatbot(req: ChatRequest, authorization: str = Header(...), db: Session = De
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
