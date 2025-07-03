@@ -3,6 +3,7 @@ import logoImg from '/src/assets/images/logo.png'
 import styles from './Header.module.css'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import useGoHome from '/src/hooks/useGoHome'
+import { logoutHandler } from '../../util/logoutHandler'
 
 const Header = () => {
     const navigate = useNavigate();
@@ -16,13 +17,15 @@ const Header = () => {
 
     // 로그인 상태 확인
     const isLoggedIn = !!localStorage.getItem('accessToken');
+     
+    
 
     /** 로그아웃 처리 함수 */
     const handleLogout = () => {
-        localStorage.removeItem('accessToken');
+        logoutHandler();
         alert('로그아웃 되었습니다.');
         navigate('/');
-    }
+    }  
 
     return (
         <div>

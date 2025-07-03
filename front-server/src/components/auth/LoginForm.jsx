@@ -24,9 +24,15 @@ const LoginForm = () => {
 
         try {
             const res = await loginRequest({ email, password });
+            console.log("응답 결과: ", res);
 
-            // 로그인 성공 시 accessToken 저장
-            localStorage.setItem('accessToken', res.accessToken);
+            if (res.token) {
+                // 로그인 성공 시 accessToken 저장
+                localStorage.setItem('accessToken', res.token);
+                localStorage.setItem('userId', res.user.id.toString());
+            } else {
+                console.warn('accessToken 없음: ', res);
+            }
 
             alert('로그인에 성공했습니다.');
             navigate('/');

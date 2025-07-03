@@ -57,3 +57,4 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_PATH = os.path.join(BASE_DIR, "app", "static")
 
 app.mount("/static", StaticFiles(directory=STATIC_PATH), name="static")
+
