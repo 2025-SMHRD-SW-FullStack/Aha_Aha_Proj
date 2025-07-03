@@ -34,6 +34,20 @@
   border-radius: 16px;
   line-height: 1.4;
   word-wrap: break-word;
+
+  display: flex;
+  flex-direction: column;
+
+  gap : 8px;
+}
+
+.message table{
+  border-collapse: collapse;
+}
+
+.message table, .message td, .message th {
+  border: 1px solid black;
+  text-align: center;
 }
 
 .user {
@@ -86,7 +100,8 @@
 /* Optional: 슬라이드 이미지 */
 .slideImage {
   max-width: 100%;
-  border-radius: 10px;
+  height: auto;
+  border-radius: 8px;
   margin-top: 8px;
 }
 
