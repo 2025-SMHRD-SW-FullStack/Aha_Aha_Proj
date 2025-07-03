@@ -1,0 +1,102 @@
+.wrapper {
+  padding: 32px;
+  max-width: 1080px;
+  margin: 0 auto;
+  background-color: white;
+}
+
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 2px solid #5a42f5;
+  padding-bottom: 8px;
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 50px;
+  font-weight: bold;
+}
+
+.editBtn {
+  padding: 6px 16px;
+  background-color: #f1efff;
+  border: none;
+  color: #5a42f5;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.editBtn:hover {
+  background-color: #e2dbff;
+}
+
+.infoRow {
+  display: flex;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid #eee;
+  padding-left: 60px;
+  gap: 20px;
+}
+
+.label {
+  color: #5a42f5;
+  font-weight: bold;
+  font-size: 18px;
+  width: 200px;
+}
+
+.value {
+  flex: 1;
+  font-size: 17px;
+  display: flex;
+  align-items: center;
+  height: 45px;
+}
+
+.input {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1.5px solid #5a42f5;
+  border-radius: 4px;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 10px;
+  margin-top: 40px;
+}
+
+.submitBtn,
+.cancelBtn {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  height: 45px;
+}
+
+.submitBtn {
+  background-color: #5a42f5;
+  color: white;
+}
+
+.submitBtn:hover {
+  background-color: #4c32e9;
+}
+.cancelBtn {
+  background-color: #eee;
+  color: #333;
+}
+
+.cancelBtn:hover {
+  background-color: #ddd;
+}

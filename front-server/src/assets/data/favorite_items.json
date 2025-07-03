@@ -1,0 +1,142 @@
+[
+  {
+    "id": 1,
+    "productName": "조명",
+    "countryName": "미국",
+    "successRate": 84.2,
+    "description": "에너지 절약형 조명 수요 증가"
+  },
+  {
+    "id": 2,
+    "productName": "조명",
+    "countryName": "일본",
+    "successRate": 82.5,
+    "description": "홈인테리어 트렌드와 맞물린 수요"
+  },
+  {
+    "id": 3,
+    "productName": "조명",
+    "countryName": "독일",
+    "successRate": 80.1,
+    "description": "친환경 에너지 제품 선호"
+  },
+  {
+    "id": 4,
+    "productName": "조명",
+    "countryName": "싱가포르",
+    "successRate": 78.7,
+    "description": "고급 조명 기기 수요 증가"
+  },
+  {
+    "id": 5,
+    "productName": "조명",
+    "countryName": "호주",
+    "successRate": 77.9,
+    "description": "배터리 연동형 조명 인기 상승"
+  },
+  {
+    "id": 6,
+    "productName": "조명",
+    "countryName": "대만",
+    "successRate": 76.3,
+    "description": "상업용 조명 교체 수요 활발"
+  },
+  {
+    "id": 7,
+    "productName": "기저귀",
+    "countryName": "캐나다",
+    "successRate": 74.8,
+    "description": "정부 보조금 지원으로 수요 증가"
+  },
+  {
+    "id": 8,
+    "productName": "기저귀",
+    "countryName": "인도네시아",
+    "successRate": 73.6,
+    "description": "저전력 조명 제품 인기"
+  },
+  {
+    "id": 9,
+    "productName": "기저귀",
+    "countryName": "말레이시아",
+    "successRate": 72.2,
+    "description": "주택용 조명 대체 수요"
+  },
+  {
+    "id": 10,
+    "productName": "기저귀",
+    "countryName": "베트남",
+    "successRate": 70.9,
+    "description": "사무실용 조명 구매 확대"
+  },
+  {
+    "id": 11,
+    "productName": "기저귀",
+    "countryName": "중국",
+    "successRate": 88.6,
+    "description": "프리미엄 유아용품 수요 급증"
+  },
+  {
+    "id": 12,
+    "productName": "기저귀",
+    "countryName": "베트남",
+    "successRate": 86.2,
+    "description": "출산율 증가에 따른 수요 확대"
+  },
+  {
+    "id": 13,
+    "productName": "기저귀",
+    "countryName": "인도네시아",
+    "successRate": 84.9,
+    "description": "합리적 가격대의 제품 인기"
+  },
+  {
+    "id": 14,
+    "productName": "기저귀",
+    "countryName": "필리핀",
+    "successRate": 83.4,
+    "description": "소형 가정 위주 유아용품 구매 증가"
+  },
+  {
+    "id": 15,
+    "productName": "거울",
+    "countryName": "태국",
+    "successRate": 82.1,
+    "description": "가성비 좋은 브랜드 선호"
+  },
+  {
+    "id": 16,
+    "productName": "거울",
+    "countryName": "미국",
+    "successRate": 80.5,
+    "description": "친환경 기저귀 수요 증가"
+  },
+  {
+    "id": 17,
+    "productName": "거울",
+    "countryName": "말레이시아",
+    "successRate": 79.2,
+    "description": "대용량 제품 선호"
+  },
+  {
+    "id": 18,
+    "productName": "거울",
+    "countryName": "브라질",
+    "successRate": 78.0,
+    "description": "신생아 및 유아용 수요 지속 증가"
+  },
+  {
+    "id": 19,
+    "productName": "조명",
+    "countryName": "인도",
+    "successRate": 76.8,
+    "description": "위생용품 수요 급성장"
+  },
+  {
+    "id": 20,
+    "productName": "조명",
+    "countryName": "멕시코",
+    "successRate": 75.4,
+    "description": "가족 중심 소비문화"
+  }
+]

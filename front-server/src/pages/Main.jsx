@@ -1,6 +1,6 @@
 import React from 'react'
 import MainLayout from '/src/components/layouts/MainLayout'
-import styles from './Main.module.css'
+import  styles from './Main.module.css'
 import { Link } from 'react-router-dom'
 import itemImg from '/src/assets/images/item.png'
 import platformImg from '/src/assets/images/platform.png'
