@@ -1,0 +1,327 @@
+{
+    "조명": [
+    {
+        "rank": "1위",
+        "flag": "🥇",
+        "country": "미국",
+        "successRate": "84.2%",
+        "comment": "🔌 에너지 절약형 조명 수요 증가",
+        "ecommerce": "아마존"
+    },
+    {
+        "rank": "2위",
+        "flag": "🥈",
+        "country": "일본",
+        "successRate": "82.5%",
+        "comment": "🏠 홈인테리어 트렌드와 맞물린 수요",
+        "ecommerce": "아마존"
+    },
+    {
+        "rank": "3위",
+        "flag": "🥉",
+        "country": "독일",
+        "successRate": "80.1%",
+        "comment": "♻️ 친환경 에너지 제품 선호",
+        "ecommerce": "아마존"
+    },
+    {
+        "rank": "4위",
+        "flag": "🏅",
+        "country": "싱가포르",
+        "successRate": "78.7%",
+        "comment": "💡 고급 조명 기기 수요 높음",
+        "ecommerce": "쇼피"
+    },
+    {
+        "rank": "5위",
+        "flag": "🏅",
+        "country": "호주",
+        "successRate": "77.9%",
+        "comment": "🔋 배터리 연동형 조명 인기도 상승",
+        "ecommerce": "아마존"
+    },
+    {
+        "rank": "6위",
+        "flag": "🏅",
+        "country": "대만",
+        "successRate": "76.3%",
+        "comment": "🏢 상업용 조명 교체 수요 활발",
+        "ecommerce": "쇼피"
+    },
+    {
+        "rank": "7위",
+        "flag": "🏅",
+        "country": "캐나다",
+        "successRate": "74.8%",
+        "comment": "💸 정부 보조금 지원으로 수요 증가",
+        "ecommerce": "아마존"
+    },
+    {
+        "rank": "8위",
+        "flag": "🏅",
+        "country": "인도네시아",
+        "successRate": "73.6%",
+        "comment": "📈 저전력 조명 제품 인기",
+        "ecommerce": "쇼피"
+    },
+    {
+        "rank": "9위",
+        "flag": "🏅",
+        "country": "말레이시아",
+        "successRate": "72.2%",
+        "comment": "🏘️ 주택용 조명 대체 수요",
+        "ecommerce": "쇼피"
+    },
+    {
+        "rank": "10위",
+        "flag": "🏅",
+        "country": "베트남",
+        "successRate": "70.9%",
+        "comment": "💼 사무실용 조명 구매 확대",
+        "ecommerce": "쇼피"
+    },
+    {
+        "rank": "11위",
+        "flag": "",
+        "country": "태국",
+        "successRate": "69.7%",
+        "comment": "🔆 실내용 감성 조명 인기",
+        "ecommerce": "쇼피"
+    },
+    {
+        "rank": "12위",
+        "flag": "",
+        "country": "영국",
+        "successRate": "68.4%",
+        "comment": "🌍 지속 가능성 강조 제품 선호",
+        "ecommerce": "아마존"
+    },
+    {
+        "rank": "13위",
+        "flag": "",
+        "country": "프랑스",
+        "successRate": "67.8%",
+        "comment": "🎨 디자인 조명 제품 수요",
+        "ecommerce": "아마존"
+    },
+    {
+        "rank": "14위",
+        "flag": "",
+        "country": "브라질",
+        "successRate": "66.2%",
+        "comment": "📦 도심 외곽 주택 조명 교체 수요",
+        "ecommerce": "아마존"
+    },
+    {
+        "rank": "15위",
+        "flag": "",
+        "country": "필리핀",
+        "successRate": "65.5%",
+        "comment": "📱 모바일 제어형 조명 인기",
+        "ecommerce": "쇼피"
+    },
+    {
+        "rank": "16위",
+        "flag": "",
+        "country": "멕시코",
+        "successRate": "64.1%",
+        "comment": "🧱 외부 벽면 조명 인테리어 유행",
+        "ecommerce": "아마존"
+    },
+    {
+        "rank": "17위",
+        "flag": "",
+        "country": "뉴질랜드",
+        "successRate": "63.2%",
+        "comment": "🌿 친환경 인증 제품 우선 구매",
+        "ecommerce": "아마존"
+    },
+    {
+        "rank": "18위",
+        "flag": "",
+        "country": "인도",
+        "successRate": "61.9%",
+        "comment": "💡 저가형 다기능 조명 수요 많음",
+        "ecommerce": "아마존"
+    },
+    {
+        "rank": "19위",
+        "flag": "",
+        "country": "이탈리아",
+        "successRate": "60.7%",
+        "comment": "🛋️ 인테리어 조명 브랜드 선호",
+        "ecommerce": "아마존"
+    },
+    {
+        "rank": "20위",
+        "flag": "",
+        "country": "네덜란드",
+        "successRate": "59.3%",
+        "comment": "🏠 실내외 조명 교체 시장 성장",
+        "ecommerce": "아마존"
+    }
+    ],
+
+    "기저귀": [
+    {
+        "rank": "1위",
+        "flag": "🥇",
+        "country": "중국",
+        "successRate": "88.6%",
+        "comment": "👶 프리미엄 유아용품 수요 급증",
+        "ecommerce": "쇼피"
+    },
+    {
+        "rank": "2위",
+        "flag": "🥈",
+        "country": "베트남",
+        "successRate": "86.2%",
+        "comment": "👨‍👩‍👧‍👦 출산율 증가에 따른 수요 확대",
+        "ecommerce": "쇼피"
+    },
+    {
+        "rank": "3위",
+        "flag": "🥉",
+        "country": "인도네시아",
+        "successRate": "84.9%",
+        "comment": "🍼 합리적 가격대의 제품 인기",
+        "ecommerce": "쇼피"
+    },
+    {
+        "rank": "4위",
+        "flag": "🏅",
+        "country": "필리핀",
+        "successRate": "83.4%",
+        "comment": "🏠 소형 가정 위주 유아용품 구매 증가",
+        "ecommerce": "쇼피"
+    },
+    {
+        "rank": "5위",
+        "flag": "🏅",
+        "country": "태국",
+        "successRate": "82.1%",
+        "comment": "💸 가성비 좋은 브랜드 선호",
+        "ecommerce": "쇼피"
+    },
+    {
+        "rank": "6위",
+        "flag": "🏅",
+        "country": "미국",
+        "successRate": "80.5%",
+        "comment": "🌱 친환경 기저귀 수요 증가",
+        "ecommerce": "아마존"
+    },
+    {
+        "rank": "7위",
+        "flag": "🏅",
+        "country": "말레이시아",
+        "successRate": "79.2%",
+        "comment": "📦 대용량 제품 선호",
+        "ecommerce": "쇼피"
+    },
+    {
+        "rank": "8위",
+        "flag": "🏅",
+        "country": "브라질",
+        "successRate": "78.0%",
+        "comment": "👶 신생아 및 유아용 수요 지속 증가",
+        "ecommerce": "아마존"
+    },
+    {
+        "rank": "9위",
+        "flag": "🏅",
+        "country": "인도",
+        "successRate": "76.8%",
+        "comment": "🏥 위생용품 수요 급성장",
+        "ecommerce": "쇼피"
+    },
+    {
+        "rank": "10위",
+        "flag": "🏅",
+        "country": "멕시코",
+        "successRate": "75.4%",
+        "comment": "👪 가족 중심 소비문화",
+        "ecommerce": "아마존"
+    },
+    {
+        "rank": "11위",
+        "flag": "",
+        "country": "이집트",
+        "successRate": "74.2%",
+        "comment": "🛍️ 온라인 쇼핑 비중 증가",
+        "ecommerce": "쇼피"
+    },
+    {
+        "rank": "12위",
+        "flag": "",
+        "country": "콜롬비아",
+        "successRate": "72.7%",
+        "comment": "📈 유아 인구 증가",
+        "ecommerce": "아마존"
+    },
+    {
+        "rank": "13위",
+        "flag": "",
+        "country": "페루",
+        "successRate": "71.3%",
+        "comment": "👝 휴대성과 편의성 강조",
+        "ecommerce": "아마존"
+    },
+    {
+        "rank": "14위",
+        "flag": "",
+        "country": "칠레",
+        "successRate": "70.5%",
+        "comment": "🧼 위생 인식 개선으로 기저귀 사용 확대",
+        "ecommerce": "아마존"
+    },
+    {
+        "rank": "15위",
+        "flag": "",
+        "country": "영국",
+        "successRate": "69.8%",
+        "comment": "🌿 친환경 인증 제품 인기",
+        "ecommerce": "아마존"
+    },
+    {
+        "rank": "16위",
+        "flag": "",
+        "country": "프랑스",
+        "successRate": "68.9%",
+        "comment": "🎁 프리미엄 제품 시장 성장",
+        "ecommerce": "아마존"
+    },
+    {
+        "rank": "17위",
+        "flag": "",
+        "country": "독일",
+        "successRate": "67.5%",
+        "comment": "🏷️ 브랜드 충성도 높은 시장",
+        "ecommerce": "아마존"
+    },
+    {
+        "rank": "18위",
+        "flag": "",
+        "country": "러시아",
+        "successRate": "66.1%",
+        "comment": "📦 수입 제품 선호 뚜렷",
+        "ecommerce": "아마존"
+    },
+    {
+        "rank": "19위",
+        "flag": "",
+        "country": "캐나다",
+        "successRate": "64.7%",
+        "comment": "🏠 온라인 육아용품 쇼핑 증가",
+        "ecommerce": "아마존"
+    },
+    {
+        "rank": "20위",
+        "flag": "",
+        "country": "사우디아라비아",
+        "successRate": "63.3%",
+        "comment": "🧕 가족 중심 소비패턴 유지",
+        "ecommerce": "아마존"
+    }
+    ]
+}

@@ -84,6 +84,14 @@ public class UserService {
     }
 
     /**
+     * Id로 사용자 조회
+     */
+    public User findById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저 없음"));
+    }
+
+    /**
      * provider + providerId 기반 사용자 조회 (소셜 전용)
      */
     public Optional<User> findByProviderAndProviderId(AuthProvider provider, String providerId) {

@@ -42,47 +42,42 @@ public class TokenController {
             }
         }
 
-        // 2. 쿠키에 토큰 없으면 401
-        if (refreshToken == null) {
-            return ResponseEntity.status(401).build();
-        }
+        if (refreshToken == null) return ResponseEntity.status(401).build();
 
-        // 3. 토큰 유효성 검사
+        // 2. 토큰 유효성 검사
         if (!jwtTokenProvider.validateToken(refreshToken)) {
             return ResponseEntity.status(401).build();
         }
 
-        // 4. 사용자 이메일 추출
-        String email = jwtTokenProvider.getUserId(refreshToken);
+        // 3. 토큰에서 userId(PK) 추출
+        Long userId = jwtTokenProvider.getUserId(refreshToken);  // subject를 Long으로 파싱
 
-        // 5. DB에 저장된 RefreshToken과 일치하는지 확인
-        RefreshToken savedToken = refreshTokenRepository.findById(email)
+        // 4. DB의 refreshToken과 일치하는지 확인
+        RefreshToken savedToken = refreshTokenRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("저장된 리프레시 토큰이 없습니다."));
 
         if (!savedToken.getToken().equals(refreshToken) || savedToken.isExpired()) {
             return ResponseEntity.status(401).build();
         }
 
-        // 6. 새로운 토큰 생성
-        String newAccessToken = jwtTokenProvider.createAccessToken(email);
-        String newRefreshToken = jwtTokenProvider.createRefreshToken(email);
+        // 5. 새 토큰 발급
+        String newAccessToken = jwtTokenProvider.createAccessToken(userId);
+        String newRefreshToken = jwtTokenProvider.createRefreshToken(userId);
 
-        // 7. DB 업데이트
-        RefreshToken newToken = new RefreshToken(email, newRefreshToken, LocalDateTime.now().plusDays(14));
+        // 6. DB 갱신
+        RefreshToken newToken = new RefreshToken(userId, newRefreshToken, LocalDateTime.now().plusDays(14));
         refreshTokenRepository.save(newToken);
 
-        // 8. 쿠키도 새로 갱신
+        // 7. 쿠키 갱신
         Cookie newCookie = new Cookie("refreshToken", newRefreshToken);
         newCookie.setHttpOnly(true);
         newCookie.setPath("/");
-        newCookie.setMaxAge(60 * 60 * 24 * 14); // 14일
+        newCookie.setMaxAge(60 * 60 * 24 * 14);
         response.addCookie(newCookie);
 
-        // 9. 유저 정보 응답에 포함
-        User user = userService.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("유저 정보를 찾을 수 없습니다."));
+        // 8. 유저 정보 응답
+        User user = userService.findById(userId);
 
         return ResponseEntity.ok(new LoginResponse(newAccessToken, new UserResponse(user)));
     }
-
 }

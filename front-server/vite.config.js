@@ -4,12 +4,11 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    proxy: {
-
+    proxy: { 
       '/api': {
-        target: 'http://localhost:8095',
+        target: 'http://localhost:8000', // FastAPI 서버 주소
         changeOrigin: true,
-        secure: false,     
+        rewrite: (path) => path.replace(/^\/api/, '/api'),
       },
     },
   },

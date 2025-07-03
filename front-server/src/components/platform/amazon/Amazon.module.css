@@ -1,0 +1,140 @@
+.stickyHeader {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 100;
+    /* padding-top: 20px; */
+    /* border-bottom: 1px solid #ccc; */
+}
+
+.inputOnOffBox {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    
+}
+
+.inputOff {
+    width: 40px;
+    height: 20px;
+    background-color: yellow;
+    /* border: 1px solid black; */
+}
+
+.inputOn {
+    width: 40px;
+    height: 20px;
+    background-color: aqua;
+}
+
+.selectInputBox {
+    padding: 1px 10px 10px 10px;
+    background-color: pink;
+}
+
+.infoBox {
+    margin: 10px 0;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: rgb(246, 246, 246);
+    line-height: 28px;
+}
+
+.infoColor {
+    color: red;
+}
+
+.imgBox {
+    border: 1px solid var(--color-gray10);
+    border-radius: 10px;
+    margin: 10px 0;
+    padding: 0 10px;
+}
+
+.userInputBox {
+    border: 1px solid black;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.customLabel {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.customInput {
+    background-color: aqua;
+    border-radius: 5px;
+}
+
+.customInput::placeholder {
+    background-color: yellow;
+    border-radius: 5px;
+}
+
+.categoryInput {
+    background-color: var(--color-gray10);
+    width: 100%;
+}
+
+.linkHover:hover {
+    background-color: var(--color-gray10);
+}
+
+.textarea {
+    width: 100%;
+}
+
+.textareaFilled {
+    background-color: aqua;
+}
+
+.textarea::placeholder {
+    background-color: yellow;
+}
+
+.tipBox {
+    margin-top: 10px;
+    border: 1px solid var(--color-gray30);
+    /* margin-left: 8px; */
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.sslBox {
+    margin-top: 10px;
+    border: 1px solid var(--color-gray30);
+    /* margin-left: 8px; */
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.parcelSizeBox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.parcelInput {
+width: 60px;
+border-radius: 5px;
+border: 1px solid #ccc;
+text-align: center;
+background-color: aqua;
+}
+
+.parcelInput::placeholder {
+    background-color: yellow;
+}
+
+.multiplySign {
+font-size: 16px;
+font-weight: bold;
+}
+
+.unit {
+margin-left: 4px;
+font-weight: bold;
+}

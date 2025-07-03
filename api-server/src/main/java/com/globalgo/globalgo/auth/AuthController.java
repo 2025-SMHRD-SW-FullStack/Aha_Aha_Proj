@@ -76,11 +76,11 @@ public class AuthController {
                 .orElseThrow(() -> new IllegalArgumentException("유저 정보를 찾을 수 없습니다."));
 
         // 토큰 생성
-        String accessToken = jwtTokenProvider.createAccessToken(user.getEmail());
-        String refreshToken = jwtTokenProvider.createRefreshToken(user.getEmail());
+        String accessToken = jwtTokenProvider.createAccessToken(user.getId());
+        String refreshToken = jwtTokenProvider.createRefreshToken(user.getId());
 
         // RefreshToken 저장 (DB)
-        refreshTokenRepository.save(new RefreshToken(user.getEmail(), refreshToken, LocalDateTime.now().plusDays(14))); // 토큰 만료기간 14일 유효
+        refreshTokenRepository.save(new RefreshToken(user.getId(), refreshToken, LocalDateTime.now().plusDays(14))); // 토큰 만료기간 14일 유효
 
         // RefreshToken → HTTP-only 쿠키 설정
         Cookie cookie = new Cookie("refreshToken", refreshToken);
@@ -105,8 +105,8 @@ public class AuthController {
 
                     // 2. 이메일 추출 후 DB에서 삭제
                     if (jwtTokenProvider.validateToken(refreshToken)) {
-                        String email = jwtTokenProvider.getUserId(refreshToken);
-                        refreshTokenRepository.deleteById(email);
+                        Long userId = jwtTokenProvider.getUserId(refreshToken);
+                        refreshTokenRepository.deleteById(userId);
                     }
 
                     // 3. 쿠키 삭제

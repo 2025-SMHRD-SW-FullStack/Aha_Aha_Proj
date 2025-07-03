@@ -11,18 +11,23 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class RefreshToken {
 
     @Id
-    private String email;
+    private Long userId;
 
     private String token;
 
     private LocalDateTime expiresAt; // 만료 시간
 
+    public RefreshToken(Long userId, String token, LocalDateTime expiredAt) {
+        this.userId = userId;
+        this.token = token;
+        this.expiresAt = expiredAt;
+    }
+
     public boolean isExpired() {
-        return LocalDateTime.now().isAfter(expiresAt);
+        return expiresAt.isBefore(LocalDateTime.now());
     }
 
 }
