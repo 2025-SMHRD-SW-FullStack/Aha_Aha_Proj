@@ -2,6 +2,22 @@ import json
 from app.core.gpt_client import call_chatgpt  # GPT 호출 분리
 import pandas as pd
 
+def calculate_recommendation_score(df: pd.DataFrame) -> pd.DataFrame:
+    """국가별로 데이터를 집계하고, 2가지 핵심 요소를 기반으로 점수를 계산합니다."""
+    if df.empty: return pd.DataFrame()
+    agg_rules = {'수출 금액': 'sum', '무역수지': 'sum'}
+    country_agg_df = df.groupby('국가').agg(agg_rules).reset_index()
+    country_agg_df['무역수지'] = country_agg_df['무역수지'].clip(lower=0)
+    def min_max_scaler(series):
+        if series.max() == series.min(): return pd.Series([0.5] * len(series), index=series.index)
+        return (series - series.min()) / (series.max() - series.min())
+    country_agg_df['시장규모_점수'] = min_max_scaler(country_agg_df['수출 금액'])
+    country_agg_df['경쟁력_점수'] = min_max_scaler(country_agg_df['무역수지'])
+    weights = {'시장규모': 0.6, '경쟁력': 0.4}
+    country_agg_df['종합점수'] = (country_agg_df['시장규모_점수'] * weights['시장규모'] + country_agg_df['경쟁력_점수'] * weights['경쟁력']) * 100
+    return country_agg_df.sort_values(by='종합점수', ascending=False)
+
+
 def generate_report_with_llm(item_name: str, ranked_df: pd.DataFrame) -> dict:
     try:
         # 🔹 GPT 프롬프트 구성
@@ -21,11 +37,12 @@ def generate_report_with_llm(item_name: str, ranked_df: pd.DataFrame) -> dict:
     ...
   ]
 }}
+추가적으로 key_factor에는 반드시 무조건 내용이 있어야 하며 그렇지 않을 너의 판단으로 해당 key_factor를 작성해주는데 단 종합점수가 100~70 이라면 매우 긍정적인 표현으로 60~36까지라면 중립적인 표현으로 해당 key_factor를 작성해줘 이건 무조건 지켜줘야해
         """.strip()
 
         print("🧠 GPT 국가 분석 요청 프롬프트:", prompt)
 
-        gpt_response = call_chatgpt(prompt)
+        gpt_response = call_chatgpt(0, prompt)
 
         # 🔹 JSON 파싱 시도
         parsed = json.loads(gpt_response)
