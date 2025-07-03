@@ -24,7 +24,7 @@ def verify_jwt_token(authorization: str) -> str:
     token = authorization.replace("Bearer ", "")
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-        user_id = payload.get("sub")  # Spring에서는 subject(sub)에 userId 저장
+        user_id = int(payload.get("sub"))  # Spring에서는 subject(sub)에 userId 저장
         if not user_id:
             raise HTTPException(status_code=401, detail="토큰에 userId(sub)가 없습니다.")
         return user_id
