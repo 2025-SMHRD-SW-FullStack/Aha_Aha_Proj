@@ -1,0 +1,46 @@
+.defaultContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* justify-content: center; */
+    /* height: 100%; */
+    text-align: center;
+    color: #444;
+    padding: 20px;
+    margin-top: 30px;
+}
+
+.guideText {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 24px;
+    line-height: 1.5;
+}
+
+.logoContainer {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+.logo {
+    height: 50px;
+    opacity: 0.8;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+    opacity: 1;
+}
+
+.logoS {
+    height: 65px;
+    opacity: 0.8;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.logoS:hover {
+    transform: scale(1.05);
+    opacity: 1;
+}

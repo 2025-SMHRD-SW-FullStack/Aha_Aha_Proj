@@ -1,4 +1,4 @@
-import axiosFastAPI from "../config/axiosFastApiInstance";
+import axiosFastAPI from "../config/axiosFastAPI";
 
 /** 품목별 수출 유망 국가 추천 */
 export async function getRecommendedCountries(itemName) {

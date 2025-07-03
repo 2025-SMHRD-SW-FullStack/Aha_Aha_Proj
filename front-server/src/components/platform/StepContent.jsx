@@ -1,4 +1,7 @@
 import React from 'react'
+import amazonLogo from '/src/assets/images/amazon_logo.png'
+import shopeeLogo from '/src/assets/images/shopee_logo.png'
+import styles from './StepContent.module.css'
 
 // 아마존 단계별 컴포넌트
 import AmazonStep1 from './amazon/AmazonStep1';
@@ -40,7 +43,17 @@ const StepContent = ({ platform, selectedStep }) => {
         case 'shopee_step6':
             return <ShopeeStep6 />;
         default:
-            return <p>단계를 선택해주세요.</p>;
+            return (
+                <div className={styles.defaultContainer}>
+                    <p className={styles.guideText}>
+                        왼쪽에서 플랫폼을 선택하여<br />가이드를 시작하세요.
+                    </p>
+                    <div className={styles.logoContainer}>
+                        <img src={amazonLogo} alt="Amazon" className={styles.logo} />
+                        <img src={shopeeLogo} alt="Shopee" className={styles.logoS} />
+                    </div>
+                </div>
+            );
     }
 };
 
