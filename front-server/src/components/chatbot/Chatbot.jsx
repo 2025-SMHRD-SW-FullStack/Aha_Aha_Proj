@@ -3,6 +3,8 @@ import { jwtDecode } from 'jwt-decode';
 import styles from './Chatbot.module.css';
 import { sendChatToBot } from '../../service/chatbotApi';
 import { step5PostTranslation } from '../../service/step5PostTranslate';
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 const Chatbot = () => {
   const [messages, setMessages] = useState([]);
@@ -157,9 +159,17 @@ const Chatbot = () => {
         {messages.map((msg, i) => (
           <div key={i} className={`${styles.message} ${styles[msg.sender]}`}>
             {msg.isImage ? (
-              <img src={msg.text} alt="slide" className={styles.slideImage} />
+              <>
+                {console.log('이미지 메시지:', msg.text)}
+                {console.log('이미지 src:', `${import.meta.env.VITE_FASTAPI_PUBLIC_URL}${msg.text}`)}
+                <img
+                  src={`${import.meta.env.VITE_FASTAPI_PUBLIC_URL}${msg.text}`}
+                  alt="slide"
+                  className={styles.slideImage}
+                />
+              </>
             ) : (
-              msg.text
+              <Markdown remarkPlugins={[remarkGfm]}>{msg.text}</Markdown>
             )}
           </div>
         ))}
