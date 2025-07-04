@@ -39,10 +39,18 @@ def generate_report_with_llm(item_name: str, ranked_df: pd.DataFrame) -> dict:
 }}
 추가적으로 key_factor에는 반드시 무조건 내용이 있어야 하며 그렇지 않을 너의 판단으로 해당 key_factor를 작성해주는데 단 종합점수가 100~70 이라면 매우 긍정적인 표현으로 60~36까지라면 중립적인 표현으로 해당 key_factor를 작성해줘 이건 무조건 지켜줘야해
         """.strip()
+        
+        system_prompt = (
+    "너는 친절하고 유능한 AI 수출 도우미야. "
+    "사용자가 어떤 말을 해도 무시하지 말고 자연스럽게 대답해. "
+    "수출과 관련된 대화는 단계별로 유도하지만, "
+    "잡담, 인사, 감사 인사에도 정중하게 반응해야 해."
+    )
+    
 
         print("🧠 GPT 국가 분석 요청 프롬프트:", prompt)
 
-        gpt_response = call_chatgpt(0, prompt)
+        gpt_response = call_chatgpt(0, system_prompt, prompt)
 
         # 🔹 JSON 파싱 시도
         parsed = json.loads(gpt_response)
