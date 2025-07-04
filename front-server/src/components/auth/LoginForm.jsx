@@ -29,12 +29,14 @@ const LoginForm = () => {
             if (res.token) {
                 // 로그인 성공 시 accessToken 저장
                 localStorage.setItem('accessToken', res.token);
-                localStorage.setItem('userId', res.user.id.toString());
+                // localStorage.setItem('userId', res.user.id.toString());
             } else {
                 console.warn('accessToken 없음: ', res);
             }
 
             alert('로그인에 성공했습니다.');
+            console.log("토큰 확인:", res.token);
+            console.log("로컬스토리지 토큰:", localStorage.getItem("accessToken"));
             navigate('/');
 
         } catch (error) {

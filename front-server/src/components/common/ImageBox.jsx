@@ -26,6 +26,12 @@ const ImageBox = ({ maxImages, minImages = 0, allowVideo = false, platform = 'am
         const updatedImages = [...images];
         updatedImages[index] = file;
         updateField('images', updatedImages);
+
+        // 첫 번째 이미지일 경우 mainImage 업데이트
+        if (index === 0 && file) {
+            const previewURL = typeof file === 'string' ? file : URL.createObjectURL(file);
+            updateField('mainImage', previewURL);
+        }
     };
 
     const handleVideoChange = (file) => {
@@ -37,6 +43,17 @@ const ImageBox = ({ maxImages, minImages = 0, allowVideo = false, platform = 'am
     const removeImage = (index) => {
         const updatedImages = images.filter((_, i) => i !== index);
         updateField('images', updatedImages);
+
+        // 첫 번째 이미지가 삭제되면 다음 이미지를 대표 이미지로 설정, 없으면 기본 이미지
+        if (index === 0) {
+            if (updatedImages.length > 0) {
+                const newMain = updatedImages[0];
+                const previewURL = typeof newMain === 'string' ? newMain : URL.createObjectURL(newMain);
+                updateField('mainImage', previewURL);
+            } else {
+                updateField('mainImage', ''); // 기본 이미지 경로
+            }
+        }
     };
 
     const removeVideo = () => {

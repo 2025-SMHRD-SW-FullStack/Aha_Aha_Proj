@@ -6,6 +6,10 @@ import ExistingProductForm from './ExistingProductForm';
 const AmazonStep4 = () => {
     const [registerType, setRegisterType] = useState('new'); // 기본값 새 상품 정보 입력
 
+    // useEffect(() => {
+    //     console.log("📝 Step4에서 입력 후 formData 상태:", formData);
+    // }, [formData]);
+
     return (
         <div>
             <div className={styles.stickyHeader}>
@@ -19,7 +23,6 @@ const AmazonStep4 = () => {
                         value="new"
                         checked={registerType === 'new'}
                         onChange={() => setRegisterType('new')}
-                        defaultChecked 
                     /> 
                     새 상품 정보 입력
                     </label>
@@ -40,7 +43,12 @@ const AmazonStep4 = () => {
                         <div className={styles.inputOn}></div>
                         <span>입력 후 상태</span>
                     </div>
+
                 </div>
+                {/* 번역하기 버튼 */}
+                <button className={styles.translateBtn}>
+                    번역하기
+                </button>
                 <br/>
             </div>
 

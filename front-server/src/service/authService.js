@@ -3,6 +3,7 @@ import axiosInstance from '/src/config/axiosInstance';
 /** 로그인 요청 */
 export async function loginRequest({ email, password }) {
     const res = await axiosInstance.post('/api/auth/login', { email, password });
+    console.log("응답 결과", res.data); // 이 구조 확인
     return res.data;
 }
 

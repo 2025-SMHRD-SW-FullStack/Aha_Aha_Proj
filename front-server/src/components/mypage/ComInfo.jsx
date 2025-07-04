@@ -4,7 +4,14 @@ import axiosInstance from "../../config/axiosInstance";
 import styles from "./ComInfo.module.css";
 
 const ComInfo = () => {
-  const [form, setForm] = useState(null);
+  // 초기값을 null이 아닌 빈 값으로 설정해 렌더링 에러 방지
+  const [form, setForm] = useState({
+    name: "",
+    ceoName: "",
+    businessNumber: "",
+    industry: "",
+    address: "",
+  });
   const [original, setOriginal] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
 
@@ -12,18 +19,27 @@ const ComInfo = () => {
     try {
       const res = await axiosInstance.get("/api/users/company");
       const data = {
-        name: res.data.name,
-        ceoName: res.data.ceoName,
-        businessNumber: res.data.businessNumber,
-        industry: res.data.industry,
-        address: res.data.address,
+        name: res.data.name ?? "",
+        ceoName: res.data.ceoName ?? "",
+        businessNumber: res.data.businessNumber ?? "",
+        industry: res.data.industry ?? "",
+        address: res.data.address ?? "",
       };
       
       setForm(data);
       setOriginal(data);
     } catch (error) {
-      console.error("회사 정보 불러오기 실패:", error);
-      alert("회사 정보 불러오기 실패: 서버 내부 오류가 발생했습니다.");
+      console.warn("💡회사 정보가 없거나 오류 발생. 빈 값으로 초기화");
+      // 💡빈 값으로 초기화해서 UI 렌더링 오류 방지
+      const emptyData = {
+        name: "",
+        ceoName: "",
+        businessNumber: "",
+        industry: "",
+        address: "",
+      };
+      setForm(emptyData);
+      setOriginal(emptyData);
     }
   }, []);
 
@@ -79,7 +95,7 @@ const ComInfo = () => {
           </button>
         )}
       </div>
-
+        
       <InfoRow
         label="회사명"
         value={form.name}

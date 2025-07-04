@@ -56,12 +56,20 @@ axiosInstance.interceptors.response.use(
 
       try {
         const res = await axios.post(
-          `${import.meta.env.VITE_API_BASE_URL}/api/auth/reissue`,
+          `${import.meta.env.VITE_API_BASE_URL}/api/auth/refresh`,
           {},
           { withCredentials: true } // ✅ 쿠키에서 refreshToken 가져옴
         );
 
-        const newToken = res.data.accessToken;
+        console.log("refresh 응답: ", res.data);
+        
+        const newToken = res.data.token;
+
+        if (!newToken) {
+          console.error("❌ accessToken이 응답에 없습니다!", res.data);
+          throw new Error("AccessToken이 응답에 없습니다");
+        }
+        
         localStorage.setItem("accessToken", newToken);
         axiosInstance.defaults.headers.Authorization = `Bearer ${newToken}`;
         processQueue(null, newToken);

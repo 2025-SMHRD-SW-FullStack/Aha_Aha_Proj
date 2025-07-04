@@ -9,7 +9,7 @@ const AmazonStep3 = () => {
             <h2>3단계: 카테고리 선택</h2>
             <br />
             <h3>✅ 새 상품 등록하러 가기</h3>
-            <p className={styles.infoBox}>
+            <div className={styles.infoBox}>
                 · 카테고리<strong>[Category]</strong>를 선택 <br />
                 · 예시: 패션, 전자제품, 문구 등 <br/><br/>
                 <strong>카테고리 선택 방법</strong> <br />
@@ -18,7 +18,7 @@ const AmazonStep3 = () => {
                 <strong>수동 선택 [Browse]</strong>: 단계별로 클릭해 적합한 카테고리를 수동 선택
                 </div>
                 
-            </p>
+            </div>
             <br />
 
             <h3>이미지 참고</h3>
@@ -32,10 +32,10 @@ const AmazonStep3 = () => {
             <br />
             
             <h3>✅ 기존 상품 등록하러 가기</h3>
-            <p className={styles.infoBox}>
+            <div className={styles.infoBox}>
                 · <strong>[Sell this product]</strong> 클릭하여 판매 정보 등록 <br />
                 · <strong>[Show limitations]</strong> 클릭하여 조건 확인 후 <strong>[Apply to sell]</strong> 선택
-            </p>
+            </div>
             <br />
 
             

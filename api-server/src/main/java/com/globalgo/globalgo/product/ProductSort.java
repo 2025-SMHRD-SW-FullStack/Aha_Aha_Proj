@@ -22,6 +22,7 @@ public class ProductSort {
 //    @Column(nullable = false)
 //    private String country;
 
+    @Column(name = "`rank`")
     private Integer rank;
 
     private Double percent;

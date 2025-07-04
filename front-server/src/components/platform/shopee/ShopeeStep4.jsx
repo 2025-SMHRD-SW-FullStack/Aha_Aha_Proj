@@ -19,14 +19,18 @@ const ShopeeStep4 = () => {
                         <span>입력 후 상태</span>
                     </div>
                 </div>
+                {/* 번역하기 버튼 */}
+                <button className={styles.translateBtn}>
+                    번역하기
+                </button>
                 <br/>
             </div>
 
             <h2>4단계: 판매 정보 입력 (Sales Information)</h2>
-            <p className={styles.infoBox}>
+            <div className={styles.infoBox}>
                 · 이 단계에서는 기본 가격과 재고를 입력하고, 필요 시 <strong>옵션(Variations)</strong>
                 기능을 활성화하여 색상/사이즈 등 다양한 상품 구성을 설정합니다.
-            </p>
+            </div>
             <br/>
 
             <h3>① 기본 입력 항목</h3>
@@ -38,12 +42,12 @@ const ShopeeStep4 = () => {
                     <input className={styles.customInput}
                         type="text" 
                         placeholder="ex) 20"
-                        value={formData.Price || ''} 
-                        onChange={(e) => updateField('Price', e.target.value)}
+                        value={formData.yourPrice || ''} 
+                        onChange={(e) => updateField('yourPrice', e.target.value)}
                         />  
                 </label>
             </div>
-            <p className={styles.infoBox}>
+            <div className={styles.infoBox}>
                 · 마켓별 최종판매가 설정툴을 참고해 최종판매가를 설정 <br /><br />
                 <strong>💡TIP : 가격 결정 팁</strong> <br />
                 <div className={styles.tipBox}>
@@ -52,7 +56,7 @@ const ShopeeStep4 = () => {
                 · 판매 시 희망 이윤 - 2,500원 <br />
                 · 상품가격 - 10,000원
                 </div>
-            </p>
+            </div>
             
             <br/>
 
@@ -96,12 +100,12 @@ const ShopeeStep4 = () => {
                         />  
                 </label>
             </div>
-            <p className={styles.infoBox}>
+            <div className={styles.infoBox}>
                 · 색상이나 사이즈 등 옵션이 있을 경우 <strong>Variation(상품 옵션)</strong>
                 으로 상품을 묶을 수 있음 <br />
                 · <strong>Variation</strong>은 최대 50개(대량 업로드는 15개)까지 가능
 
-            </p>
+            </div>
             <br />
 
             <h3>③ 옵션별 가격/재고 입력</h3>
@@ -113,11 +117,11 @@ const ShopeeStep4 = () => {
                     style={{ maxWidth: '100%', marginTop: '16px', borderRadius: '8px' }}
                 />
             </div>
-            <p className={styles.infoBox}>
+            <div className={styles.infoBox}>
                 · 옵션에 따라 판매가와 수량이 다른 경우 숫자를 개별적으로 수정 <br />
                 · 옵션에 상관없이 판매가가 모두 같은 경우 <strong>[Apply to All]</strong> 클릭 
 
-            </p>
+            </div>
             <br/>
 
             <br />

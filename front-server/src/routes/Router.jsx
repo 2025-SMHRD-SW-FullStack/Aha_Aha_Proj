@@ -16,6 +16,8 @@ import FavoriteItem from "../components/mypage/FavoriteItem";
 import ProductList from "../components/mypage/ProductList";
 import UserInfo from "../components/mypage/UserInfo";
 import ExhibitionPage from "../pages/exhibition/ExhibitionPage";
+import ProductDetail from "../components/product/ProductDetail";
+import ProductDetailPage from "../pages/product/ProductDetailPage";
 
 
 const Router = () => {
@@ -55,6 +57,9 @@ const Router = () => {
                     <Route path="favorite_item" element={<FavoriteItem />} />
                     <Route path="product_list" element={<ProductList />} />
                 </Route>
+
+                <Route path="/product/:id" element={<ProductDetailPage/>}/>
+
                 </Routes>    
         </BrowserRouter>
     )

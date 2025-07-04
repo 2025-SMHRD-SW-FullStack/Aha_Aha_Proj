@@ -22,9 +22,9 @@ const ShopeeStep5 = () => {
             </div>
 
             <h2>5단계: 무게 및 배송 정보 입력</h2>
-            <p className={styles.infoBox}>
+            <div className={styles.infoBox}>
                 · 이 단계에서는 <strong>상품의 배송무게 및 부피</strong>를 설정합니다.
-            </p>
+            </div>
             <br/>
 
             <h3>⚙️ Shipping</h3>
@@ -71,19 +71,19 @@ const ShopeeStep5 = () => {
                     <span className={styles.unit}>cm</span>
                 </div>
             </div>
-            <p className={styles.infoBox}>
+            <div className={styles.infoBox}>
                 <strong>Weight</strong> <br />
                 · 포장 완료된 상태의 실제 무게(kg)를 입력 <br />
                 <strong>Parcel Size</strong> <br />
                 · 가로 x 세로 x 높이(cm) 순서로 입력 <br />
                 · 입력 후, Shopee에서 자동으로 부피 무게 계산 <br />
                 · <strong>(가로 x 세로 x 높이) / 6,000</strong>
-            </p>
+            </div>
             <br/>
 
             <h3>🚚 배송비 설정 방식</h3>
             <h4>SSL(Shopee 제공) / Non-SSL(사용자 지정)</h4>
-            <p className={styles.infoBox}>
+            <div className={styles.infoBox}>
                 <strong>Shopee 제공 배송 옵션 (SSL)</strong>
                 <div className={styles.sslBox}>
                     · <strong>Shopee Supported Logistics (SSL)</strong>
@@ -99,7 +99,7 @@ const ShopeeStep5 = () => {
                     · 배송비를 직접 명시하거나 무료 배송 옵션 선택도 가능
                 </div>
 
-            </p>
+            </div>
             <br />
 
             <br />

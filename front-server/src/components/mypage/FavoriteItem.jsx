@@ -11,10 +11,19 @@ const FavoriteItem = () => {
 
   // ✅ DB에서 데이터 가져오기
   useEffect(() => {
+    console.log("uesEffect 실행됨");
+
     const fetchFavorites = async () => {
       try {
         const res = await axiosInstance.get("/api/favorites");
+        console.log("🎯 응답 데이터 구조:", res.data);
         const data = res.data;
+
+        if (!Array.isArray(data)) {
+          console.warn("🚨 예상치 못한 응답 구조:", data);
+          setFavorites([]); // 빈 배열로 초기화
+          return;
+        }
 
         setFavorites(data);
 
@@ -27,6 +36,7 @@ const FavoriteItem = () => {
         setCountries(countryList);
       } catch (error) {
         console.error("즐겨찾기 불러오기 실패:", error);
+        setFavorites([]); // 네트워크 에러 시에도 빈 배열 처리
       }
     };
 
@@ -67,6 +77,7 @@ const FavoriteItem = () => {
 
     return items.sort((a, b) => b.successRate - a.successRate);
   }, [favorites, selected]);
+  
 
   const rankIcon = (index) => {
     if (index === 0) return "🥇 1위";

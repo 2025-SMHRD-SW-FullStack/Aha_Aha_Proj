@@ -1,20 +1,35 @@
+body {
+  min-width: 1080px;
+  overflow-x: auto;
+}
+
 /* 컨테이너 전체 스타일 */
 .container {
-  padding: 24px;
+  /* padding: 24px;
   max-width: 1200px; 
   margin: 0 auto;
-  width: 100%;
+  width: 100%; */
+  width: 1080px;  /* ✅ 고정 너비 */
+  padding: 20px 32px;
+  margin: 0 auto;
+  background-color: white;
+  box-sizing: border-box;
+  /* 반응형 방지용 추가 */
+  min-width: 1080px;
+  max-width: 1080px;
 }
 
 /* 제목 */
 .header {
-  font-size: 50px;
+  width: 75%;
+  font-size: 30px;
   font-weight: bold;
   margin-bottom: 24px;
 }
 
 /* 필터 버튼 영역 */
 .filterBar {
+  width: 75%;
   display: flex;
   gap: 10px;
   margin-bottom: 24px;
@@ -23,7 +38,7 @@
 /* 전체 버튼 스타일 */
 .filterButton {
   background-color: #f1efff;
-  color: #5a42f5;
+  color: var(--color-primary);
   border: none;
   padding: 6px 12px;
   border-radius: 4px;
@@ -32,7 +47,7 @@
 }
 
 .filterButton:hover {
-  background-color: #5a42f5;
+  background-color: var(--color-primary);
   color: #fff;
 }
 
@@ -45,9 +60,10 @@
 
 /* 테이블 wrapper 추가 (테이블만 스크롤) */
 .tableWrapper{
- max-height: 440px;
- overflow-y: auto;
- border-top: 1px solid #eee;
+  width: 75%;
+  max-height: 440px;
+  overflow-y: auto;
+  border-top: 1px solid #eee;
 }
 
 /* 테이블 스타일 */

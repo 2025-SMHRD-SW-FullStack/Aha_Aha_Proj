@@ -43,8 +43,8 @@ const ShopeeStep2 = () => {
                     <input className={styles.customInput}
                         type="text" 
                         placeholder="ex) ABC Toothbrush Soft"
-                        value={formData.ProductName || ''} 
-                        onChange={(e) => updateField('ProductName', e.target.value)}
+                        value={formData.productName || ''} 
+                        onChange={(e) => updateField('productName', e.target.value)}
                         />  
                 </label>
             </div>
@@ -67,10 +67,10 @@ const ShopeeStep2 = () => {
                         />  
                 </label>
             </div>
-            <p className={styles.infoBox}>
+            <div className={styles.infoBox}>
                 · Shopee에서 자동 추천된 카테고리 목록 중 하나를 선택합니다. <br />
                 (예시: <strong>Beauty {'>'} Makeup {'>'} Face {'>'} Powder</strong>) 
-            </p>
+            </div>
             <br/>
 
             <br />

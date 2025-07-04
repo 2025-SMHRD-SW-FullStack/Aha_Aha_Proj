@@ -14,10 +14,14 @@ const OAuthSuccess = () => {
 
         if (token) {
             // accessToken 저장
+            console.log("받은 토큰: ", token);
             localStorage.setItem("accessToken", token);
 
+            setTimeout(() => {
+                navigate("/", { replace: true });
+            }, 300);
             // 메인페이지로 이동
-            navigate("/", {replace: true});
+            // navigate("/", {replace: true});
         } else {
             alert("토큰이 존재하지 않습니다.");
             navigate("/login");

@@ -40,12 +40,12 @@ const ExistingProductForm = () => {
                     <option value="used">Used</option>
                 </select><br/>            
             </div>
-            <p className={styles.infoBox}>
+            <div className={styles.infoBox}>
                 · 판매 상품의 실제 상품 상태 (i.e. 신규, 중고) 선택 <br />
                 <p className={styles.infoColor}>
                 ※ 상품 상태의 경우 최초 기입 이후에 수정 불가
                 </p>
-            </p>
+            </div>
             <br/>
 
             <div className={styles.userInputBox}>
@@ -58,9 +58,9 @@ const ExistingProductForm = () => {
                     placeholder='Ex: 7'
                 /><br/>
             </div>
-            <p className={styles.infoBox}>
+            <div className={styles.infoBox}>
                 · 주문 당 판매 상품을 구매할 수 있는 최대 수량 확인
-            </p>
+            </div>
             <br/>
 
             <div className={styles.userInputBox}>
@@ -84,11 +84,11 @@ const ExistingProductForm = () => {
                     /> [FBA] Amazon will ship and provide customer service (Fulfilled by Amazon)
                 </label><br/>
             </div>
-            <p className={styles.infoBox}>
+            <div className={styles.infoBox}>
                 · 판매 상품의 주문 처리 방식 선택 <br/>
                 · <strong>[FBM]</strong> : 판매자가 직접 배송 <br/>
                 · <strong>[FBA]</strong> : Amazon에서 배송 및 고객 서비스를 제공
-            </p>
+            </div>
         </div>
     )
 }

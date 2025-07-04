@@ -1,0 +1,167 @@
+body {
+    min-width: 1080px;
+    overflow-x: auto;
+}
+
+.wrapper {
+    padding: 32px;
+    max-width: 1080px;
+    margin: 0 auto;
+    background-color: white;
+      /* 반응형 방지용 추가 */
+    min-width: 1080px;
+    max-width: 1080px;
+}
+
+.headerRow {
+    width: 75%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 2px solid var(--color-primary);
+    padding-bottom: 8px;
+    margin-bottom: 24px;
+}
+
+.title {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.infoRow {
+    display: flex;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid #eee;
+    /* padding-left: 20px; */
+    gap: 20px;
+}
+
+.label {
+    color: var(--color-primary);
+    font-weight: bold;
+    font-size: 25px;
+    width: 200px;
+}
+
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: var(--color-white);
+    /* border: 2px solid var(--color-gray10); */
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+
+    /* ✅ 그림자 효과 추가 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.2s ease;
+}
+
+.card:hover {
+    /* 마우스 올렸을 때 더 진한 그림자 */
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+
+.imageBox {
+    /* background-color: #F8F4FF; */
+    width: 100%;
+    height: 160px; /* 고정 높이 */
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* 넘치는 이미지 잘라냄 */
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.placeholderIcon {
+    font-size: 32px;
+    color: #bbb;
+}
+
+.textBox {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    margin-top: 8px;
+    font-weight: bold;
+}
+
+.productTitle {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.productPrice {
+    font-size: 15px;
+    font-weight: bold;
+    color: #333;
+}
+
+.platformLabel {
+    font-size: 14px;
+    margin-top: 6px;
+    color: #666;
+}
+
+.productLink {
+    display: inline-block;
+    margin-top: 4px;
+    color: #007bff;
+    text-decoration: underline;
+    font-size: 13px;
+}
+
+.section {
+    margin-bottom: 40px;
+}
+
+.sectionTitle {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.empty {
+    font-size: 14px;
+    color: #888;
+    padding: 8px;
+}
+
+.previewImage {
+    /* background-color: white; */
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* 비율 유지하며 잘 맞춤 */
+    display: block;
+}
+
+.platformIcon {
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+.platformLabel {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    margin-top: 6px;
+    color: #666;
+}
