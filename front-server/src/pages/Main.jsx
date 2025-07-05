@@ -14,10 +14,10 @@ const Main = () => {
 
     useEffect(() => {
         const token = localStorage.getItem('accessToken');
-        if (!token) {
-            alert("로그인이 필요합니다.");
-            navigate("/login");
-        }
+        // if (!token) {
+        //     alert("로그인이 필요합니다.");
+        //     navigate("/login");
+        // }
     }, [navigate]);
 
     const handleStartChatbot = () => {
@@ -31,14 +31,14 @@ const Main = () => {
                     <div className={`${styles.box} ${styles.item}`}>
                         <Link to='/item'>
                             <h2>품목</h2>
-                            <p>수출 성공 확률을 추천해줍니다.</p>
+                            <p>품목에 맞는 수출 국가와 성공 확률을 추천해드립니다.</p>
                             <img src={itemImg} alt="품목 이미지" />
                         </Link>
                     </div>
                     <div className={`${styles.box} ${styles.platform}`}>
                         <Link to='/platform'>
                             <h2>중개플랫폼</h2>
-                            <p>중개 플랫폼 설명, 필요한 문서들 미리보기, 판매 등록 가이드 해줍니다.</p>
+                            <p>상품 판매 등록 방법을 단계별로 쉽게 안내해 드립니다.</p>
                             <img src={platformImg} alt="플랫폼 이미지" />
                         </Link>
                     </div>
@@ -56,15 +56,15 @@ const Main = () => {
                     <div className={`${styles.box} ${styles.board}`}>
                         <Link to='/exhibition'>
                             <h2>게시판</h2>
-                            <p>게시판 입니다.</p>
+                            <p>Amazon과 Shoppe에 등록한 판매 제품들을 보여줍니다.</p>
                             <img src={boardImg} alt="게시판 이미지" />
                         </Link>
                     </div>
 
                     <div className={`${styles.box} ${styles.chatbot}`}>
                         <Link to='/chatbot'>
-                            <h2>챗봇</h2>
-                            <p>수출 가이드 챗봇입니다.</p>
+                            <h2>챗봇 가이드</h2>
+                            <p>품목 검색부터 수출 유망 국가 추천, 판매 등록 가이드, 게시글 작성까지 한 번에!</p>
                             <img src={chatbotImg} alt="챗봇 이미지" />
                         </Link>
                     </div>

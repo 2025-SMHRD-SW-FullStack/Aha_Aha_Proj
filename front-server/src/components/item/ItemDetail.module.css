@@ -187,3 +187,17 @@
     0% { transform: rotateY(0deg); }
     100% { transform: rotateY(360deg); } 
 }
+
+.description {
+    width: 400px;    /* 원하는 높이로 조정 */
+    overflow-y: auto;    /* 세로 스크롤 */
+    line-height: 1.4;    /* 가독성 향상 */
+    word-break: keep-all;/* 단어가 중간에 잘리지 않게 */
+}
+
+.descriptionTable {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

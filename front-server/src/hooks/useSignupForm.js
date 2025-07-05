@@ -15,6 +15,14 @@ export function useSignUpForm() {
     const [gender, setGender] = useState('남자');
     const [phone, setPhone] = useState('');
 
+    // 회사 정보 관련 상태
+    const [companyName, setCompanyName] = useState('');
+    const [businessNumber, setBusinessNumber] = useState('');
+    const [address, setAddress] = useState('');
+    const [ceoName, setCeoName] = useState('');
+    const [industry, setIndustry] = useState('');
+    const [product, setProduct] = useState('');
+
     // 에러 메시지 상태 추가
     const [nicknameError, setNicknameError] = useState('');
     const [emailError, setEmailError] = useState('');
@@ -43,6 +51,13 @@ export function useSignUpForm() {
         birth, setBirth,
         gender, setGender,
         phone, setPhone,
+         // ✅ 회사 정보 추가
+        companyName, setCompanyName,
+        businessNumber, setBusinessNumber,
+        address, setAddress,
+        ceoName, setCeoName,
+        industry, setIndustry,
+        product, setProduct,
         nicknameError, setNicknameError,
         emailError, setEmailError,
         passwordError, setPasswordError,

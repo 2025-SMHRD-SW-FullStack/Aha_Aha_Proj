@@ -67,7 +67,8 @@ const FavoriteItem = () => {
           items.push({
             id: item.favoriteId,
             productName: item.productName,
-            description: item.productDescription,
+            // description: item.productDescription,
+            reason: rc.reason,
             countryName: rc.country,
             successRate: rc.percent,
           });
@@ -148,7 +149,7 @@ const FavoriteItem = () => {
                 <td><span className={styles.rankIcon}>{rankIcon(idx)}</span></td>
                 <td>
                   {item.productName}
-                  <div className={styles.description}>{item.description}</div>
+                  <div className={styles.description}>{item.reason}</div>
                 </td>
                 <td>{item.countryName}</td>
                 <td>{item.successRate}%</td>

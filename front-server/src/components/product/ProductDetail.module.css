@@ -72,13 +72,13 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    color: #666;
-    font-size: 20px;
+    color: var(--color-gray90);
+    font-size: 30px;
+    font-weight: 500;
 }
 
 .platform img {
-    width: 20px;
-    height: 20px;
+    height: 50px;
 }
 
 .price {
@@ -88,15 +88,15 @@
 }
 
 .content {
-    border: 1px solid var(--color-gray10);
+    /* border: 1px solid var(--color-gray10); */
     height: 175px;
-    font-size: 18px;
+    font-size: 20px;
     color: #444;
     line-height: 1.6;
     margin-bottom: 20px;
     border-radius: 10px;
     padding: 20px;
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
 }
 
 .linkButton {
@@ -115,7 +115,22 @@
     margin-top: auto;
     padding: 12px;
     border-radius: 8px;
-    background-color: #ddd;
+    /* background-color: #ddd; */
     color: #777;
     text-align: center;
+}
+
+
+.platformBox {
+    /* height: 80px; */
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    align-items: center;
+    background-color: #ddd;
+    border-radius: 20px;
+}
+
+.btnBox {
+    margin-left: 40px;
 }

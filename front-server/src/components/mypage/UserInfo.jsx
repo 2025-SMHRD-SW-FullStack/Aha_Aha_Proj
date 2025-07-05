@@ -60,6 +60,7 @@ const UserInfo = () => {
         phone: form.phone,
         birth: form.birth,
         name: form.name,
+        email: form.email,
       };
 
       await axiosInstance.put("/api/users/me", requestData);
@@ -100,12 +101,12 @@ const UserInfo = () => {
         isEdit={isEdit}
         onChange={handleChange}
       />
-      {/* <InfoRow
+      <InfoRow
         label="이메일"
         value={form.email}
         name="email"
         isEdit={false}
-      /> */}
+      />
       <InfoRow
         label="생년월일"
         value={form.birth}

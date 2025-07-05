@@ -10,6 +10,8 @@ import typingIcon from '/src/assets/images/typing.png'
 import lodingIcon from '/src/assets/images/platform.png'
 import { useNavigate } from 'react-router-dom'
 import { getRecommendedCountries, getRecommendedPlatformByCountry } from '../../service/recommendService'
+import { getProductItemIdByName, toggleFavorite } from '../../service/favoriteService'
+import { getUserIdFromToken } from '../../util/jwt'
 
 
 /** input, 즐겨찾기 버튼 등 중앙 검색 영역 전체 */
@@ -22,7 +24,7 @@ const ItemDetail = ({itemId}) => {
 
     const [isFavorite, setIsFavorite] = useState(false);
     const [feedback, setFeedback] = useState(null);
-    const [favoriteList, setFavoriteList] = useState([]);
+    // const [favoriteList, setFavoriteList] = useState([]);
     const [searched, setSearched] = useState(false);
 
     const [recommendData, setRecommendData] = useState(null);
@@ -49,24 +51,26 @@ const ItemDetail = ({itemId}) => {
         }
     }, [itemId]);
 
+    // 입력값이 바뀔 때 즐겨찾기 여부 서버에서 확인하는 로직을 추가하고 싶다면 여기에 API 호출 필요
+
     // 로컬스토리지에서 해당 유저의 즐겨찾기 목록 불러오기
-    useEffect(() => {
-        if (!userId) return;
-        try {
-            const saved = JSON.parse(localStorage.getItem(`favorites_${userId}`)) || [];
-            setFavoriteList(saved);
-        } catch (e) {
-            console.error('즐겨찾기 목록 파싱 실패', e);
-            setFavoriteList([]);
-        }
-    }, [itemId, userId]);
+    // useEffect(() => {
+    //     if (!userId) return;
+    //     try {
+    //         const saved = JSON.parse(localStorage.getItem(`favorites_${userId}`)) || [];
+    //         setFavoriteList(saved);
+    //     } catch (e) {
+    //         console.error('즐겨찾기 목록 파싱 실패', e);
+    //         setFavoriteList([]);
+    //     }
+    // }, [itemId, userId]);
 
     // 입력값이 바뀔 때마다 즐겨찾기 여부 동기화
-    useEffect(() => {
-        if (!userId) return;
-        const trimmed = inputValue.trim();
-        setIsFavorite(favoriteList.includes(trimmed));
-    }, [inputValue, favoriteList, userId]);
+    // useEffect(() => {
+    //     if (!userId) return;
+    //     const trimmed = inputValue.trim();
+    //     setIsFavorite(favoriteList.includes(trimmed));
+    // }, [inputValue, favoriteList, userId]);
 
     // 검색 완료 후 플랫폼 추천 요청
     useEffect(() => {
@@ -85,26 +89,38 @@ const ItemDetail = ({itemId}) => {
         }
     }, [inputValue, itemId]);
 
-    /** [ 즐겨찾기 버튼 클릭 ] */
-    const handleFavorite = () => {
+    /** [ 즐겨찾기 버튼 클릭 (서버에 요청)] */
+    const handleFavorite = async () => {
+        const userId = getUserIdFromToken();
+
         if (!userId) {
             alert('로그인이 필요합니다.');
             return;
         }
+
         const trimmed = inputValue.trim();
-        const nextState = !isFavorite;
-        setIsFavorite(nextState);
+        try {
+            const productItemId = await getProductItemIdByName(trimmed); // 품목 ID 가져오기
+            await toggleFavorite({productItemId, userId}); // 서버에 즐겨찾기 토글 요청
 
-        const updatedList = nextState
-        ? [...favoriteList, trimmed]
-        : favoriteList.filter(item => item !== trimmed);
+            const nextState = !isFavorite;
+            setIsFavorite(nextState);
+            setFeedback(nextState ? 'add': 'delete');
+            setTimeout(()=> setFeedback(null), 1000);
+        } catch (error) {
+            console.error('즐겨찾기 처리 실패:', error);
+        }
 
-        setFavoriteList(updatedList);
-        localStorage.setItem(`favorites_${userId}`, JSON.stringify(updatedList));
+        // const updatedList = nextState
+        // ? [...favoriteList, trimmed]
+        // : favoriteList.filter(item => item !== trimmed);
 
-        // 즐겨찾기 추가/삭제 클릭 알림 표시
-        setFeedback(nextState ? 'add' : 'delete');
-        setTimeout(()=> setFeedback(null), 1000);
+        // setFavoriteList(updatedList);
+        // localStorage.setItem(`favorites_${userId}`, JSON.stringify(updatedList));
+
+        // // 즐겨찾기 추가/삭제 클릭 알림 표시
+        // setFeedback(nextState ? 'add' : 'delete');
+        // setTimeout(()=> setFeedback(null), 1000);
     };
 
     /** [ 검색 실행 ] */
@@ -231,7 +247,11 @@ const ItemDetail = ({itemId}) => {
                                 <td>{item.rank}</td>
                                 <td>{item.country}</td>
                                 <td>{item.recommendationScore}</td>
-                                <td>{item.key_factor}</td>
+                                <td className={styles.descriptionTable}>
+                                    <div className={styles.description}>
+                                    {item.key_factor}
+                                    </div>
+                                </td>
                                 <td>{
                                     platformMap[item.country]
                                         ? platformMap[item.country].map(p => p.platform).join(', ')

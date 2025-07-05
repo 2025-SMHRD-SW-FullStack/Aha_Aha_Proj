@@ -1,11 +1,7 @@
 import React, { useContext } from 'react'
 import styles from './AmazonStep5.module.css'
 import AmazonFormContext from '/src/provider/AmazonFormContext'
-import { createExhibition } from '/src/service/exhibitionApi';
 import { useNavigate } from 'react-router-dom';
-import { step5PostTranslation } from '/src/service/step5PostTranslate';
-import { jwtDecode } from 'jwt-decode';
-
 const AmazonStep5 = () => {
     // useEffect(() => {
     //     console.log("📦 Step5 진입 시 formData 상태:", formData);

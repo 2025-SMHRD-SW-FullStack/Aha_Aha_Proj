@@ -2,9 +2,6 @@ import React, { useContext } from 'react'
 import styles from './ShopeeStep6.module.css'
 import ShopeeContext from '/src/provider/ShopeeFormContext.jsx'
 import { useNavigate } from 'react-router-dom';
-import { step5PostTranslation } from '/src/service/step5PostTranslate';
-import { createExhibition } from '../../../service/exhibitionApi';
-import { jwtDecode } from 'jwt-decode';
 
 
 const ShopeeStep6 = () => {

@@ -26,6 +26,13 @@ const EmailSignUpForm = () => {
         birth, setBirth,
         gender, setGender,
         phone, setPhone,
+         // ✅ 회사 정보 추가
+        companyName, setCompanyName,
+        businessNumber, setBusinessNumber,
+        address, setAddress,
+        ceoName, setCeoName,
+        industry, setIndustry,
+        product, setProduct,
         isValid,
         nicknameError, setNicknameError,
         emailError, setEmailError,
@@ -48,13 +55,18 @@ const EmailSignUpForm = () => {
                 birth,
                 gender,
                 phone,
+                companyName,     // ✅ 추가
+                businessNumber,
+                address,
+                ceoName,
+                industry,
             });
 
             // 바로 로그인 요청
-            const loginRes = await loginRequest({email, password});
+            const { token, user } = await loginRequest({email, password});
 
             // AccessToken 저장
-            localStorage.setItem('accessToken', loginRes.accessToken);
+            localStorage.setItem('accessToken', token);
 
             // 메인 페이지 이동
             navigate('/');
@@ -307,11 +319,16 @@ const EmailSignUpForm = () => {
                 <p className={styles.inputInfoText}>선택 입력 사항</p>
             
                 <div>
-                    <TextField id="company_name" label="회사명" type="text" singleFirst/>
-                    <TextField id="business_number" label="사업자등록번호" type="text" singleMiddle/>
-                    <TextField id="address" label="본사 주소" type="text" singleMiddle/>
-                    <TextField id="ceo_name" label="대표자명" type="text" singleMiddle/>
-                    <TextField id="industry" label="업종" type="text" singleLast/>
+                    <TextField id="company_name" label="회사명" type="text" singleFirst
+                        value={companyName} onChange={(e) => setCompanyName(e.target.value)}/>
+                    <TextField id="business_number" label="사업자등록번호" type="text" singleMiddle
+                        value={businessNumber} onChange={(e) => setBusinessNumber(e.target.value)}/>
+                    <TextField id="address" label="본사 주소" type="text" singleMiddle
+                        value={address} onChange={(e) => setAddress(e.target.value)}/>
+                    <TextField id="ceo_name" label="대표자명" type="text" singleMiddle
+                        value={ceoName} onChange={(e) => setCeoName(e.target.value)}/>
+                    <TextField id="industry" label="업종" type="text" singleLast
+                        value={industry} onChange={(e) => setIndustry(e.target.value)}/>
                 </div>
                 
                 {/* 유효성 조건에 따라 활성/비활성화 처리 */}
