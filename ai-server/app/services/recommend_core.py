@@ -76,6 +76,8 @@ def recommend_core(item: str, page: int = 1, size: int = 10) -> dict:
         "tableData": table_data
     }
 
-    # 9. 결과 캐시(DB)에 저장
+   # 9. 결과 캐시(DB)에 저장
+    print(f"[DEBUG] 캐시 저장 함수 호출 직전: item={item}")
     save_search_result_to_db(item, response_data)
+    print(f"[DEBUG] 캐시 저장 함수 호출 완료: item={item}")
     return response_data
