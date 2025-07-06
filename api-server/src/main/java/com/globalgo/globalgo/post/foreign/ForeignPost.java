@@ -26,6 +26,15 @@ public class ForeignPost {
     @Lob
     private String content;
 
+    @Column(nullable = true)
+    private String url;
+
+    @Column(nullable = true)
+    private String platform;
+
+    @Column(nullable = true)
+    private String yourPrice;
+
     private LocalDateTime createdAt;
 
     public static ForeignPost create(User user, String title, String content) {

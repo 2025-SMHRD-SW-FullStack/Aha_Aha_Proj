@@ -5,6 +5,7 @@ import { sendChatToBot } from '../../service/chatbotApi';
 import { step5PostTranslation } from '../../service/step5PostTranslate';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import ImageModal from './ImageModal';
 
 const Chatbot = () => {
   const [messages, setMessages] = useState([]);
@@ -18,6 +19,8 @@ const Chatbot = () => {
   const [translatedTitle, setTranslatedTitle] = useState('');
   const [translatedContent, setTranslatedContent] = useState('');
   const [userId, setUserId] = useState(null);
+
+  const [modalImage, setModalImage] = useState(null);
 
   // 🔐 JWT 토큰에서 userId 추출
   useEffect(() => {
@@ -43,15 +46,17 @@ const Chatbot = () => {
     }
   }, [userId]);
 
-  const addMessage = (sender, text, isImage = false) => {
-    setMessages((prev) => [...prev, { sender, text, isImage }]);
+  const addMessage = (role, content, type = 'text') => {
+    setMessages((prev) => [...prev, { role, content, type }]);
   };
 
   // 📩 사용자 메시지 전송
   const handleSubmit = async (e) => {
+    
     e.preventDefault();
     if (!input.trim()) return;
 
+    // 사용자 메시지 추가
     addMessage('user', input);
 
     if (step === 5) {
@@ -68,19 +73,31 @@ const Chatbot = () => {
 
     try {
       const res = await sendChatToBot({ userId, message: input });
+
+      if (!res) {
+        addMessage('bot', '❌ 서버에서 응답을 받지 못했습니다. 다시 시도해주세요.');
+        return;
+      }
+
       console.log('백엔드 응답:', res);
 
-      // 텍스트 응답 추가
+      if (res.messages && Array.isArray(res.messages)) {
+        res.messages.forEach((msg) => {
+          addMessage(msg.role, msg.content, msg.type);
+        });
+      }
+
       if (res.response) {
         addMessage('bot', res.response);
       }
 
-      // 이미지 응답이 있다면 이미지 추가
       if (res.image) {
-        addMessage('bot', res.image, true);
+        addMessage('bot', res.image, 'image');
       }
 
       const { step: newStep, context } = res;
+      console.log('context:', context);
+
 
       if (context?.item) setItem(context.item);
       if (context?.country) setCountry(context.country);
@@ -109,8 +126,17 @@ const Chatbot = () => {
     setInput('');
   };
 
+
   // 📤 Step5: 게시글 등록
   const handleStep5 = async (msg) => {
+    console.log('Step5 게시글 등록 데이터:', {
+      userId,
+      title,
+      content,
+      translatedTitle,
+      translatedContent,
+      target,
+    });
     const answer = msg.trim();
     let target = '';
 
@@ -155,25 +181,45 @@ const Chatbot = () => {
   return (
     <div className={styles.container}>
       <div className={styles.chatHeader}>🧠 GlobalGo AI 수출 도우미</div>
+
       <div className={styles.chatBody}>
         {messages.map((msg, i) => (
-          <div key={i} className={`${styles.message} ${styles[msg.sender]}`}>
-            {msg.isImage ? (
-              <>
-                {console.log('이미지 메시지:', msg.text)}
-                {console.log('이미지 src:', `${import.meta.env.VITE_FASTAPI_PUBLIC_URL}${msg.text}`)}
-                <img
-                  src={`${import.meta.env.VITE_FASTAPI_PUBLIC_URL}${msg.text}`}
-                  alt="slide"
-                  className={styles.slideImage}
-                />
-              </>
+          <div key={i} className={`${styles.message} ${styles[msg.role]}`}>
+            {msg.type === 'image' ? (
+              <img
+                src={`${msg.content}`}
+                alt="slide"
+                className={styles.chatImage}
+                onClick={() => setModalImage(msg.content)}
+              />
             ) : (
-              <Markdown remarkPlugins={[remarkGfm]}>{msg.text}</Markdown>
+            <>
+                <Markdown remarkPlugins={[remarkGfm]} components={{
+                    img: ({ node, ...props }) => (
+                      <img
+                        {...props}
+                        style={{ maxWidth: '100%', cursor: 'pointer' }}
+                        onClick={() => setModalImage(props.src)}
+                        alt={props.alt || 'image'}
+                      />
+                    ),
+                  }}
+                >
+                  {msg.content}
+                </Markdown>
+
+                {modalImage && (
+                  <ImageModal
+                    src={modalImage}
+                    onClose={() => setModalImage(null)}
+                  />
+                )}
+              </>
             )}
           </div>
         ))}
       </div>
+
       <form className={styles.chatFooter} onSubmit={handleSubmit}>
         <input
           type="text"

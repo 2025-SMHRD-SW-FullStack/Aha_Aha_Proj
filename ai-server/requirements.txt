@@ -6,3 +6,4 @@ httpx
 requests
 PyJWT
 redis
+mysql-connector-python

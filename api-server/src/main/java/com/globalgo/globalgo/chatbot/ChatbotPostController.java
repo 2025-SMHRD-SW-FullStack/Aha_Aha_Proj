@@ -17,13 +17,14 @@ public class ChatbotPostController {
 
     @PostMapping("/post")
     public ResponseEntity<String> postTranslated(@RequestBody PostTranslationRequest request) {
+        System.out.println("✅✅✅ ChatbotPostController 진입 확인");
         Long userId = request.getUserId();
 
-        if (request.getTarget().contains("domestic")) {
+        if (request.getTarget().contains("domestic") || request.getTarget().contains("both")) {
             domesticPostService.create(userId, request.getTitle(), request.getContent());
         }
 
-        if (request.getTarget().contains("foreign")) {
+        if (request.getTarget().contains("foreign") || request.getTarget().contains("both")) {
             foreignPostService.create(userId, request.getTranslatedTitle(), request.getTranslatedContent());
         }
 
