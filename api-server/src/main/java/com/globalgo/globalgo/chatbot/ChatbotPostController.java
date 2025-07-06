@@ -3,6 +3,7 @@ package com.globalgo.globalgo.chatbot;
 import com.globalgo.globalgo.chatbot.dto.PostTranslationRequest;
 import com.globalgo.globalgo.post.domestic.DomesticPostService;
 import com.globalgo.globalgo.post.foreign.ForeignPostService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/step5")
+@Tag(name = "챗봇전용 상품게시 API", description = "챗봇전용 상품 게시 API")
 public class ChatbotPostController {
 
     private final DomesticPostService domesticPostService;
