@@ -8,7 +8,7 @@ export async function getRecommendedCountries(itemName, page = 1, size = 20) {
         item: itemName,
         page,
         size
-    }
+        }
     });
     // 200: 문자열 응답
     return res.data;  

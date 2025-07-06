@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-def call_chatgpt(user_id: int, system_prompt: str, user_prompt: str, chat_history: list[dict] = None) -> str:
+def call_chatgpt(user_id: int, system_prompt: str, user_prompt: str, chat_history: list[dict] = None, force_json: bool = False) -> str:
     print("🔵 GPT 호출 중...")
 
     # ✅ system 프롬프트를 외부에서 받음
@@ -23,7 +23,11 @@ def call_chatgpt(user_id: int, system_prompt: str, user_prompt: str, chat_histor
         )
         result = response.choices[0].message.content.strip()
         print("🟢 GPT 응답:", result)
+        print("call_chatgpt 리턴 직전")
+        print("리턴값:", repr(result), type(result))
         return result
     except Exception as e:
         print("🔴 GPT 호출 오류:", str(e))
         return "죄송합니다. 응답에 문제가 발생했습니다."
+    finally:
+        print("call_chatgpt finally 블록")

@@ -16,8 +16,8 @@ class ChatRequest(BaseModel):
 @router.post("/chatbot")
 def chatbot(req: ChatRequest, authorization: str = Header(...), db: Session = Depends(get_db)):
     try:
-        user_email = verify_jwt_token(authorization)
-        result = ChatbotService().handle(db, user_email, req.message)
+        user_id = verify_jwt_token(authorization)
+        result = ChatbotService().handle(db, user_id, req.message)
 
         # 👉 문자열이면 JSON으로 감싸서 리턴
         if isinstance(result, str):

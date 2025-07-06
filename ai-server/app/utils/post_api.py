@@ -17,9 +17,13 @@ async def post_to_spring_board(user_id: int, title: str, content: str, translate
         "target": target  # "domestic" / "foreign" / "both"
     }
 
+    print("📡 [post_to_spring_board] 호출됨")
+    print("📤 payload:", payload)
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(SPRING_API_URL, json=payload, timeout=10.0)
+            print("📥 응답 코드:", response.status_code)
+            print("📥 응답 내용:", response.text)
             return response.status_code == 200
     except Exception as e:
         print(f"❌ 게시 요청 실패: {e}")

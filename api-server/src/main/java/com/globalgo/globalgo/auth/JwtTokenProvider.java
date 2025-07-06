@@ -18,7 +18,8 @@ public class JwtTokenProvider {
     private String secretKey;
 
     // 각각 유효시간 (초 단위 → 밀리초로 변환)
-    private final long accessTokenValidityInMillis = 1000L * 60 * 15;         // 15분
+    private final long accessTokenValidityInMillis = 1000L * 60 * 60 * 24 * 7; // 7일
+//            1000L * 60 * 15;         // 15분
     private final long refreshTokenValidityInMillis = 1000L * 60 * 60 * 24 * 14; // 14일
 
     private static final String HEADER = "Authorization";

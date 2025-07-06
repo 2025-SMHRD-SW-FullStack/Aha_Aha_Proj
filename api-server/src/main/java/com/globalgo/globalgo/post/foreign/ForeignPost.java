@@ -26,8 +26,21 @@ public class ForeignPost {
     @Lob
     private String content;
 
+    @Column(nullable = true)
+    private String url;
+
+    @Column(nullable = true)
+    private String platform;
+
+    @Column(nullable = true)
+    private String yourPrice;
+
+    @Column(nullable = true)
+    private String img;
+
     private LocalDateTime createdAt;
 
+    // 챗봇용
     public static ForeignPost create(User user, String title, String content) {
         return ForeignPost.builder()
                 .user(user)
@@ -36,4 +49,20 @@ public class ForeignPost {
                 .createdAt(LocalDateTime.now())
                 .build();
     }
+
+    // 페이지용
+    public static ForeignPost create(User user, String title, String content,
+                                     String img, String url, String platform, String yourPrice) {
+        return ForeignPost.builder()
+                .user(user)
+                .title(title)
+                .content(content)
+                .img(img)
+                .url(url)
+                .platform(platform)
+                .yourPrice(yourPrice)
+                .createdAt(LocalDateTime.now())
+                .build();
+    }
+
 }

@@ -1,102 +1,132 @@
 [
   {
-    "title": "쇼피 가이드 1단계",
-    "content": "내용 없음",
+    "title": "쇼피 셀러 개념",
+    "content": "글로벌 상품과 샵 상품 개념",
     "image": "/static/slides/shopee/slide_1.png"
   },
   {
-    "title": "쇼피 가이드 2단계",
-    "content": "내용 없음",
+    "title": "셀러센터 로그인",
+    "content": "main아이디 로그인",
     "image": "/static/slides/shopee/slide_2.png"
   },
   {
-    "title": "쇼피 가이드 3단계",
-    "content": "내용 없음",
+    "title": "Global SKU 상품 등록",
+    "content": "Add a Gloval SKU 클릭",
     "image": "/static/slides/shopee/slide_3.png"
   },
   {
-    "title": "쇼피 가이드 4단계",
-    "content": "내용 없음",
+    "title": "Product Images 등록",
+    "content": "상품이미지 등록, 필수 등록",
     "image": "/static/slides/shopee/slide_4.png"
   },
   {
-    "title": "쇼피 가이드 5단계",
-    "content": "내용 없음",
+    "title": "Product Video",
+    "content": "상품 동영상 등록",
     "image": "/static/slides/shopee/slide_5.png"
   },
   {
-    "title": "쇼피 가이드 6단계",
-    "content": "내용 없음",
+    "title": "Product Name",
+    "content": "상품 이름, 브랜드명 + 제품명",
     "image": "/static/slides/shopee/slide_6.png"
   },
   {
-    "title": "쇼피 가이드 7단계",
-    "content": "내용 없음",
+    "title": "Category",
+    "content": "상품 카테고리 선택",
     "image": "/static/slides/shopee/slide_7.png"
   },
   {
-    "title": "쇼피 가이드 8단계",
-    "content": "내용 없음",
+    "title": "Product Description",
+    "content": "제품 상세내용",
     "image": "/static/slides/shopee/slide_8.png"
   },
   {
-    "title": "쇼피 가이드 9단계",
-    "content": "내용 없음",
+    "title": "Specification",
+    "content": "브랜드명, 유통기한, 제형",
     "image": "/static/slides/shopee/slide_9.png"
   },
   {
-    "title": "쇼피 가이드 10단계",
-    "content": "내용 없음",
+    "title": "Specification 참고사항",
+    "content": "참고사항",
     "image": "/static/slides/shopee/slide_10.png"
   },
   {
-    "title": "쇼피 가이드 11단계",
-    "content": "내용 없음",
+    "title": "Sales Information",
+    "content": "상품 상세옵션 ",
     "image": "/static/slides/shopee/slide_11.png"
   },
   {
-    "title": "쇼피 가이드 12단계",
-    "content": "내용 없음",
+    "title": "Variations 1",
+    "content": "상품 상세 옵션 작성",
     "image": "/static/slides/shopee/slide_12.png"
   },
   {
-    "title": "쇼피 가이드 13단계",
-    "content": "내용 없음",
+    "title": "Variations 2 참고사항",
+    "content": "가격 설정 시 참고사항",
     "image": "/static/slides/shopee/slide_13.png"
   },
   {
-    "title": "쇼피 가이드 14단계",
-    "content": "내용 없음",
+    "title": "Variations 3 참고사항",
+    "content": "상품 가격, 이미지, 재고",
     "image": "/static/slides/shopee/slide_14.png"
   },
   {
-    "title": "쇼피 가이드 15단계",
-    "content": "내용 없음",
+    "title": "Variations 4",
+    "content": "가격 설정 시 참고사항",
     "image": "/static/slides/shopee/slide_15.png"
   },
   {
-    "title": "쇼피 가이드 16단계",
-    "content": "내용 없음",
+    "title": "Weight and Dimension 참고사항 1",
+    "content": "상품 포장 및 부피중량 참고사항",
     "image": "/static/slides/shopee/slide_16.png"
   },
   {
-    "title": "쇼피 가이드 17단계",
-    "content": "내용 없음",
+    "title": "Weight and Dimension 참고사항 2",
+    "content": "부피중량 참고사항",
     "image": "/static/slides/shopee/slide_17.png"
   },
   {
-    "title": "쇼피 가이드 18단계",
-    "content": "내용 없음",
+    "title": "Weight and Dimension",
+    "content": "부피중량 입력",
     "image": "/static/slides/shopee/slide_18.png"
   },
   {
-    "title": "쇼피 가이드 19단계",
-    "content": "내용 없음",
+    "title": "Days to ship",
+    "content": "집하지까지의 발송일",
     "image": "/static/slides/shopee/slide_19.png"
   },
   {
-    "title": "쇼피 가이드 20단계",
-    "content": "내용 없음",
+    "title": "Create and Publish",
+    "content": "상품 게시",
     "image": "/static/slides/shopee/slide_20.png"
+  },
+  {
+    "title": "Select Shops",
+    "content": "게시할 샵 선택하기",
+    "image": "/static/slides/shopee/slide_21.png"
+  },
+  {
+    "title": "Confirm Shop",
+    "content": "샵 상품의 가격 설정",
+    "image": "/static/slides/shopee/slide_22.png"
+  },
+  {
+    "title": "마켓 판매시작",
+    "content": "마켓 판매 시작",
+    "image": "/static/slides/shopee/slide_23.png"
+  },
+  {
+    "title": "마켓 판매 참고사항 1",
+    "content": "현재 미판매 나라는 회색",
+    "image": "/static/slides/shopee/slide_24.png"
+  },
+  {
+    "title": "마켓 판매 참고사항 2",
+    "content": "현재 판매중인 나라는 초록",
+    "image": "/static/slides/shopee/slide_25.png"
+  },
+  {
+    "title": "마켓 판매 참고사항 3",
+    "content": "글로벌 상품 주의사항",
+    "image": "/static/slides/shopee/slide_26.png"
   }
 ]
