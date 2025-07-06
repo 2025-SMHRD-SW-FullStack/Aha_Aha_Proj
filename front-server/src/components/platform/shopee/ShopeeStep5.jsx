@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import styles from './Shopee.module.css'
 import step5 from '/src/assets/images/shopee/step5.png'
 import ShopeeContext from '/src/provider/ShopeeFormContext.jsx'
+import CopyButton from '../../common/CopyButton'
 
 
 const ShopeeStep5 = () => {
@@ -40,6 +41,15 @@ const ShopeeStep5 = () => {
                         onChange={(e) => updateField('Weight', e.target.value)}
                         />  
                 </label>
+                {/* 복사 버튼 (입력값 복사) */}
+                <div style={{
+                    position: 'absolute',
+                    right: '8px',
+                    top: '60%',
+                    transform: 'translateY(-50%)'
+                    }}>
+                    <CopyButton text={formData.Weight} />
+                </div>
             </div>
 
             <div className={styles.userInputBox}>

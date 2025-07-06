@@ -1,10 +1,26 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import styles from './AmazonStep4.module.css'
 import NewProductForm from './NewProductForm';
 import ExistingProductForm from './ExistingProductForm';
+import AmazonFormContext from '../../../provider/AmazonFormContext';
+import translateApi from '../../../service/translateApi';
 
 const AmazonStep4 = () => {
     const [registerType, setRegisterType] = useState('new'); // 기본값 새 상품 정보 입력
+    const { formData, updateField } = useContext(AmazonFormContext);
+
+    // 번역하기 버튼
+    const handleTranslate = async () => {
+        try {
+            const translatedData = await translateApi(formData)
+            Object.entries(translatedData).forEach(([key, value]) => {
+                updateField(key, value)
+            });
+        } catch (error) {
+            console.error('AmazonStep4 번역 실패 :', error)
+            alert('번역 중 오류가 발생했습니다.');
+        }
+    }
 
     // useEffect(() => {
     //     console.log("📝 Step4에서 입력 후 formData 상태:", formData);
@@ -46,7 +62,7 @@ const AmazonStep4 = () => {
 
                 </div>
                 {/* 번역하기 버튼 */}
-                <button className={styles.translateBtn}>
+                <button className={styles.translateBtn} onClick={handleTranslate}>
                     번역하기
                 </button>
                 <br/>

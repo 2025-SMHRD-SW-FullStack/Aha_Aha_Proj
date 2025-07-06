@@ -3,10 +3,25 @@ import styles from './Shopee.module.css'
 import step3 from '/src/assets/images/shopee/step3.png'
 import ShopeeContext from '/src/provider/ShopeeFormContext.jsx'
 import ImageBox from '../../common/ImageBox'
+import translateApi from '../../../service/translateApi'
+import CopyButton from '../../common/CopyButton'
 
 
 const ShopeeStep3 = () => {
     const { formData, updateField } = useContext(ShopeeContext);
+
+    // 번역하기 버튼
+    const handleTranslate = async () => {
+        try {
+            const translatedData = await translateApi(formData)
+            Object.entries(translatedData).forEach(([key, value]) => {
+                updateField(key, value)
+            });
+        } catch (error) {
+            console.error('ShopeeStep2 번역 오류:', error)
+            alert('번역 중 오류가 발생했습니다.');
+        }
+    }
 
     return (
         <div>
@@ -20,7 +35,7 @@ const ShopeeStep3 = () => {
                     </div>
                 </div>
                 {/* 번역하기 버튼 */}
-                <button className={styles.translateBtn}>
+                <button className={styles.translateBtn} onClick={handleTranslate}>
                     번역하기
                 </button>
                 <br/>
@@ -70,6 +85,15 @@ const ShopeeStep3 = () => {
                     onChange={(e) => updateField('description', e.target.value)}
                     placeholder="상품의 기본 설명 글" 
                 /><br/>
+                {/* 복사 버튼 (입력값 복사) */}
+                <div style={{
+                    position: 'absolute',
+                    right: '8px',
+                    top: '-15%',
+                    transform: 'translateY(-50%)'
+                    }}>
+                    <CopyButton text={formData.description} />
+                </div>
             </div>
             <div className={styles.infoBox}>
                 · 상세 페이지에 단락으로 요약된 상세 상품 관련 설명 작성 <br />

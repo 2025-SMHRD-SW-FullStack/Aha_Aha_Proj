@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import styles from './AmazonStep4.module.css'
 import AmazonFormContext from '../../../provider/AmazonFormContext';
+import CopyButton from '../../common/CopyButton';
 
 const ExistingProductForm = () => {
     const { formData, updateField } = useContext(AmazonFormContext);
@@ -22,6 +23,15 @@ const ExistingProductForm = () => {
                     onChange={(e) => updateField('yourPrice', e.target.value)}
                     placeholder="Ex: 50.00" 
                 /><br/>
+                {/* 복사 버튼 (입력값 복사) */}
+                <div style={{
+                    position: 'absolute',
+                    right: '8px',
+                    top: '60%',
+                    transform: 'translateY(-50%)'
+                    }}>
+                    <CopyButton text={formData.yourPrice} />
+                </div>
             </div>
             <p className={styles.infoBox}>
                 · 판매 상품의 기준 가격을 입력
@@ -57,6 +67,15 @@ const ExistingProductForm = () => {
                     onChange={(e) => updateField('maxOrderQty', e.target.value)}
                     placeholder='Ex: 7'
                 /><br/>
+                {/* 복사 버튼 (입력값 복사) */}
+                <div style={{
+                    position: 'absolute',
+                    right: '8px',
+                    top: '60%',
+                    transform: 'translateY(-50%)'
+                    }}>
+                    <CopyButton text={formData.maxOrderQty} />
+                </div>
             </div>
             <div className={styles.infoBox}>
                 · 주문 당 판매 상품을 구매할 수 있는 최대 수량 확인

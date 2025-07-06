@@ -25,8 +25,11 @@ public class ProductSort {
     @Column(name = "`rank`")
     private Integer rank;
 
-    private Double percent;
+    private String percent;
 
     @Column(length = 1000)
     private String reason;
+
+    @Column(name="product_item_name")
+    private String product_item_name;
 }

@@ -58,6 +58,17 @@ const ShopeeStep6 = () => {
             · 이전 1~5단계에서 입력한 모든 정보를 검토한 후, 
             <strong>상품을 저장하고 등록</strong>합니다.
             </div>
+            <br />
+
+            <div>
+                <a 
+                href="https://seller.shopee.kr"
+                target="_blank"
+                rel="noopener noreferrer"
+                >
+                <h3 className={styles.linkHover} style={{color: '#4078FF'}}>쇼피에 판매 등록하러 바로가기 ↘️</h3>
+                </a>
+            </div>
 
 
             {/* 체크박스 */}

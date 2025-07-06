@@ -60,6 +60,17 @@ const AmazonStep5 = () => {
             · 주문 처리 방식으로 FBA를 선택하셨다면, 리스팅 된 상품의 재고를 아마존 주문처리 센터로 보내야 합니다.
             본 프로세스에 대한 상세 안내는 별도 가이드를 참고해주세요.
             </p>
+            <br />
+
+            <div>
+                <a 
+                href="https://sellercentral.amazon.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                >
+                <h3 className={styles.linkHover} style={{color: '#4078FF'}}>아마존에 판매 등록하러 바로가기 ↘️</h3>
+                </a>
+            </div>
 
 
             {/* 체크박스 */}

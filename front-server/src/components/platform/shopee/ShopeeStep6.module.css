@@ -45,3 +45,7 @@
     background-color: var(--color-primary);
     margin-left: 10px;
 }
+
+.linkHover:hover {
+    background-color: #e3f1f7;
+}

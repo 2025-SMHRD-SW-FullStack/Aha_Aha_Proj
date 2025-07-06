@@ -11,6 +11,7 @@ export const AmazonFormProvider = ({children}) => {
         noProductId: false,         // ✅ checkbox (boolean)
         productName: '',            // 📝 상품명
         brandName: '',              // 📝 브랜드명
+        noBrandName: false,         // 📝 브랜드명 없음
         // ☑️ checkbox: 브랜드명 없음 → 별도 처리 고려 가능
 
         // 💲 Offer

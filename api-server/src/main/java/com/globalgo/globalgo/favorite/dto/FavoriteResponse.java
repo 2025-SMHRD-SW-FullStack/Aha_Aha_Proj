@@ -24,7 +24,7 @@ public class FavoriteResponse {
     public static class ProductSortDto {
         private String country;
         private Integer rank;
-        private Double percent;
+        private String percent;
         private String reason;
     }
 

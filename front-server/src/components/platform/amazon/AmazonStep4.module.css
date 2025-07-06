@@ -34,6 +34,7 @@
 } */
 
 .userInputBox {
+    position: relative;
     border: 1px solid black;
     padding: 10px;
     margin: 10px 0;
@@ -139,4 +140,8 @@ input::placeholder {
     color: var(--color-primary);
     height: 36px;
     align-self: center;
+}
+
+.textareaBox {
+    position: relative;
 }

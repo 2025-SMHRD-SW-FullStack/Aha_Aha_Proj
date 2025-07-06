@@ -56,7 +56,7 @@ axiosFastAPI.interceptors.response.use(
 
       try {
         const response = await axios.post(
-          `${import.meta.env.VITE_FASTAPI_BASE_URL}/api/auth/reissue`, // FastAPI 주소인지 확인
+          `${import.meta.env.VITE_FASTAPI_BASE_URL}/auth/reissue`, // FastAPI 주소인지 확인
           {}, // 보통 쿠키에 refreshToken 있음
           { withCredentials: true }
         );

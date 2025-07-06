@@ -4,9 +4,32 @@ import styles2 from './Amazon.module.css'
 import step4 from '/src/assets/images/amazon/step4.png'
 import AmazonFormContext from '/src/provider/AmazonFormContext'
 import ImageBox from '../../common/ImageBox'
+import CopyButton from '/src/components/common/CopyButton.jsx'
 
 const NewProductForm = () => {
     const { formData, updateField } = useContext(AmazonFormContext);
+
+    // 체크박스 토글 핸들러 (Product ID 없음)
+    const handleNoProductIdChange = (e) => {
+        const checked = e.target.checked
+        updateField('noProductId', checked)
+        if (checked) {
+        // 체크하면 기존 입력값 초기화
+        updateField('productId', '')
+        updateField('productIdType', '')
+        }
+    }
+
+    // 체크박스 토글 핸들러 (Brand Name 없음)
+    const handleNoBrandNameChange = (e) => {
+        const checked = e.target.checked
+        updateField('noBrandName', checked)
+        if (checked) {
+        // 체크하면 기존 입력값 초기화
+        updateField('brandName', '')
+        }
+    }
+
 
     return (
         <div>
@@ -47,6 +70,16 @@ const NewProductForm = () => {
                     onChange={(e) => updateField('productId', e.target.value)}
                     placeholder="5.27917E+12" 
                     />
+                    {/* 복사 버튼 (입력값 복사) */}
+                    <div style={{
+                    position: 'absolute',
+                    right: '8px',
+                    top: '40%',
+                    transform: 'translateY(-50%)'
+                    }}>
+                    <CopyButton text={formData.productId} />
+                    </div>
+                            
                 <select
                     style={{marginLeft:'10px'}}
                     value={formData.productIdType}
@@ -62,7 +95,7 @@ const NewProductForm = () => {
                     style={{marginRight:'5px'}}
                     type="checkbox"
                     checked={formData.noProductId} 
-                    onChange={(e) => updateField('noProductId', e.target.value)}
+                    onChange={handleNoProductIdChange}
                     /> I don’t have a Product ID
                 </label>
                 <br/>
@@ -81,6 +114,15 @@ const NewProductForm = () => {
                     onChange={(e) => updateField('productName', e.target.value)}
                     placeholder="[브랜드] 상품명 + 특성" 
                 />
+                {/* 복사 버튼 (입력값 복사) */}
+                <div style={{
+                    position: 'absolute',
+                    right: '8px',
+                    top: '60%',
+                    transform: 'translateY(-50%)'
+                    }}>
+                    <CopyButton text={formData.productName} />
+                </div>
                 <br/>
             </div>
             <div className={styles.infoBox}>
@@ -95,16 +137,30 @@ const NewProductForm = () => {
 
             <div className={styles.userInputBox}>
                 <span style={{color:'red'}}>★ </span><label className={styles.customLabel}>Brand Name:</label>
-                <input className={styles.customInput} type="text" placeholder="브랜드명" /><br/>
+                <input className={styles.customInput} 
+                    type="text" 
+                    placeholder="브랜드명" 
+                    value={formData.brandName} 
+                    onChange={(e) => updateField('brandName', e.target.value)}
+                /><br/>
                 <label className={styles.customLabel}>
                     <input className={styles.customInput}
                         style={{marginRight:'5px'}}
                         type="checkbox" 
-                        value={formData.brandName} 
-                        onChange={(e) => updateField('brandName', e.target.value)}
+                        value={formData.noBrandName} 
+                        onChange={handleNoBrandNameChange}
                     /> This product does not have a brand name
                 </label>
                 <br/>
+                {/* 복사 버튼 (입력값 복사) */}
+                <div style={{
+                    position: 'absolute',
+                    right: '8px',
+                    top: '40%',
+                    transform: 'translateY(-50%)'
+                    }}>
+                    <CopyButton text={formData.brandName} />
+                </div>
             </div>
             <div className={styles.infoBox}>
                 · 상품의 비/상표 여부 및 상표권 보유 여부에 따른 상품 등록 권고 절차가 상이하므로 이어지는 페이지를 통해 개별 상세 케이스 필수 참고 <br />
@@ -130,6 +186,15 @@ const NewProductForm = () => {
                     placeholder="Ex: 50.00" 
                 />
                 <br/>
+                {/* 복사 버튼 (입력값 복사) */}
+                <div style={{
+                    position: 'absolute',
+                    right: '8px',
+                    top: '60%',
+                    transform: 'translateY(-50%)'
+                    }}>
+                    <CopyButton text={formData.yourPrice} />
+                </div>
             </div>
             <p className={styles.infoBox}>
                 · 판매 상품의 기준 가격을 입력
@@ -146,6 +211,15 @@ const NewProductForm = () => {
                     placeholder="Ex: 50.00" 
                 />
                 <br/>
+                {/* 복사 버튼 (입력값 복사) */}
+                <div style={{
+                    position: 'absolute',
+                    right: '8px',
+                    top: '60%',
+                    transform: 'translateY(-50%)'
+                    }}>
+                    <CopyButton text={formData.listPrice} />
+                </div>
             </div>
             <div className={styles.infoBox}>
                 · 세금을 포함하여 판매 상품의 정가를 입력 <br />
@@ -185,6 +259,15 @@ const NewProductForm = () => {
                     placeholder='Ex: 7' 
                 />
                 <br/>
+                {/* 복사 버튼 (입력값 복사) */}
+                <div style={{
+                    position: 'absolute',
+                    right: '8px',
+                    top: '60%',
+                    transform: 'translateY(-50%)'
+                    }}>
+                    <CopyButton text={formData.maxOrderQty} />
+                </div>
             </div>
             <p className={styles.infoBox}>
                 · 주문 당 판매 상품을 구매할 수 있는 최대 수량 확인
@@ -237,6 +320,15 @@ const NewProductForm = () => {
                     onChange={(e) => updateField('searchTerms', e.target.value)}
                     placeholder="검색 키워드" 
                 /><br/>
+                {/* 복사 버튼 (입력값 복사) */}
+                <div style={{
+                    position: 'absolute',
+                    right: '8px',
+                    top: '60%',
+                    transform: 'translateY(-50%)'
+                    }}>
+                    <CopyButton text={formData.searchTerms} />
+                </div>
             </div>
             <div className={styles.infoBox}>
                 · 소비자가 판매 상품을 구매를 가정했을 때 가장 검색할법한 키워드 입력 <br/>
@@ -287,16 +379,26 @@ const NewProductForm = () => {
             {/* 5. Description */}
             <h3>📖 Description</h3>
             <h4>상품에 대한 설명 및 기타 유의 사항을 개괄하는 상세 정보</h4><br/>
-
-            <label className={styles.customLabel}>Product Description:</label><br/>
-            <div className={styles.userInputBox}>
-                <textarea
-                    className={`${styles.textarea} ${formData.description ? styles.textareaFilled : ''}`}
-                    rows="5" 
-                    value={formData.description} 
-                    onChange={(e) => updateField('description', e.target.value)}
-                    placeholder="상품의 기본 설명 글" 
-                /><br/>
+            <div className={styles.textareaBox}>
+                <label className={styles.customLabel}>Product Description:</label><br/>
+                <div className={styles.userInputBox}>
+                    <textarea
+                        className={`${styles.textarea} ${formData.description ? styles.textareaFilled : ''}`}
+                        rows="5" 
+                        value={formData.description} 
+                        onChange={(e) => updateField('description', e.target.value)}
+                        placeholder="상품의 기본 설명 글" 
+                    /><br/>
+                </div>
+                {/* 복사 버튼 (입력값 복사) */}
+                <div style={{
+                    position: 'absolute',
+                    right: '8px',
+                    top: '10%',
+                    transform: 'translateY(-50%)'
+                    }}>
+                    <CopyButton text={formData.description} />
+                </div>
             </div>
             <div className={styles.infoBox}>
                 · 상세 페이지에 단락으로 요약된 상세 상품 관련 설명 작성 <br/>
@@ -307,16 +409,27 @@ const NewProductForm = () => {
                 </p>
             </div>
             <br/>
-
-            <label className={styles.customLabel}>Key Product Features:</label>
-            <div className={styles.userInputBox}>
-                <textarea
-                    className={`${styles.textarea} ${formData.keyFeatures ? styles.textareaFilled : ''}`} 
-                    rows="5" 
-                    value={formData.keyFeatures} 
-                    onChange={(e) => updateField('keyFeatures', e.target.value)}
-                    placeholder="100자 이하의 요약한 기능" 
-                /><br/>
+            
+            <div className={styles.textareaBox}>
+                <label className={styles.customLabel}>Key Product Features:</label>
+                <div className={styles.userInputBox}>
+                    <textarea
+                        className={`${styles.textarea} ${formData.keyFeatures ? styles.textareaFilled : ''}`} 
+                        rows="5" 
+                        value={formData.keyFeatures} 
+                        onChange={(e) => updateField('keyFeatures', e.target.value)}
+                        placeholder="100자 이하의 요약한 기능" 
+                    /><br/>
+                </div>
+                {/* 복사 버튼 (입력값 복사) */}
+                <div style={{
+                    position: 'absolute',
+                    right: '8px',
+                    top: '10%',
+                    transform: 'translateY(-50%)'
+                    }}>
+                    <CopyButton text={formData.keyFeatures} />
+                </div>
             </div>
             <div className={styles.infoBox}>
                 · 타 유사 상품과 차별화되는 본 상품만의 기능 혹은 특징 소구 <br/>
@@ -370,6 +483,15 @@ const NewProductForm = () => {
                     onChange={(e) => updateField('manufacturer', e.target.value)}
                     placeholder='Ex: Homedics'
                 /><br/>
+                {/* 복사 버튼 (입력값 복사) */}
+                <div style={{
+                    position: 'absolute',
+                    right: '8px',
+                    top: '60%',
+                    transform: 'translateY(-50%)'
+                    }}>
+                    <CopyButton text={formData.manufacturer} />
+                </div>
             </div>
             <p className={styles.infoBox}>
             · 제조사 (제조 공장) 정보 입력
@@ -384,6 +506,15 @@ const NewProductForm = () => {
                     onChange={(e) => updateField('manufacturerPartNumber', e.target.value)}
                     placeholder='Ex: SB-122'
                 /><br/>
+                {/* 복사 버튼 (입력값 복사) */}
+                <div style={{
+                    position: 'absolute',
+                    right: '8px',
+                    top: '60%',
+                    transform: 'translateY(-50%)'
+                    }}>
+                    <CopyButton text={formData.manufacturerPartNumber} />
+                </div>
             </div>
             <p className={styles.infoBox}>
             · 제품 고유 식별자인 제조업체 부품번호 (MPN) 정보 입력
@@ -414,6 +545,15 @@ const NewProductForm = () => {
                     onChange={(e) => updateField('numberOfItems', e.target.value)}
                     placeholder='Ex: 6'
                 /><br/>
+                {/* 복사 버튼 (입력값 복사) */}
+                <div style={{
+                    position: 'absolute',
+                    right: '8px',
+                    top: '60%',
+                    transform: 'translateY(-50%)'
+                    }}>
+                    <CopyButton text={formData.numberOfItems} />
+                </div>
             </div>
             <p className={styles.infoBox}>
             · 하나의 포장에 제공되는 제품 수 확인 (i.e. 1박스 당 6개 포장 → 6 입력)
@@ -428,6 +568,15 @@ const NewProductForm = () => {
                     onChange={(e) => updateField('itemForm', e.target.value)}
                     placeholder='Ex: heat-pack' 
                 /><br/>
+                {/* 복사 버튼 (입력값 복사) */}
+                <div style={{
+                    position: 'absolute',
+                    right: '8px',
+                    top: '60%',
+                    transform: 'translateY(-50%)'
+                    }}>
+                    <CopyButton text={formData.itemForm} />
+                </div>
             </div>
             <br/>
 
@@ -439,6 +588,15 @@ const NewProductForm = () => {
                     onChange={(e) => updateField('unitCount', e.target.value)}
                     placeholder='Ex: 1'
                 /><br/>
+                {/* 복사 버튼 (입력값 복사) */}
+                <div style={{
+                    position: 'absolute',
+                    right: '8px',
+                    top: '60%',
+                    transform: 'translateY(-50%)'
+                    }}>
+                    <CopyButton text={formData.unitCount} />
+                </div>
             </div>
             <p className={styles.infoBox}>
             · 하나의 포장 단위 개수 확인 (i.e. 1박스 당 6개 포장 → 1 입력)
@@ -453,6 +611,15 @@ const NewProductForm = () => {
                     onChange={(e) => updateField('unitCountType', e.target.value)}
                     placeholder='Ex: Count, Gram..'
                 /><br/>
+                {/* 복사 버튼 (입력값 복사) */}
+                <div style={{
+                    position: 'absolute',
+                    right: '8px',
+                    top: '60%',
+                    transform: 'translateY(-50%)'
+                    }}>
+                    <CopyButton text={formData.unitCountType} />
+                </div>
             </div>
             <p className={styles.infoBox}>
             · 하나의 포장 단위 당 개수, 무게, 부피 등의 상세 정보 확인

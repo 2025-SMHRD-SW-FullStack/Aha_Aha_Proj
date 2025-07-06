@@ -3,10 +3,25 @@ import styles from './Shopee.module.css'
 import step4 from '/src/assets/images/shopee/step4.png'
 import step4_option from '/src/assets/images/shopee/step4_option.png'
 import ShopeeContext from '/src/provider/ShopeeFormContext.jsx'
+import translateApi from '../../../service/translateApi'
+import CopyButton from '../../common/CopyButton'
 
 
 const ShopeeStep4 = () => {
     const { formData, updateField } = useContext(ShopeeContext);
+
+    // 번역하기 버튼
+    const handleTranslate = async () => {
+        try {
+            const translatedData = await translateApi(formData)
+            Object.entries(translatedData).forEach(([key, value]) => {
+                updateField(key, value)
+            });
+        } catch (error) {
+            console.error('ShopeeStep2 번역 오류:', error)
+            alert('번역 중 오류가 발생했습니다.');
+        }
+    }
 
     return (
         <div>
@@ -20,7 +35,7 @@ const ShopeeStep4 = () => {
                     </div>
                 </div>
                 {/* 번역하기 버튼 */}
-                <button className={styles.translateBtn}>
+                <button className={styles.translateBtn} onClick={handleTranslate}>
                     번역하기
                 </button>
                 <br/>
@@ -46,6 +61,15 @@ const ShopeeStep4 = () => {
                         onChange={(e) => updateField('yourPrice', e.target.value)}
                         />  
                 </label>
+                {/* 복사 버튼 (입력값 복사) */}
+                <div style={{
+                    position: 'absolute',
+                    right: '8px',
+                    top: '60%',
+                    transform: 'translateY(-50%)'
+                    }}>
+                    <CopyButton text={formData.yourPrice} />
+                </div>
             </div>
             <div className={styles.infoBox}>
                 · 마켓별 최종판매가 설정툴을 참고해 최종판매가를 설정 <br /><br />
@@ -70,6 +94,15 @@ const ShopeeStep4 = () => {
                         onChange={(e) => updateField('Stock', e.target.value)}
                         />  
                 </label>
+                {/* 복사 버튼 (입력값 복사) */}
+                <div style={{
+                    position: 'absolute',
+                    right: '8px',
+                    top: '60%',
+                    transform: 'translateY(-50%)'
+                    }}>
+                    <CopyButton text={formData.Stock} />
+                </div>
             </div>
             <p className={styles.infoBox}>
                 · 보유한 재고를 정확하게 기입
@@ -88,6 +121,15 @@ const ShopeeStep4 = () => {
                         onChange={(e) => updateField('Name', e.target.value)}
                         />  
                 </label>
+                {/* 복사 버튼 (입력값 복사) */}
+                <div style={{
+                    position: 'absolute',
+                    right: '8px',
+                    top: '60%',
+                    transform: 'translateY(-50%)'
+                    }}>
+                    <CopyButton text={formData.Name} />
+                </div>
             </div>
             <div className={styles.userInputBox}>
                 <label className={styles.customLabel}>Options</label>
@@ -99,6 +141,15 @@ const ShopeeStep4 = () => {
                         onChange={(e) => updateField('Options', e.target.value)}
                         />  
                 </label>
+                {/* 복사 버튼 (입력값 복사) */}
+                <div style={{
+                    position: 'absolute',
+                    right: '8px',
+                    top: '60%',
+                    transform: 'translateY(-50%)'
+                    }}>
+                    <CopyButton text={formData.Options} />
+                </div>
             </div>
             <div className={styles.infoBox}>
                 · 색상이나 사이즈 등 옵션이 있을 경우 <strong>Variation(상품 옵션)</strong>

@@ -2,11 +2,26 @@ import React, { useContext } from 'react'
 import styles from './Shopee.module.css'
 import step2 from '/src/assets/images/shopee/step2.png'
 import ShopeeContext from '/src/provider/ShopeeFormContext.jsx'
+import translateApi from '../../../service/translateApi'
+import CopyButton from '../../common/CopyButton'
 
 
 
 const ShopeeStep2 = () => {
     const { formData, updateField } = useContext(ShopeeContext);
+
+    // 번역하기 버튼
+    const handleTranslate = async () => {
+        try {
+            const translatedData = await translateApi(formData)
+            Object.entries(translatedData).forEach(([key, value]) => {
+                updateField(key, value)
+            });
+        } catch (error) {
+            console.error('ShopeeStep2 번역 오류:', error)
+            alert('번역 중 오류가 발생했습니다.');
+        }
+    }
 
     return (
         <div>
@@ -19,6 +34,10 @@ const ShopeeStep2 = () => {
                         <span>입력 후 상태</span>
                     </div>
                 </div>
+                {/* 번역하기 버튼 */}
+                <button className={styles.translateBtn} onClick={handleTranslate}>
+                    번역하기
+                </button>
                 <br/>
             </div>
 
@@ -47,6 +66,15 @@ const ShopeeStep2 = () => {
                         onChange={(e) => updateField('productName', e.target.value)}
                         />  
                 </label>
+                {/* 복사 버튼 (입력값 복사) */}
+                <div style={{
+                    position: 'absolute',
+                    right: '8px',
+                    top: '60%',
+                    transform: 'translateY(-50%)'
+                    }}>
+                    <CopyButton text={formData.productName} />
+                </div>
             </div>
             <p className={styles.infoBox}>
                 · 브랜드명 + 제품명 (영어로 작성)

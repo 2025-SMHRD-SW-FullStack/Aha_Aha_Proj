@@ -46,3 +46,7 @@
     margin-left: 10px;
     /* align-self: center; */
 }
+
+.linkHover:hover {
+    background-color: #e3f1f7;
+}
