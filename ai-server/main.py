@@ -8,6 +8,8 @@ from fastapi.staticfiles import StaticFiles
 
 from app.api.routes import router as api_router
 from app.api.routes.recommend import router as recommend_router
+from app.api.routes.translate_api import router as translate_router
+from app.api.routes.favorite import router as favorite_router
 from app.core.loader import load_all_data
 from app.core.state import app_state
 
@@ -55,6 +57,8 @@ app.add_middleware(
 # ✅ API 라우터 등록
 app.include_router(api_router, prefix="/api")
 app.include_router(recommend_router, prefix="/api")
+app.include_router(translate_router, prefix="/api")
+app.include_router(favorite_router, prefix="/api")
 
 # ✅ 정적 파일 경로 마운트
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
