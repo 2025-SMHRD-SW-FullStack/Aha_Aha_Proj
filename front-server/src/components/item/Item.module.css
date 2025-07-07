@@ -1,13 +1,21 @@
 .container {
     width: 100%;
-    /* height: calc(100vh - 200px); */
+    /* height: 100vh; */
+    height: calc(100vh - 200px);
     /* height: calc(100vh - var(--header-height) - var(--nav-height)); */
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    height: 300px;
-    margin-top: calc(100vh - 500px);;
+    justify-content: center;
+    /* height: 300px; */
+    gap: 30px;
+    /* margin-top: calc(100vh - 750px); */
+    /* margin-top: 70px; */
+}
+
+.recommendImgBox {
+    margin-top: 50px;
+    height: 70px;
 }
 
 .searchBox>hr:nth-child(1) {
@@ -23,7 +31,8 @@
 .searchBox {
     width: 100%;
     text-align: center;
-    height: 30px;
+    /* height: 30px; */
+    margin-top: 30px;
 }
 
 .itemBox {
@@ -47,7 +56,7 @@
 
 .itemBox img {
     display: flex;
-    height: 30px;
+    /* height: 30px; */
 }
 
 .itemBox a {
@@ -56,13 +65,13 @@
 }
 
 .sliderWrapper {
-    margin-top: 30px;
+    margin-top: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
     width: 100%;
-    margin-top: 20px;
+    /* margin-top: 20px; */
 }
 
 .slider {

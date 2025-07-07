@@ -4,6 +4,7 @@ import searchIcon from '/src/assets/images/search.png'
 import leftArrow from '/src/assets/images/leftArrow.png'
 import rightArrow from '/src/assets/images/rightArrow.png'
 import boxIcon from '/src/assets/images/boxIcon.png'
+import recommendIcon from '/src/assets/images/recommend.png'
 import styles from './Item.module.css'
 
 const Item = () => {
@@ -56,6 +57,9 @@ const Item = () => {
 
     return (
         <div className={styles.container}>
+            <div>
+                <img className={styles.recommendImgBox} src={recommendIcon} alt="안내문구" />
+            </div>
             <div className={styles.searchBox}>
                 <hr/>
                 <div className={styles.itemBox}>

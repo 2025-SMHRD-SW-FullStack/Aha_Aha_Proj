@@ -3,9 +3,10 @@
     /* height: 700px; */
     display: flex;
     /* align-items: center; */
-    justify-content: space-between;
+    /* justify-content: space-between; */
     margin-top: 50px;
     flex-direction: column;
+    height: calc(100vh - 200px);
     gap: 100px;
 }
 
