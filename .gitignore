@@ -20,5 +20,6 @@ __pycache__/
 *.pyc
 
 # Secrets
-application-secret.yml
+application-secret-dev.yml
+application-secret-prod.yml
 .env
