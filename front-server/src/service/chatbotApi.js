@@ -1,11 +1,12 @@
 import axiosFastAPI from '../config/axiosFastAPI';
 
 /**
- * @param {{ userId: string, message: string }} payload
+ * @param {{ userId: string, platform: string, message: string }} payload
  */
-export const sendChatToBot = async ({ userId, message }) => {
+export const sendChatToBot = async ({ userId, platform, message }) => {
   const res = await axiosFastAPI.post('/chatbot', {
     userId,
+    platform,
     message,
   });
   return res.data;

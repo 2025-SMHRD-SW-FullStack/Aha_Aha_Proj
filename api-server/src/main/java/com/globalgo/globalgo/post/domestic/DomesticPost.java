@@ -42,9 +42,10 @@ public class DomesticPost {
 
     private LocalDateTime createdAt;
 
-    public static DomesticPost create(User user, String title, String content) {
+    public static DomesticPost create(User user, String platform, String title, String content) {
         return DomesticPost.builder()
                 .user(user)
+                .platform(platform)
                 .title(title)
                 .content(content)
                 .createdAt(LocalDateTime.now())

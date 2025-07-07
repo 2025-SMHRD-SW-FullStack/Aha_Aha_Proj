@@ -41,9 +41,10 @@ public class ForeignPost {
     private LocalDateTime createdAt;
 
     // 챗봇용
-    public static ForeignPost create(User user, String title, String content) {
+    public static ForeignPost create(User user, String platform, String title, String content) {
         return ForeignPost.builder()
                 .user(user)
+                .platform(platform)
                 .title(title)
                 .content(content)
                 .createdAt(LocalDateTime.now())

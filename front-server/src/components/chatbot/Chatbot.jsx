@@ -7,6 +7,9 @@ import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import ImageModal from './ImageModal';
 import chatbotImg from '/src/assets/images/chatbot.png';
+import { createDomesticPost } from '../../service/domesticPostApi';
+import { createForeignPost } from '../../service/foreignPostApi';
+
 
 const Chatbot = () => {
   const [messages, setMessages] = useState([]);
@@ -82,7 +85,7 @@ const Chatbot = () => {
     }
 
     try {
-      const res = await sendChatToBot({ userId, message: input });
+      const res = await sendChatToBot({ userId, platform, message: input });
 
       if (!res) {
         addMessage('bot', '❌ 서버에서 응답을 받지 못했습니다. 다시 시도해주세요.');
@@ -109,11 +112,19 @@ const Chatbot = () => {
       console.log('context:', context);
 
 
+      // if (context?.item) setItem(context.item);
+      // if (context?.country) setCountry(context.country);
+      // if (context?.platform) setPlatform(context.platform);
+      // if (context?.title) setTitle(context.title);
+      // if (context?.content) setContent(context.content);
+
       if (context?.item) setItem(context.item);
       if (context?.country) setCountry(context.country);
       if (context?.platform) setPlatform(context.platform);
-      if (context?.title) setTitle(context.title);
-      if (context?.content) setContent(context.content);
+      if (context?.post_title_kr) setTitle(context.post_title_kr);
+      if (context?.post_content_kr) setContent(context.post_content_kr);
+      if (context?.translated_title) setTranslatedTitle(context.translated_title);
+      if (context?.translated_content) setTranslatedContent(context.translated_content);
 
       if (newStep === 4) {
         addMessage('bot', '📝 판매글 제목과 내용을 입력해주세요. 예: 제목 | 내용');
@@ -139,6 +150,8 @@ const Chatbot = () => {
 
   // 📤 Step5: 게시글 등록
   const handleStep5 = async (msg) => {
+    let target = '';
+
     console.log('Step5 게시글 등록 데이터:', {
       userId,
       title,
@@ -148,7 +161,7 @@ const Chatbot = () => {
       target,
     });
     const answer = msg.trim();
-    let target = '';
+    // let target = '';
 
     if (answer === '1') target = 'domestic';
     else if (answer === '2') target = 'foreign';
@@ -159,15 +172,34 @@ const Chatbot = () => {
       return;
     }
 
+    // 공통 데이터 객체 (번역 결과를 postData에 반영)
+    const postData = {
+      userId,
+      title,
+      content,
+      img: '',
+      url: '',
+      platform,
+      yourPrice: '',
+    }
+
     try {
       await step5PostTranslation({
         userId,
+        platform,
         title,
         content,
         translatedTitle,
         translatedContent,
         target,
       });
+
+      if (target === 'domestic' || target === 'both') {
+        await createDomesticPost(postData);
+      }
+      if (target === 'foreign' || target === 'both') {
+        await createForeignPost(postData);
+      }
 
       addMessage('bot', '✅ 게시 완료! 감사합니다.');
       addMessage('bot', '📍 전시관으로 이동할까요?\n1️⃣ 네\n❌ 아니요');
@@ -194,6 +226,18 @@ const Chatbot = () => {
         <img className={styles.chatbotImgBox} src={chatbotImg} alt="챗봇 이미지" /><span>GlobalGo AI 수출 도우미</span>
       </div>
 
+      <div className={styles.guideBox}>
+        <h3 style={{marginBottom: '10px'}}>챗봇 이용 가이드</h3>
+        <strong className={styles.stepBox}>1단계</strong><span className={styles.stepSpanBox}>품목 입력</span>
+        <strong className={styles.stepBox}>2단계</strong><span className={styles.stepSpanBox}>국가 선택</span>
+        <strong className={styles.stepBox}>3단계</strong><span className={styles.stepSpanBox}>이커머스 선택 </span>
+        <strong className={styles.stepBox}>4단계</strong><span className={styles.stepSpanBox}>판매 등록 가이드</span>
+        <strong className={styles.stepBox}>5단계</strong><span className={styles.stepSpanBox}>번역 기능</span>
+        <strong className={styles.stepBox}>6단계</strong><span className={styles.stepSpanBox}>판매 글 게시</span>
+        {/* <strong className={styles.stepBox}>4단계</strong><span className={styles.stepSpanBox}>판매 등록 가이드 (명령어 : 다음, 슬라이드 종료)</span>
+        <strong className={styles.stepBox}>5단계</strong><span className={styles.stepSpanBox}>번역 기능 ex)제목: 비누팝니다 , 내용: 비누팔아요~)</span>
+        <strong className={styles.stepBox}>6단계</strong><span className={styles.stepSpanBox}>판매 글 게시(국내/해외/둘다)</span> */}
+      </div>
       <div className={styles.chatBody} ref={chatBodyRef}>
         {messages.map((msg, i) => (
           <div key={i} className={`${styles.message} ${styles[msg.role]}`}>
@@ -233,13 +277,21 @@ const Chatbot = () => {
       </div>
 
       <form className={styles.chatFooter} onSubmit={handleSubmit}>
-        <input
+        <textarea
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="메시지를 입력하세요"
           className={styles.input}
-        />
+          onKeyDown={e => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              // Shift 없이 Enter만 눌렀을 때는 submit
+              e.preventDefault();
+              handleSubmit(e);
+            }
+            // Shift+Enter면 그냥 줄 바꿈
+          }}
+            />
         <button type="submit" className={styles.button}>전송</button>
       </form>
     </div>

@@ -6,6 +6,7 @@ import lombok.Setter;
 @Getter @Setter
 public class PostTranslationRequest {
     private Long userId;
+    private String platform;
     private String title;
     private String content;
     private String translatedTitle;

@@ -59,7 +59,7 @@ const ProductDetailPage = () => {
     return (
         <div>
             <Header/>
-            <ProductDetail product={product} onBack={() => navigate(-1)} />
+            <ProductDetail product={product} region={region} onBack={() => navigate(-1)} />
         </div>
     )
 }

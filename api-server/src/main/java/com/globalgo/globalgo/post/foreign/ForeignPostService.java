@@ -17,10 +17,10 @@ public class ForeignPostService {
     
     // 챗봇용
     @Transactional
-    public void create(Long userId, String title, String content) {
+    public void create(Long userId, String platform, String title, String content) {
         System.out.println("🔥🔥🔥 [Foreign] 저장 시도 - userId: " + userId + ", title: " + title);
         User user = userRepository.findById(userId).orElseThrow();
-        ForeignPost post = ForeignPost.create(user, title, content);
+        ForeignPost post = ForeignPost.create(user, platform, title, content);
         System.out.println("✅ [Foreign] 저장 시도");
         foreignPostRepository.save(post);
         System.out.println("✅ [Foreign] 저장 완료");

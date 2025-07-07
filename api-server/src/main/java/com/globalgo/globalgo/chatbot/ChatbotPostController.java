@@ -23,11 +23,11 @@ public class ChatbotPostController {
         Long userId = request.getUserId();
 
         if (request.getTarget().contains("domestic") || request.getTarget().contains("both")) {
-            domesticPostService.create(userId, request.getTitle(), request.getContent());
+            domesticPostService.create(userId, request.getPlatform(), request.getTitle(), request.getContent());
         }
 
         if (request.getTarget().contains("foreign") || request.getTarget().contains("both")) {
-            foreignPostService.create(userId, request.getTranslatedTitle(), request.getTranslatedContent());
+            foreignPostService.create(userId, request.getPlatform(), request.getTranslatedTitle(), request.getTranslatedContent());
         }
 
         return ResponseEntity.ok("게시 성공");

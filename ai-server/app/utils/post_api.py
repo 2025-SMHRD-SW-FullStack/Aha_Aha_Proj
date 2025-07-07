@@ -7,9 +7,10 @@ load_dotenv()
 BASE_URL = os.getenv("API_SERVER_URL", "http://localhost:8095")  # fallback도 포함
 SPRING_API_URL = f"{BASE_URL}/api/step5/post"
 
-async def post_to_spring_board(user_id: int, title: str, content: str, translated_title: str, translated_content: str, target: str) -> bool:
+async def post_to_spring_board(user_id: int, platform: str, title: str, content: str, translated_title: str, translated_content: str, target: str) -> bool:
     payload = {
         "userId": user_id,
+        "platform": platform,
         "title": title,
         "content": content,
         "translatedTitle": translated_title,

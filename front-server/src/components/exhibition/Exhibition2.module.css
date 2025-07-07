@@ -2,6 +2,37 @@
 padding: 30px 0;
 /* background: #fafafa; */
 }
+.filterBar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .filterBar button {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 12px;
+    font-size: 14px;
+    /* background-color: #f5f5f5; */
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    color: black;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
+.filterBar button:hover {
+background-color: #eaeaea;
+}
+.filterBar button.active {
+background-color: #4737A1; /* 보라색 강조 */
+color: #fff;
+border-color: #4737A1;
+}
+.icon {
+width: 30px;
+height: 20px;
+}
 
 .pageTitle {
 margin: 0 0 12px;
@@ -79,4 +110,9 @@ gap: 4px;
 .platformIcon {
 width: 16px;
 height: 16px;
+}
+.error {
+    text-align: center;
+    color: #d9534f;
+    font-size: 14px;
 }

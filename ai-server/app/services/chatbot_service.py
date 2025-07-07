@@ -301,6 +301,7 @@ class ChatbotService:
         update_user_context(user_id, {"post_target": target, "stage": "step6"})
         success = asyncio.run(post_to_spring_board(
             user_id=int(user_id),
+            platform=context.get("platform", ""),
             title=context.get("post_title_kr", ""),
             content=context.get("post_content_kr", ""),
             translated_title=context.get("translated_title", ""),
@@ -425,6 +426,7 @@ class ChatbotService:
                 update_user_context(user_id, {"post_target": "both", "stage": "step6"})
                 success = asyncio.run(post_to_spring_board(
                     user_id=int(user_id),
+                    platform=context.get("platform", ""),
                     title=context.get("post_title_kr", ""),
                     content=context.get("post_content_kr", ""),
                     translated_title=context.get("translated_title", ""),
