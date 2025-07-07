@@ -13,7 +13,7 @@ const Item = () => {
     const spanRef = useRef(null); // 글자 길이 측정용 span
     const scrollRef = useRef(null); // 슬라이드 영역
 
-    const recommendedItems = ['추천 품목1', '추천 품목2', '추천 품목3', '추천 품목4', '추천 품목5', '추천 품목6'];
+    const recommendedItems = ['사과', '커피', '화장품', '바나나', '컴퓨터', '휴대폰'];
     const [startIndex, setStartIndex] = useState(0);
     const ITEMS_TO_SHOW = 4;
 
