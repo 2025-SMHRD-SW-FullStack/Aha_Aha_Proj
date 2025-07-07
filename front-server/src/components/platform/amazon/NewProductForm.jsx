@@ -109,8 +109,11 @@ const NewProductForm = () => {
                 <label className={styles.customLabel}>Product Name:</label>
                 <input className={styles.customInput}
                     type="text"
-                    value={formData.productName} 
-                    onChange={(e) => updateField('productName', e.target.value)}
+                    value={formData.productNameEn} 
+                    onChange={(e) => {
+                        updateField('productNameEn', e.target.value);
+                        updateField('productName', e.target.value);
+                    }}
                     placeholder="[브랜드] 상품명 + 특성" 
                 />
                 {/* 복사 버튼 (입력값 복사) */}
@@ -139,8 +142,11 @@ const NewProductForm = () => {
                 <input className={styles.customInput} 
                     type="text" 
                     placeholder="브랜드명" 
-                    value={formData.brandName} 
-                    onChange={(e) => updateField('brandName', e.target.value)}
+                    value={formData.brandNameEn} 
+                    onChange={(e) => {
+                        updateField('brandNameEn', e.target.value);
+                        updateField('brandName', e.target.value);
+                    }}
                 /><br/>
                 <label className={styles.customLabel}>
                     <input className={styles.customInput}
@@ -315,8 +321,11 @@ const NewProductForm = () => {
                 <label className={styles.customLabel}>Search Terms:</label>
                 <input className={styles.customInput}
                     type="text" 
-                    value={formData.searchTerms} 
-                    onChange={(e) => updateField('searchTerms', e.target.value)}
+                    value={formData.searchTermsEn} 
+                    onChange={(e) => {
+                        updateField('searchTermsEn', e.target.value);
+                        updateField('searchTerms', e.target.value);
+                    }}
                     placeholder="검색 키워드" 
                 /><br/>
                 {/* 복사 버튼 (입력값 복사) */}
@@ -382,10 +391,13 @@ const NewProductForm = () => {
                 <label className={styles.customLabel}>Product Description:</label><br/>
                 <div className={styles.userInputBox}>
                     <textarea
-                        className={`${styles.textarea} ${formData.description ? styles.textareaFilled : ''}`}
+                        className={`${styles.textarea} ${formData.descriptionEn ? styles.textareaFilled : ''}`}
                         rows="5" 
-                        value={formData.description} 
-                        onChange={(e) => updateField('description', e.target.value)}
+                        value={formData.descriptionEn} 
+                        onChange={(e) => {
+                            updateField('descriptionEn', e.target.value);
+                            updateField('description', e.target.value);
+                        }}
                         placeholder="상품의 기본 설명 글" 
                     /><br/>
                 </div>
@@ -415,8 +427,11 @@ const NewProductForm = () => {
                     <textarea
                         className={`${styles.textarea} ${formData.keyFeatures ? styles.textareaFilled : ''}`} 
                         rows="5" 
-                        value={formData.keyFeatures} 
-                        onChange={(e) => updateField('keyFeatures', e.target.value)}
+                        value={formData.keyFeaturesEn} 
+                        onChange={(e) => {
+                            updateField('keyFeaturesEn', e.target.value);
+                            updateField('keyFeatures', e.target.value);
+                        }}
                         placeholder="100자 이하의 요약한 기능" 
                     /><br/>
                 </div>
@@ -478,8 +493,11 @@ const NewProductForm = () => {
                 <label className={styles.customLabel}>Manufacturer:</label>
                 <input className={styles.customInput}
                     type="text" 
-                    value={formData.manufacturer} 
-                    onChange={(e) => updateField('manufacturer', e.target.value)}
+                    value={formData.manufacturerEn} 
+                    onChange={(e) => {
+                        updateField('manufacturerEn', e.target.value);
+                        updateField('manufacturer', e.target.value);
+                    }}
                     placeholder='Ex: Homedics'
                 /><br/>
                 {/* 복사 버튼 (입력값 복사) */}
@@ -563,8 +581,11 @@ const NewProductForm = () => {
                 <label className={styles.customLabel}>Item Form:</label>
                 <input className={styles.customInput}
                     type="text" 
-                    value={formData.itemForm} 
-                    onChange={(e) => updateField('itemForm', e.target.value)}
+                    value={formData.itemFormEn} 
+                    onChange={(e) => {
+                        updateField('itemFormEn', e.target.value);
+                        updateField('itemForm', e.target.value);
+                    }}
                     placeholder='Ex: heat-pack' 
                 /><br/>
                 {/* 복사 버튼 (입력값 복사) */}
@@ -606,8 +627,11 @@ const NewProductForm = () => {
                 <label className={styles.customLabel}>Unit Count Type:</label>
                 <input className={styles.customInput}
                     type="text" 
-                    value={formData.unitCountType} 
-                    onChange={(e) => updateField('unitCountType', e.target.value)}
+                    value={formData.unitCountTypeEn} 
+                    onChange={(e) => {
+                        updateField('unitCountTypeEn', e.target.value);
+                        updateField('unitCountType', e.target.value);
+                    }}
                     placeholder='Ex: Count, Gram..'
                 /><br/>
                 {/* 복사 버튼 (입력값 복사) */}

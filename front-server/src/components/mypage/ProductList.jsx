@@ -5,13 +5,14 @@ import amazonLogo from '/src/assets/images/amazon_logo.png';
 import shopeeLogo from '/src/assets/images/shopee_logo.png';
 import { useNavigate } from "react-router-dom";
 import { getMyDomesticPosts } from "../../service/domesticPostApi";
+import { getMyForeignPosts } from "../../service/foreignPostApi";
 import { getUserIdFromToken } from "../../util/jwt";
 
-const ProductList = () => {
-  const [products, setProducts] = useState([]);
-  const navigate = useNavigate();
 
-  useEffect(() => {
+const ProductList = () => {
+    const [products, setProducts] = useState([]);
+    const navigate = useNavigate();
+
     // // 저장된 상품 정보 불러오기
     // const loaded = [];
 
@@ -34,102 +35,141 @@ const ProductList = () => {
 
     // setProducts(loaded);
 
+      useEffect(() => {
+        fetchProducts();
+      }, []);
+
     async function fetchProducts() {
       try {
-        const userId = getUserIdFromToken()
-        const data = await getMyDomesticPosts(userId)
-        // API 응답 구조에 맞춰 매핑
-        const mapped = data.map(post => ({
-          id:       post.id,
-          url:      post.url,
+        const userId = getUserIdFromToken();
+
+        const [domestic, foreign] = await Promise.all([
+          getMyDomesticPosts(userId),
+          getMyForeignPosts(userId),
+        ]);
+
+        console.log("✅ getMyForeignPosts 결과:", foreign); 
+
+        const domesticMapped = domestic.map(post => ({
+          id: post.id,
+          url: post.url,
           platform: post.platform,
-          title:    post.title,
-          content:  post.content,
-          price:    post.yourPrice,
-          image:    post.img || ''  // 대표 이미지
-        }))
-        setProducts(mapped)
+          title: post.productName,
+          content: post.descrioption,
+          price: post.yourPrice,
+          image: post.img || '',
+          region: 'domestic'
+        }));
+
+        const foreignMapped = foreign.map(post => ({
+          id: post.id,
+          url: post.url,
+          platform: post.platform,
+          title: post.productNameEn,
+          content: post.descriptionEn,
+          price: post.yourPrice,
+          image: post.img || '',
+          region: 'foreign'
+        }));
+        
+        // setProducts([...domesticMapped, ...foreignMapped]);
+        setProducts([...domesticMapped, ...foreignMapped].sort((a, b) => b.id - a.id));
+
       } catch (err) {
-        console.error("상품 목록 조회 실패:", err)
+        console.error("상품 목록 조회 실패: ", err);
       }
-    }
+      //   const data = await getMyDomesticPosts(userId)
+      //   // API 응답 구조에 맞춰 매핑
+      //   const mapped = data.map(post => ({
+      //     id:       post.id,
+      //     url:      post.url,
+      //     platform: post.platform,
+      //     title:    post.title,
+      //     content:  post.content,
+      //     price:    post.yourPrice,
+      //     image:    post.img || ''  // 대표 이미지
+      //   }))
+      //   setProducts(mapped)
+      // } catch (err) {
+      //   console.error("상품 목록 조회 실패:", err)
+      // }
+      
+      // fetchProducts()
+      
+   
 
-    fetchProducts()
-
-  }, []);
-
-  return (
-    <div className={styles.wrapper}>
-      <div className={styles.headerRow}>
-        <h2 className={styles.title}>내 상품 리스트</h2>
-        {/* <p>등록된 상품 정보를 임시 저장소(sessionStorage)에서 불러옵니다.</p> */}
-      </div>
-
-      {products.length === 0 ? (
-        <p className={styles.empty}>등록된 상품이 없습니다.</p>
-      ) : (
-        <div className={styles.grid}>
-          {products.map((item) => (
-            <div 
-              key={item.id} 
-              className={styles.card}
-              // onClick={() => navigate(`/product/${item.id}`)} // ✅ 클릭 시 이동
-              // onClick={() => navigate(`/product/${item.region}/${item.id}`)}  // ✅ 클릭 시 이동
-              onClick={() => navigate(`/product/domestic/${item.id}`)}
-              style={{ cursor: 'pointer' }} // 클릭 가능한 느낌
-              >
-              <div className={styles.imageBox}>
-              {item.image ? (
-                <img src={item.image} alt="대표 이미지" className={styles.previewImage} />
-              ) : (
-                <img src={defaultImage} alt="기본 이미지" className={styles.previewImage} />
-              )}
-              </div>
-              <div className={styles.textBox}>
-                <p className={styles.productTitle}>{item.title || "제목 없음"}</p>
-                <p className={styles.productPrice}>
-                  💰 {item.price ? `${item.price}$` : "가격 정보 없음"}
-                </p>
-
-                <div className={styles.platformLabel}>
-                  {item.platform === 'amazon' && (
-                    <>
-                      <img src={amazonLogo} alt="Amazon" className={styles.platformIcon} />
-                      <span>Amazon</span>
-                    </>
-                  )}
-                  {item.platform === 'shopee' && (
-                    <>
-                      <img src={shopeeLogo} alt="Shopee" className={styles.platformIcon} />
-                      <span>Shopee</span>
-                    </>
-                  )}
-                  {!['amazon', 'shopee'].includes(item.platform) && (
-                    <span>🌐 플랫폼 미지정</span>
-                  )}
-                </div>
-
-                {/* {item.url ? (
-                  <a
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.productLink}
-                  >
-                    🔗 상품 보러가기
-                  </a>
-                ) : (
-                  <div className={styles.productLinkDisabled}>
-                    🕓 승인 대기 중
-                  </div>
-                )} */}
-              </div>
-            </div>
-          ))}
+    return (
+      <div className={styles.wrapper}>
+        <div className={styles.headerRow}>
+          <h2 className={styles.title}>내 상품 리스트</h2>
+          {/* <p>등록된 상품 정보를 임시 저장소(sessionStorage)에서 불러옵니다.</p> */}
         </div>
-      )}
-    </div>
-  );
-};
 
+        {products.length === 0 ? (
+          <p className={styles.empty}>등록된 상품이 없습니다.</p>
+        ) : (
+          <div className={styles.grid}>
+            {products.map((item) => (
+              <div 
+                key={item.id} 
+                className={styles.card}
+                // onClick={() => navigate(`/product/${item.id}`)} // ✅ 클릭 시 이동
+                // onClick={() => navigate(`/product/${item.region}/${item.id}`)}  // ✅ 클릭 시 이동
+                onClick={() => navigate(`/product/${item.region}/${item.id}`)}
+                style={{ cursor: 'pointer' }} // 클릭 가능한 느낌
+                >
+                <div className={styles.imageBox}>
+                {item.image ? (
+                  <img src={item.image} alt="대표 이미지" className={styles.previewImage} />
+                ) : (
+                  <img src={defaultImage} alt="기본 이미지" className={styles.previewImage} />
+                )}
+                </div>
+                <div className={styles.textBox}>
+                  <p className={styles.productTitle}>{item.title || "제목 없음"}</p>
+                  <p className={styles.productPrice}>
+                    💰 {item.price ? `${item.price}$` : "가격 정보 없음"}
+                  </p>
+
+                  <div className={styles.platformLabel}>
+                    {item.platform === 'amazon' && (
+                      <>
+                        <img src={amazonLogo} alt="Amazon" className={styles.platformIcon} />
+                        <span>Amazon</span>
+                      </>
+                    )}
+                    {item.platform === 'shopee' && (
+                      <>
+                        <img src={shopeeLogo} alt="Shopee" className={styles.platformIcon} />
+                        <span>Shopee</span>
+                      </>
+                    )}
+                    {!['amazon', 'shopee'].includes(item.platform) && (
+                      <span>🌐 플랫폼 미지정</span>
+                    )}
+                  </div>
+
+                  {/* {item.url ? (
+                    <a
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.productLink}
+                    >
+                      🔗 상품 보러가기
+                    </a>
+                  ) : (
+                    <div className={styles.productLinkDisabled}>
+                      🕓 승인 대기 중
+                    </div>
+                  )} */}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+}
 export default ProductList;

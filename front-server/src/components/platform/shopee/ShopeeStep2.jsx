@@ -10,18 +10,46 @@ import CopyButton from '../../common/CopyButton'
 const ShopeeStep2 = () => {
     const { formData, updateField } = useContext(ShopeeContext);
 
-    // 번역하기 버튼
     const handleTranslate = async () => {
         try {
-            const translatedData = await translateApi(formData)
-            Object.entries(translatedData).forEach(([key, value]) => {
-                updateField(key, value)
+            const toTranslate = {};
+    
+            // productName, description은 제외하고 ~~En 필드만 번역 대상 수집
+            Object.entries(formData).forEach(([key, value]) => {
+                if (
+                    key.endsWith('En') &&
+                    key !== 'productNameEn' &&
+                    key !== 'descriptionEn' &&
+                    typeof value === 'string' &&
+                    value.trim() !== ''
+                ) {
+                    toTranslate[key] = value;
+                }
             });
+    
+            // 🔄 productName, description은 원본을 따로 포함
+            toTranslate.productName = formData.productName;
+            toTranslate.description = formData.description;
+    
+            const translatedData = await translateApi(toTranslate);
+    
+            // 결과 반영 (단, productName과 description은 En 필드에 저장)
+            Object.entries(translatedData).forEach(([key, value]) => {
+                if (key === 'productName') {
+                    updateField('productNameEn', value);
+                } else if (key === 'description') {
+                    updateField('descriptionEn', value);
+                } else {
+                    updateField(key, value); // brandNameEn 등은 그대로 덮어쓰기
+                }
+            });
+    
+            console.log('✅ 번역 성공:', translatedData);
         } catch (error) {
-            console.error('ShopeeStep2 번역 오류:', error)
+            console.error('AmazonStep4 번역 실패:', error);
             alert('번역 중 오류가 발생했습니다.');
         }
-    }
+    };
 
     return (
         <div>
@@ -62,8 +90,11 @@ const ShopeeStep2 = () => {
                     <input className={styles.customInput}
                         type="text" 
                         placeholder="ex) ABC Toothbrush Soft"
-                        value={formData.productName || ''} 
-                        onChange={(e) => updateField('productName', e.target.value)}
+                        value={formData.productNameEn} 
+                        onChange={(e) => {
+                            updateField('productNameEn', e.target.value);
+                            updateField('productName', e.target.value);
+                        }}
                         />  
                 </label>
                 {/* 복사 버튼 (입력값 복사) */}

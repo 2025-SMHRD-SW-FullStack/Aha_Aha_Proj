@@ -4,6 +4,7 @@ import ShopeeContext from '/src/provider/ShopeeFormContext.jsx'
 import { useNavigate } from 'react-router-dom';
 import { getUserIdFromToken } from '../../../util/jwt';
 import { createDomesticPost } from '../../../service/domesticPostApi';
+import { createForeignPost } from '../../../service/foreignPostApi';
 
 
 const ShopeeStep6 = () => {
@@ -18,9 +19,11 @@ const ShopeeStep6 = () => {
         reader.readAsDataURL(file)
     })
 
+    // 완료 버튼 클릭 시 게시글 등록
     const handleComplete = async () => {
         console.log("📦 formData 상태:", formData);
 
+        // 필수값 확인
         if (!formData.productName || !formData.description || !formData.yourPrice) {
             alert("상품명과 상세내용, 상품 가격을 입력해주세요.");
             return;
@@ -62,19 +65,33 @@ const ShopeeStep6 = () => {
     }
     // sessionStorage.setItem(`product-image-${id}`, imgData)  // 수정: FileReader 제거, imgData 저장
 
-    // DB에 저장하도록 API 호출 추가
-    const postData = {
-        userId: getUserIdFromToken(),                                                             // 사용자 식별
-        title: formData.productName,                                           // 상품명
-        content: formData.description,                                         // 상세내용
+    // API 전송용 공통 데이터
+    const commonData = {
+        userId: getUserIdFromToken(),                                          // 상세내용
+        yourPrice: formData.yourPrice,  
         img: imgData,                                                          // 이미지 URL or 빈 문자열
         url: formData.externalUrl ?? '',                                       // 외부 판매 링크
         platform: 'shopee',                                                    // 플랫폼 구분
-        yourPrice: formData.yourPrice   
     }
 
+    // 국내 게시판용
+    const domesticPost = {
+        ...commonData,
+        title: formData.productName,
+        content: formData.description,
+    }
+
+    // 해외 게시판용
+    const foreignPost = {
+        ...commonData,
+        title: formData.productNameEn,
+        content: formData.descriptionEn,
+    }
+
+    // 서버에 저장
     try {
-        await createDomesticPost(postData)
+        await createDomesticPost(domesticPost)
+        await createForeignPost(foreignPost)
         alert("상품 등록이 완료되었습니다.");
         navigate('/mypage/product_list');
     } catch (err) {

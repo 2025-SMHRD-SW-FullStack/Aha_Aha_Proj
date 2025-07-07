@@ -4,6 +4,7 @@ import AmazonFormContext from '/src/provider/AmazonFormContext'
 import { useNavigate } from 'react-router-dom';
 import { getUserIdFromToken } from './../../../util/jwt';
 import { createDomesticPost } from '../../../service/domesticPostApi';
+import { createForeignPost } from '../../../service/foreignPostApi';
 const AmazonStep5 = () => {
     // useEffect(() => {
     //     console.log("📦 Step5 진입 시 formData 상태:", formData);
@@ -19,14 +20,21 @@ const AmazonStep5 = () => {
         reader.readAsDataURL(file)
     })
 
-    // 완료 버튼 클릭 시 내 상품 리스트 + 게시판 등록
+    // 완료 버튼 클릭 시 내 상품 리스트 + 국내 / 해외 게시판 등록
     const handleComplete = async () => {
         console.log("📦 formData 상태:", formData);
 
-        if (!formData.productName || !formData.description || !formData.yourPrice) {
-            alert("상품명과 상세내용, 상품 가격을 입력해주세요.");
-            return;
+        if ((!formData.productName && !formData.productNameEn) ||
+        (!formData.description && !formData.descriptionEn) ||
+        !formData.yourPrice) {
+        alert("상품명과 상세내용, 상품 가격을 입력해주세요.");
+        return;
         }
+
+        // if (!formData.productName || !formData.description || !formData.yourPrice) {
+        //     alert("상품명과 상세내용, 상품 가격을 입력해주세요.");
+        //     return;
+        // }
 
          // 🧠 sessionStorage에 정보 저장 (DB 연동 대신)
         //  const id = Date.now(); // 임시 고유 ID
@@ -55,27 +63,40 @@ const AmazonStep5 = () => {
         // 1) 이미지 base64 변환
         let imgData = ''
         if (formData.images?.length > 0) {
-        try {
-            imgData = await toBase64(formData.images[0])
-        } catch (e) {
-            console.warn("이미지 변환 실패:", e)
-        }
+            try {
+                imgData = await toBase64(formData.images[0])
+            } catch (e) {
+                console.warn("이미지 변환 실패:", e)
+            }
         }
 
-        // 2) API 전송용 데이터 구성
-        const postData = {
+        // 2) API 전송용 공통 데이터
+        const commonData = {
         userId:   getUserIdFromToken(),        // 로그인된 유저 ID
-        title:    formData.productName,        // 상품명
-        content:  formData.description,        // 상세내용
+        yourPrice: formData.yourPrice,         // 가격
         img:      imgData,                     // base64 이미지 (또는 빈 문자열)
         url:      formData.externalUrl ?? '',  // 외부 링크
         platform: 'amazon',                    // 플랫폼
-        yourPrice: formData.yourPrice          // 가격
+        }
+
+        // 2-1) 국내 게시판용
+        const domesticPost = {
+            ...commonData,
+            title: formData.productName,
+            content: formData.description,
+        }
+
+        // 2-2) 해외 게시판용
+        const foreignPost = {
+            ...commonData,
+            title: formData.productNameEn,
+            content: formData.descriptionEn,
         }
     
        // 3) 서버에 저장
         try {
-            await createDomesticPost(postData)
+            await createDomesticPost(domesticPost)
+            await createForeignPost(foreignPost)
             alert("상품 등록이 완료되었습니다.")
             navigate('/mypage/product_list');
         } catch (err) {

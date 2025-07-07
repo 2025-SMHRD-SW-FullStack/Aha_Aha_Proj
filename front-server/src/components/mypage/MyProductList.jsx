@@ -6,30 +6,50 @@ import shopeeLogo from '/src/assets/images/shopee_logo.png';
 import { useNavigate } from "react-router-dom";
 import { getMyDomesticPosts } from "../../service/domesticPostApi";
 import { getUserIdFromToken } from "../../util/jwt";
+import { getMyForeignPosts } from "../../service/foreignPostApi";
 
 const MyProductList = () => {
 const [products, setProducts] = useState([]);
 const navigate = useNavigate();
 
 useEffect(() => {
-async function fetchProducts() {
-    try {
-    const userId = getUserIdFromToken();
-    const data = await getMyDomesticPosts(userId);
-    const mapped = data.map(post => ({
-        id:       post.id,
-        url:      post.url,
-        platform: post.platform || 'amazon',
-        title:    post.title,
-        content:  post.content,
-        price:    post.yourPrice || '1000',
-        image:    post.img || '',
-    }));
-    setProducts(mapped);
-    } catch (err) {
-    console.error("❌ 상품 목록 조회 실패:", err);
+    async function fetchProducts() {
+        try {
+            const userId = getUserIdFromToken();
+            const [domestic, foreign] = await Promise.all([
+                getMyDomesticPosts(userId),
+                getMyForeignPosts(userId),
+            ]);
+
+            const domesticMapped = domestic.map(post => ({
+                id: post.id,
+                region: 'domestic',
+                url: post.url,
+                platform: post.platform,
+                title: post.title,
+                content: post.content,
+                price: post.yourPrice,
+                image: post.img || '',
+            }));
+
+            const foreignMapped = foreign.map(post => ({
+                id: post.id,
+                region: 'foreign',
+                url: post.url,
+                platform: post.platform,
+                title: post.title,
+                content: post.content,
+                price: post.yourPrice,
+                image: post.img || '',
+            }));
+
+            setProducts([...domesticMapped, ...foreignMapped].sort((a, b) => b.id - a.id));
+
+        } catch (error) {
+            console.error("❌ 상품 목록 조회 실패:", err);
+        }
+        
     }
-}
 
 fetchProducts();
 }, []);
@@ -46,9 +66,14 @@ return (
     <div className={styles.grid}>
         {products.map((item) => (
         <div
-            key={item.id}
+            key={`${item.region}-${item.id}`}
             className={styles.card}
-            onClick={() => navigate(`/product/domestic/${item.id}`)} // ✅ 핵심
+            onClick={() => navigate(`/product/${item.region}/${item.id}`, {
+                state: {
+                    product: item,
+                    region: item.region,
+                },
+            })}
             style={{ cursor: "pointer" }}
         >
             <div className={styles.imageBox}>
@@ -61,7 +86,11 @@ return (
             <div className={styles.textBox}>
             <p className={styles.productTitle}>{item.title || "제목 없음"}</p>
             <p className={styles.productPrice}>
-                💰 {item.price ? `${item.price}₩` : "가격 정보 없음"}
+                💰 {item.price
+                    ? `${item.price}${item.region === 'foreign' ? '$' : '₩'}`
+                    : item.region === 'foreign'
+                    ? '10$'
+                    : '1000₩'}
             </p>
             {/* <div className={styles.platformLabel}>
                 {item.platform === "amazon" && (

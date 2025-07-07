@@ -8,11 +8,14 @@ const ProductDetail = ({product, onBack, region}) => {
     const {username} = product;
     const isDomestic = region === 'domestic';
 
+    const title = product.title;
+    const content = product.content;
+    
     const priceText = product.price
-    ? `${product.price}${isDomestic ? '$' : '₩'}`
-    : isDomestic
-        ? '1000₩'
-        : '1000₩';
+        ? `${product.price}${isDomestic ? '₩' : '$'}`
+        : isDomestic
+        ? `1000₩`
+        : `10$`;
 
     const platform = product.platform || 'amazon';
 
@@ -31,7 +34,7 @@ const ProductDetail = ({product, onBack, region}) => {
 
                 <div className={styles.contentBox}>
                     <div className={styles.textBox}>
-                        <h2 className={styles.title}>{product.title || '제목 없음'}</h2>
+                        <h2 className={styles.title}>{title || '제목 없음'}</h2>
 
                         {/* 여기에 작성자 닉네임 표시 */}
                         {username && (
@@ -41,7 +44,7 @@ const ProductDetail = ({product, onBack, region}) => {
                         )}
 
                         <p className={styles.price}>💰 {priceText}</p>
-                        <p className={styles.content}>{product.content || '상품 설명이 없습니다.'}</p>
+                        <p className={styles.content}>{content || '상품 설명이 없습니다.'}</p>
                     </div>
 
                     <div className={styles.platformBox}>

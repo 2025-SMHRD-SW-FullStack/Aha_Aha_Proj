@@ -128,7 +128,7 @@ const Exhibition2 = () => {
                         ? `${post.yourPrice}${post.region === 'domestic' ? '₩' : '$'}`
                         : post.region === 'domestic'
                         ? '1000₩'
-                        : '10.25$'}
+                        : '10$'}
                 </p>
                 <div className={styles.platformLabel}>
                     {post.platform === 'amazon' ? (
