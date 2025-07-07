@@ -4,7 +4,17 @@ import defaultImage from '/src/assets/images/imgIcon.png';
 import amazonLogo from '/src/assets/images/amazon_logo.png';
 import shopeeLogo from '/src/assets/images/shopee_logo.png';
 
-const ProductDetail = ({product, onBack}) => {
+const ProductDetail = ({product, onBack, region}) => {
+    const {username} = product;
+    const isDomestic = region === 'domestic';
+
+    const priceText = product.price
+    ? `${product.price}${isDomestic ? '$' : '₩'}`
+    : isDomestic
+        ? '1000₩'
+        : '1000₩';
+
+    const platform = product.platform || 'amazon';
 
     return (
         <div className={styles.wrapper}>
@@ -23,19 +33,26 @@ const ProductDetail = ({product, onBack}) => {
                     <div className={styles.textBox}>
                         <h2 className={styles.title}>{product.title || '제목 없음'}</h2>
 
-                        <p className={styles.price}>💰 {product.price ? `${product.price}₩` : '가격 정보 없음'}</p>
+                        {/* 여기에 작성자 닉네임 표시 */}
+                        {username && (
+                        <div className={styles.username}>
+                            by {username}
+                        </div>
+                        )}
+
+                        <p className={styles.price}>💰 {priceText}</p>
                         <p className={styles.content}>{product.content || '상품 설명이 없습니다.'}</p>
                     </div>
 
                     <div className={styles.platformBox}>
                         <div className={styles.platform}>
-                                {product.platform === 'amazon' && (
+                                {platform === 'amazon' && (
                                 <>
                                     <img src={amazonLogo} alt="Amazon" />
                                     <span>Amazon</span>
                                 </>
                                 )}
-                                {product.platform === 'shopee' && (
+                                {platform === 'shopee' && (
                                 <>
                                     <img src={shopeeLogo} alt="Shopee" />
                                     <span>Shopee</span>

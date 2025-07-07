@@ -190,7 +190,7 @@
 
 .description {
     width: 400px;    /* 원하는 높이로 조정 */
-    overflow-y: auto;    /* 세로 스크롤 */
+    /* overflow-y: auto; */
     line-height: 1.4;    /* 가독성 향상 */
     word-break: keep-all;/* 단어가 중간에 잘리지 않게 */
 }
@@ -201,3 +201,8 @@
     align-items: center;
     justify-content: center;
 }
+
+/* 순위 아이콘 한 줄 처리 */
+.rankIcon {
+    white-space: nowrap;
+} 

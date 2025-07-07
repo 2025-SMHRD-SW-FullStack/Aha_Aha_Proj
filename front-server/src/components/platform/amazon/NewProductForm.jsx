@@ -30,7 +30,6 @@ const NewProductForm = () => {
         }
     }
 
-
     return (
         <div>
             <h2>✅ 새 상품 정보 입력</h2>

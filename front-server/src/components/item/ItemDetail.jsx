@@ -10,8 +10,9 @@ import typingIcon from '/src/assets/images/typing.png'
 import lodingIcon from '/src/assets/images/platform.png'
 import { useNavigate } from 'react-router-dom'
 import { getRecommendedCountries } from '../../service/recommendService'
-import { getProductItemIdByName, toggleFavorite } from '../../service/favoriteService'
+// import { getProductItemIdByName } from '../../service/favoriteService'
 import { getUserIdFromToken } from '../../util/jwt'
+import { addFavorite, removeFavorite, getProductItemIdByName, checkFavoriteStatus } from '../../service/favoriteApi'
 
 
 /** input, 즐겨찾기 버튼 등 중앙 검색 영역 전체 */
@@ -32,7 +33,8 @@ const ItemDetail = ({itemId}) => {
     // const [platformMap, setPlatformMap] = useState({}); // 국가명 -> 플랫폼 목록
 
     // 해당 유저 Id 불러오기
-    const userId = localStorage.getItem('userId');
+    // const userId = localStorage.getItem('userId');
+    const userId = getUserIdFromToken();
 
     // input 자동 포커스
     useEffect(() => {
@@ -51,7 +53,13 @@ const ItemDetail = ({itemId}) => {
         }
     }, [itemId]);
 
-    // 입력값이 바뀔 때 즐겨찾기 여부 서버에서 확인하는 로직을 추가하고 싶다면 여기에 API 호출 필요
+    const rankIcon = (index) => {
+        if (index === 0) return "🥇 1위";  // 1위 아이콘
+        if (index === 1) return "🥈 2위";  // 2위 아이콘
+        if (index === 2) return "🥉 3위";  // 3위 아이콘
+        return `${index + 1}위`;  // 그 외 순위는 그냥 숫자
+    };
+
     // 로컬스토리지에서 해당 유저의 즐겨찾기 목록 불러오기
     // useEffect(() => {
     //     if (!userId) return;
@@ -68,8 +76,8 @@ const ItemDetail = ({itemId}) => {
     // useEffect(() => {
     //     if (!userId) return;
     //     const trimmed = inputValue.trim();
-    //     setIsFavorite(favoriteList.includes(trimmed));
-    // }, [inputValue, favoriteList, userId]);
+    //     // setIsFavorite(favoriteList.includes(trimmed));
+    // }, [inputValue, userId]);
 
     // 검색 완료 후 플랫폼 추천 요청
     // useEffect(() => {
@@ -87,41 +95,72 @@ const ItemDetail = ({itemId}) => {
             setSearched(false);
             setRecommendData(null);
         }
+
+         // 입력 값이 비어 있으면 즐겨찾기 아이콘을 비어있는 상태로 설정
+        if (!inputValue.trim()) {
+            setIsFavorite(false);
+        }
     }, [inputValue, itemId]);
 
     /** [ 즐겨찾기 버튼 클릭 (서버에 요청)] */
     const handleFavorite = async () => {
-        const userId = getUserIdFromToken();
-
         if (!userId) {
             alert('로그인이 필요합니다.');
             return;
         }
-
         const trimmed = inputValue.trim();
-        try {
-            const productItemId = await getProductItemIdByName(trimmed); // 품목 ID 가져오기
-            await toggleFavorite({productItemId, userId}); // 서버에 즐겨찾기 토글 요청
+        const nextState = !isFavorite; // 현재 상태 반전 (추가 -> 삭제, 삭제 -> 추가)
+        setIsFavorite(nextState); // 즐겨찾기 버튼 왔다 갔다 하는 거
 
-            const nextState = !isFavorite;
-            setIsFavorite(nextState);
+        // const updatedList = nextState
+        // ? [...favoriteList, trimmed]
+        // : favoriteList.filter(item => item !== trimmed) // 즐겨찾기 추가/삭제 처리
+
+        // setFavoriteList(updatedList);
+        // localStorage.setItem(`favorites_${userId}`, JSON.stringify(updatedList));
+
+        // 즐겨찾기 추가/삭제 클릭 알림 표시
+        setFeedback(nextState ? 'add' : 'delete');
+        setTimeout(() => setFeedback(null), 1000);
+
+        try {
+            const productItemId = await getProductItemIdByName(trimmed);  // 상품 이름을 통해 ID 조회
+            
+            if(nextState) {
+                await addFavorite(userId, productItemId); // 즐겨찾기 추가
+            } else {
+                await removeFavorite(userId, productItemId); // 즐겨찾기 삭제
+            }
+            
+            // await toggleFavorite({productItemId, userId}); // 서버에 즐겨찾기 토글 요청
+
+            // const nextState = !isFavorite;
+            // setIsFavorite(nextState);
             setFeedback(nextState ? 'add': 'delete');
             setTimeout(()=> setFeedback(null), 1000);
         } catch (error) {
             console.error('즐겨찾기 처리 실패:', error);
         }
-
-        // const updatedList = nextState
-        // ? [...favoriteList, trimmed]
-        // : favoriteList.filter(item => item !== trimmed);
-
-        // setFavoriteList(updatedList);
-        // localStorage.setItem(`favorites_${userId}`, JSON.stringify(updatedList));
-
-        // // 즐겨찾기 추가/삭제 클릭 알림 표시
-        // setFeedback(nextState ? 'add' : 'delete');
-        // setTimeout(()=> setFeedback(null), 1000);
     };
+
+    /** [ 즐겨찾기 상태 확인 (서버에 요청)] */
+    useEffect(() => {
+        const checkFavorite = async () => {
+            const trimmed = inputValue.trim();
+            if (!userId || !trimmed) return;
+
+            try {
+                // 상품 이름을 기준으로 상품 ID 가져오기
+                const productItemId = await getProductItemIdByName(trimmed);
+                const favoriteStatus = await checkFavoriteStatus(userId, productItemId); // 즐겨찾기 여부 확인
+                setIsFavorite(favoriteStatus);  // 상태 업데이트
+            } catch (error) {
+                console.error('즐겨찾기 상태 확인 실패:', error);
+            }
+        };
+
+        checkFavorite(); // 컴포넌트가 로드될 때 확인
+    }, [inputValue, userId]);
 
     /** [ 검색 실행 ] */
     const runSearch = async (keyword) => {
@@ -133,7 +172,8 @@ const ItemDetail = ({itemId}) => {
 
         setSearched(true);
         setLoading(true);
-    
+
+
         try {
             const data = await getRecommendedCountries(trimmed);
             setRecommendData(data);
@@ -166,6 +206,7 @@ const ItemDetail = ({itemId}) => {
         if (trimmed !== itemId) {
             navigate(`/item/${encodeURIComponent(trimmed)}`);
         } else {
+            console.log("잘못된 품목명이어서 검색을 수행하지 않습니다.");
             runSearch(trimmed); // 페이지 이동 없이 같은 품목에서 재검색 가능
         }
     };
@@ -237,14 +278,19 @@ const ItemDetail = ({itemId}) => {
                             <th>순위</th>
                             <th>국가</th>
                             <th>예상성공률</th>
-                            <th></th>
+                            <th>추천 이유</th>
                             {/* <th>추천 이커머스</th> */}
                         </tr>
                     </thead>
                     <tbody>
                         {recommendData.tableData.map((item, idx) => (
                             <tr key={idx}>
-                                <td>{item.rank}</td>
+                                {/* <td>{item.rank}</td> */}
+                                <td>
+                                <span className={styles.rankIcon}>
+                                    {rankIcon(idx)} {/* 순위 아이콘 */}
+                                </span>
+                                </td>
                                 <td>{item.country}</td>
                                 <td>{item.recommendationScore}</td>
                                 <td className={styles.descriptionTable}>

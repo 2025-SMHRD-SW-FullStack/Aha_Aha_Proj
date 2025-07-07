@@ -44,10 +44,18 @@ body {
     width: 200px;
 }
 
-.grid {
+/* .grid {
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
+} */
+
+/* ✅ 여기 중요 */
+.grid {
+    width: 100px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 한 줄에 4개 */
+    gap: 20px;
 }
 
 .card {
@@ -59,6 +67,7 @@ body {
     border-radius: 8px;
     padding: 20px;
     text-align: center;
+    width: 180px;
 
     /* ✅ 그림자 효과 추가 */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
@@ -74,7 +83,7 @@ body {
 .imageBox {
     /* background-color: #F8F4FF; */
     width: 100%;
-    height: 160px; /* 고정 높이 */
+    height: 130px;
     border-radius: 12px;
     display: flex;
     justify-content: center;
@@ -82,6 +91,7 @@ body {
     overflow: hidden; /* 넘치는 이미지 잘라냄 */
     position: relative;
     margin-bottom: 10px;
+    border: 1px solid var(--color-gray10);
 }
 
 .placeholderIcon {

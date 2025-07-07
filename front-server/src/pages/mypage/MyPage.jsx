@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import MainLayout from "../../components/layouts/MainLayout";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import styles from "./Mypage.module.css";
 
 const menus = [
@@ -12,6 +12,14 @@ const menus = [
 
 const MyPage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+
+   // ✅ 최초 경로가 /mypage면 /mypage/user_info로 이동
+  useEffect(() => {
+    if (location.pathname === "/mypage") {
+      navigate("user_info", { replace: true });
+    }
+  }, [location.pathname, navigate]);
 
   return (
     <MainLayout>

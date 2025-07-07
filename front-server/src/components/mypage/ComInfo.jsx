@@ -5,19 +5,14 @@ import styles from "./ComInfo.module.css";
 
 const ComInfo = () => {
   // 초기값을 null이 아닌 빈 값으로 설정해 렌더링 에러 방지
-  const [form, setForm] = useState({
-    name: "",
-    ceoName: "",
-    businessNumber: "",
-    industry: "",
-    address: "",
-  });
+  const [form, setForm] = useState(null);
   const [original, setOriginal] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
 
   const fetchComInfo = useCallback(async () => {
     try {
-      const res = await axiosInstance.get("/api/users/company");
+      const res = await axiosInstance.get("/api/company/me");
+      console.log("회사 정보 : ", res.data);
       const data = {
         name: res.data.name ?? "",
         ceoName: res.data.ceoName ?? "",
@@ -28,6 +23,7 @@ const ComInfo = () => {
       
       setForm(data);
       setOriginal(data);
+
     } catch (error) {
       console.warn("💡회사 정보가 없거나 오류 발생. 빈 값으로 초기화");
       // 💡빈 값으로 초기화해서 UI 렌더링 오류 방지
@@ -73,7 +69,7 @@ const ComInfo = () => {
         address: form.address,
       };
 
-      await axiosInstance.put("/api/users/company", requestData);
+      await axiosInstance.put("/api/company/me", requestData);
       alert("회사 정보가 수정되었습니다.");
       setIsEdit(false);
       fetchComInfo();

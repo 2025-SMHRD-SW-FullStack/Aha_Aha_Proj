@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import styles from './Chatbot.module.css';
 import { sendChatToBot } from '../../service/chatbotApi';
@@ -6,6 +6,7 @@ import { step5PostTranslation } from '../../service/step5PostTranslate';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import ImageModal from './ImageModal';
+import chatbotImg from '/src/assets/images/chatbot.png';
 
 const Chatbot = () => {
   const [messages, setMessages] = useState([]);
@@ -21,6 +22,15 @@ const Chatbot = () => {
   const [userId, setUserId] = useState(null);
 
   const [modalImage, setModalImage] = useState(null);
+
+  const chatBodyRef = useRef(null); // 자동 스크롤
+
+  // ✅ 메시지가 변경될 때마다 아래로 스크롤
+  useEffect(() => {
+    if (chatBodyRef.current) {
+      chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   // 🔐 JWT 토큰에서 userId 추출
   useEffect(() => {
@@ -180,9 +190,11 @@ const Chatbot = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.chatHeader}>🧠 GlobalGo AI 수출 도우미</div>
+      <div className={styles.chatHeader}>
+        <img className={styles.chatbotImgBox} src={chatbotImg} alt="챗봇 이미지" /><span>GlobalGo AI 수출 도우미</span>
+      </div>
 
-      <div className={styles.chatBody}>
+      <div className={styles.chatBody} ref={chatBodyRef}>
         {messages.map((msg, i) => (
           <div key={i} className={`${styles.message} ${styles[msg.role]}`}>
             {msg.type === 'image' ? (

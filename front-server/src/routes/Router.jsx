@@ -18,6 +18,7 @@ import UserInfo from "../components/mypage/UserInfo";
 import ExhibitionPage from "../pages/exhibition/ExhibitionPage";
 import ProductDetail from "../components/product/ProductDetail";
 import ProductDetailPage from "../pages/product/ProductDetailPage";
+import MyProductList from "../components/mypage/MyProductList";
 
 
 const Router = () => {
@@ -42,6 +43,7 @@ const Router = () => {
 
                 {/* 게시판 페이지 관련 */}
                 <Route path='/exhibition' element={<ExhibitionPage/>}/>
+                {/* <Route path='/exhibition2' element={<ExhibitionPage/>}/> */}
 
                 {/* 중개플랫폼 페이지 관련 */}
                 <Route path='/platform' element={<PlatformPage/>}/>
@@ -55,10 +57,12 @@ const Router = () => {
                     <Route path="user_info" element={<UserInfo />} />
                     <Route path="com_info" element={<ComInfo />} />
                     <Route path="favorite_item" element={<FavoriteItem />} />
-                    <Route path="product_list" element={<ProductList />} />
+                    {/* <Route path="product_list" element={<ProductList />} /> */}
+                    <Route path="product_list" element={<MyProductList />} />
                 </Route>
 
-                <Route path="/product/:id" element={<ProductDetailPage/>}/>
+                {/* <Route path="/product/:id" element={<ProductDetailPage/>}/> */}
+                <Route path="/product/:region/:id" element={<ProductDetailPage/>}/>
 
                 </Routes>    
         </BrowserRouter>

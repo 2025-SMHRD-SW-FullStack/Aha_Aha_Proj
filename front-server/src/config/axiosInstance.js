@@ -1,12 +1,13 @@
 // src/config/axiosInstance.js
 import axios from "axios";
 
-const axiosInstance = axios.create({
+export const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL, // Spring 서버 주소
   timeout: 5000,
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true, // 세션 쿠키 자동 포함
 });
 
 // ✅ 요청 전 AccessToken 자동 첨부

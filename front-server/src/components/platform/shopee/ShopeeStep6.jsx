@@ -2,11 +2,21 @@ import React, { useContext } from 'react'
 import styles from './ShopeeStep6.module.css'
 import ShopeeContext from '/src/provider/ShopeeFormContext.jsx'
 import { useNavigate } from 'react-router-dom';
+import { getUserIdFromToken } from '../../../util/jwt';
+import { createDomesticPost } from '../../../service/domesticPostApi';
 
 
 const ShopeeStep6 = () => {
     const { formData, updateField } = useContext(ShopeeContext);
     const navigate = useNavigate();
+
+     // File → base64 로 변환하는 Promise 함수
+    const toBase64 = file => new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = () => resolve(reader.result)
+        reader.onerror = e => reject(e)
+        reader.readAsDataURL(file)
+    })
 
     const handleComplete = async () => {
         console.log("📦 formData 상태:", formData);
@@ -17,32 +27,61 @@ const ShopeeStep6 = () => {
         }
 
         // 🧠 sessionStorage에 정보 저장 (DB 연동 대신)
-        const id = Date.now();
-        sessionStorage.setItem(`product-id-${id}`, id);
-        sessionStorage.setItem(`product-title-${id}`, formData.productName);
-        sessionStorage.setItem(`product-content-${id}`, formData.description);
-        sessionStorage.setItem(`product-url-${id}`, formData.externalUrl ?? '');
-        sessionStorage.setItem(`product-platform-${id}`, "shopee");
-        sessionStorage.setItem(`product-yourPrice-${id}`, formData.yourPrice ?? '');
+        // const id = Date.now();
+        // sessionStorage.setItem(`product-id-${id}`, id);
+        // sessionStorage.setItem(`product-title-${id}`, formData.productName);
+        // sessionStorage.setItem(`product-content-${id}`, formData.description);
+        // sessionStorage.setItem(`product-url-${id}`, formData.externalUrl ?? '');
+        // sessionStorage.setItem(`product-platform-${id}`, "shopee");
+        // sessionStorage.setItem(`product-yourPrice-${id}`, formData.yourPrice ?? '');
 
         // 🔄 이미지 기본값 (비워두기)
-        sessionStorage.setItem(`product-image-${id}`, '');
+        // sessionStorage.setItem(`product-image-${id}`, '');
 
         // ✅ 이미지 저장
-        if (formData.images && formData.images.length > 0) {
-            const firstImage = formData.images[0];
-            const reader = new FileReader();
+        // if (formData.images && formData.images.length > 0) {
+        //     const firstImage = formData.images[0];
+        //     const reader = new FileReader();
         
-            reader.onload = () => {
-            sessionStorage.setItem(`product-image-${id}`, reader.result);
-            };
+        //     reader.onload = () => {
+        //     sessionStorage.setItem(`product-image-${id}`, reader.result);
+        //     };
         
-            reader.readAsDataURL(firstImage);
-        }
+        //     reader.readAsDataURL(firstImage);
+        // }
 
-        // 실제 API 호출안하고 상태만 유지
-        alert("상품 등록이 완료되었습니다. (저장만 진행됨)");
+        // ✅ 이미지 저장 (Blob / string 둘 다 처리)
+    // 1) 이미지가 있으면 base64로 변환
+    let imgData = ''
+    if (formData.images?.length > 0) {
+        try {
+            imgData = await toBase64(formData.images[0])
+        } catch (err) {
+            console.error("이미지 변환 실패:", err)
+        }
+    }
+    // sessionStorage.setItem(`product-image-${id}`, imgData)  // 수정: FileReader 제거, imgData 저장
+
+    // DB에 저장하도록 API 호출 추가
+    const postData = {
+        userId: getUserIdFromToken(),                                                             // 사용자 식별
+        title: formData.productName,                                           // 상품명
+        content: formData.description,                                         // 상세내용
+        img: imgData,                                                          // 이미지 URL or 빈 문자열
+        url: formData.externalUrl ?? '',                                       // 외부 판매 링크
+        platform: 'shopee',                                                    // 플랫폼 구분
+        yourPrice: formData.yourPrice   
+    }
+
+    try {
+        await createDomesticPost(postData)
+        alert("상품 등록이 완료되었습니다.");
         navigate('/mypage/product_list');
+    } catch (err) {
+        console.error(err)
+        alert("상품 등록 중 오류가 발생했습니다.");
+        return
+    }
     
     };
 

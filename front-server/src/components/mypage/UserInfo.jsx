@@ -101,12 +101,12 @@ const UserInfo = () => {
         isEdit={isEdit}
         onChange={handleChange}
       />
-      <InfoRow
+      {/* <InfoRow
         label="이메일"
         value={form.email}
         name="email"
         isEdit={false}
-      />
+      /> */}
       <InfoRow
         label="생년월일"
         value={form.birth}

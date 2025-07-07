@@ -4,33 +4,57 @@ import defaultImage from '/src/assets/images/imgIcon.png';
 import amazonLogo from '/src/assets/images/amazon_logo.png';
 import shopeeLogo from '/src/assets/images/shopee_logo.png';
 import { useNavigate } from "react-router-dom";
+import { getMyDomesticPosts } from "../../service/domesticPostApi";
+import { getUserIdFromToken } from "../../util/jwt";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // 저장된 상품 정보 불러오기
-    const loaded = [];
+    // // 저장된 상품 정보 불러오기
+    // const loaded = [];
 
-    // 세션에 저장된 모든 키 탐색
-    for (let i = 0; i < sessionStorage.length; i++) {
-      const key = sessionStorage.key(i);
-      if (key.startsWith("product-url-")) {
-        const id = key.replace("product-url-", "");
-        loaded.push({
-          id,
-          url: sessionStorage.getItem(`product-url-${id}`),
-          platform: sessionStorage.getItem(`product-platform-${id}`),
-          title: sessionStorage.getItem(`product-title-${id}`),
-          content: sessionStorage.getItem(`product-content-${id}`),
-          price: sessionStorage.getItem(`product-price-${id}`),
-          image: sessionStorage.getItem(`product-image-${id}`) || '', // ✅ 대표 이미지
-        });
+    // // 세션에 저장된 모든 키 탐색
+    // for (let i = 0; i < sessionStorage.length; i++) {
+    //   const key = sessionStorage.key(i);
+    //   if (key.startsWith("product-url-")) {
+    //     const id = key.replace("product-url-", "");
+    //     loaded.push({
+    //       id,
+    //       url: sessionStorage.getItem(`product-url-${id}`),
+    //       platform: sessionStorage.getItem(`product-platform-${id}`),
+    //       title: sessionStorage.getItem(`product-title-${id}`),
+    //       content: sessionStorage.getItem(`product-content-${id}`),
+    //       price: sessionStorage.getItem(`product-price-${id}`),
+    //       image: sessionStorage.getItem(`product-image-${id}`) || '', // ✅ 대표 이미지
+    //     });
+    //   }
+    // }
+
+    // setProducts(loaded);
+
+    async function fetchProducts() {
+      try {
+        const userId = getUserIdFromToken()
+        const data = await getMyDomesticPosts(userId)
+        // API 응답 구조에 맞춰 매핑
+        const mapped = data.map(post => ({
+          id:       post.id,
+          url:      post.url,
+          platform: post.platform,
+          title:    post.title,
+          content:  post.content,
+          price:    post.yourPrice,
+          image:    post.img || ''  // 대표 이미지
+        }))
+        setProducts(mapped)
+      } catch (err) {
+        console.error("상품 목록 조회 실패:", err)
       }
     }
 
-    setProducts(loaded);
+    fetchProducts()
 
   }, []);
 
@@ -38,7 +62,7 @@ const ProductList = () => {
     <div className={styles.wrapper}>
       <div className={styles.headerRow}>
         <h2 className={styles.title}>내 상품 리스트</h2>
-        <p>등록된 상품 정보를 임시 저장소(sessionStorage)에서 불러옵니다.</p>
+        {/* <p>등록된 상품 정보를 임시 저장소(sessionStorage)에서 불러옵니다.</p> */}
       </div>
 
       {products.length === 0 ? (
@@ -49,7 +73,9 @@ const ProductList = () => {
             <div 
               key={item.id} 
               className={styles.card}
-              onClick={() => navigate(`/product/${item.id}`)} // ✅ 클릭 시 이동
+              // onClick={() => navigate(`/product/${item.id}`)} // ✅ 클릭 시 이동
+              // onClick={() => navigate(`/product/${item.region}/${item.id}`)}  // ✅ 클릭 시 이동
+              onClick={() => navigate(`/product/domestic/${item.id}`)}
               style={{ cursor: 'pointer' }} // 클릭 가능한 느낌
               >
               <div className={styles.imageBox}>

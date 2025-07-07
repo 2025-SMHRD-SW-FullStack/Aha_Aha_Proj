@@ -64,18 +64,22 @@ const FavoriteItem = () => {
           (selected.product === "전체" || item.productName === selected.product) &&
           (selected.country === "전체" || rc.country === selected.country)
         ) {
+          // percent 값을 숫자로 변환하여 successRate 계산
+          const successRate = parseFloat(rc.percent) || 0; // 값이 NaN일 경우 0으로 처리 
+
           items.push({
             id: item.favoriteId,
             productName: item.productName,
             // description: item.productDescription,
             reason: rc.reason,
             countryName: rc.country,
-            successRate: rc.percent,
+            successRate: successRate, // 변환된 숫자형 값 사용
           });
         }
       });
     });
 
+    // 성공률을 기준으로 정렬 (내림차순)
     return items.sort((a, b) => b.successRate - a.successRate);
   }, [favorites, selected]);
   
