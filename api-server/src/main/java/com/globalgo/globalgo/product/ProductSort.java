@@ -19,9 +19,6 @@ public class ProductSort {
     @JoinColumn(name = "product_item_id")
     private ProductItem productItem;
 
-//    @Column(nullable = false)
-//    private String country;
-
     @Column(name = "`rank`")
     private Integer rank;
 
