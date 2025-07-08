@@ -10,17 +10,27 @@ import CopyButton from '../../common/CopyButton'
 const ShopeeStep3 = () => {
     const { formData, updateField } = useContext(ShopeeContext);
 
-    // 번역하기 버튼
     const handleTranslate = async () => {
         try {
             const toTranslate = {};
+
+            // 이미지 관련 키 방어적 제외 처리
+            const excludedKeys = [
+                'productNameEn',
+                'descriptionEn',
+                'mainImage',
+                'mainImageEn',
+                'images',
+                'imagesEn',
+                'video',
+                'videoEn'
+            ];
     
             // productName, description은 제외하고 ~~En 필드만 번역 대상 수집
             Object.entries(formData).forEach(([key, value]) => {
                 if (
                     key.endsWith('En') &&
-                    key !== 'productNameEn' &&
-                    key !== 'descriptionEn' &&
+                    !excludedKeys.includes(key) &&
                     typeof value === 'string' &&
                     value.trim() !== ''
                 ) {

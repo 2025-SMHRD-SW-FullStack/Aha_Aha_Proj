@@ -13,13 +13,24 @@ const ShopeeStep4 = () => {
     const handleTranslate = async () => {
         try {
             const toTranslate = {};
+
+            // 이미지 관련 키 방어적 제외 처리
+            const excludedKeys = [
+                'productNameEn',
+                'descriptionEn',
+                'mainImage',
+                'mainImageEn',
+                'images',
+                'imagesEn',
+                'video',
+                'videoEn'
+            ];
     
             // productName, description은 제외하고 ~~En 필드만 번역 대상 수집
             Object.entries(formData).forEach(([key, value]) => {
                 if (
                     key.endsWith('En') &&
-                    key !== 'productNameEn' &&
-                    key !== 'descriptionEn' &&
+                    !excludedKeys.includes(key) &&
                     typeof value === 'string' &&
                     value.trim() !== ''
                 ) {
@@ -145,8 +156,11 @@ const ShopeeStep4 = () => {
                     <input className={styles.customInput}
                         type="text" 
                         placeholder="ex) Color"
-                        value={formData.Name || ''} 
-                        onChange={(e) => updateField('Name', e.target.value)}
+                        value={formData.NameEn} 
+                        onChange={(e) => {
+                            updateField('NameEn', e.target.value);
+                            updateField('Name', e.target.value);
+                        }}
                         />  
                 </label>
                 {/* 복사 버튼 (입력값 복사) */}
@@ -165,8 +179,11 @@ const ShopeeStep4 = () => {
                     <input className={styles.customInput}
                         type="text" 
                         placeholder="ex) Red, Blue"
-                        value={formData.OptionsEn || ''} 
-                        onChange={(e) => updateField('OptionsEn', e.target.value)}
+                        value={formData.OptionsEn} 
+                        onChange={(e) => {
+                            updateField('OptionsEn', e.target.value);
+                            updateField('Options', e.target.value);
+                        }}
                         />  
                 </label>
                 {/* 복사 버튼 (입력값 복사) */}

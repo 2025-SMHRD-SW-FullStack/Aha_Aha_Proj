@@ -35,7 +35,8 @@ public class ForeignPost {
     @Column(nullable = true)
     private String yourPrice;
 
-    @Column(nullable = true)
+    @Lob
+    @Column(nullable = true, columnDefinition = "LONGTEXT")
     private String img;
 
     private LocalDateTime createdAt;
