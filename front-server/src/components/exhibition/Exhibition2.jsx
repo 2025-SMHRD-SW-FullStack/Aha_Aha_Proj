@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { getUserIdFromToken } from './../../util/jwt';
-import { getMyDomesticPosts } from '../../service/domesticPostApi';
-import { getMyForeignPosts } from '../../service/foreignPostApi';
+import { getAllDomesticPosts, getMyDomesticPosts } from '../../service/domesticPostApi';
+import { getAllForeignPosts, getMyForeignPosts } from '../../service/foreignPostApi';
 import styles from './Exhibition2.module.css'
 import defaultImage from '/src/assets/images/imgIcon.png'
 import amazonLogo   from '/src/assets/images/amazon_logo.png'
@@ -47,8 +47,8 @@ const Exhibition2 = () => {
                 // console.log('🎯 합친 게시글 데이터:', combined);
 
                 const [dom = [], forn = []] = await Promise.all([
-                    getMyDomesticPosts(userId),
-                    getMyForeignPosts(userId),
+                    getAllDomesticPosts(),
+                    getAllForeignPosts(),
                 ]);
                 // 각 post에 region 필드 추가
                 setDomesticPosts(dom.map(p => ({...p, region: 'domestic'})))
