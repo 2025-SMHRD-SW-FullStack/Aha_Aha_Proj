@@ -56,7 +56,7 @@ const Main = () => {
                 <div className={styles.right}>
                     <div className={`${styles.box} ${styles.board}`}>
                         <Link to='/exhibition'>
-                            <h2>판매</h2>
+                            <h2>상품</h2>
                             <p>Amazon과 Shoppe에 등록한 <br />판매 제품들을 보여줍니다.</p>
                             <img src={productImg} alt="게시판 이미지" />
                         </Link>

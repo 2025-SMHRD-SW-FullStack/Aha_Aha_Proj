@@ -52,7 +52,7 @@ const Header = () => {
             {!hideNav &&(   
                 <nav className={styles.nav}>
                     <NavLink to='/item' className={({isActive}) => isActive ? styles.active : ''}>품목</NavLink>
-                    <NavLink to='/exhibition' className={({isActive}) => isActive ? styles.active : ''}>판매</NavLink>
+                    <NavLink to='/exhibition' className={({isActive}) => isActive ? styles.active : ''}>상품</NavLink>
                     <NavLink to='/platform' className={({isActive}) => isActive ? styles.active : ''}>중개 플랫폼</NavLink>
                     <NavLink to='/chatbot' className={({isActive}) => isActive ? styles.active : ''}>챗봇</NavLink>
                 </nav>
