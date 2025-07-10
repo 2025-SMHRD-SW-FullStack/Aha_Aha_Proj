@@ -38,17 +38,17 @@
 
 ## 🗂️ 프로젝트 산출물
 
-- 📄 기획서: `기획서_Global_Go___소상공인_AI_수출_어드바이저.hwp`
-- 📄 요구사항정의서: `Global_Go_요구사항정의서_AhaAha_250704.hwp`
-- 📄 DB 요구사항분석서: `Global_Go_DB_요구사항분석서_AhaAha_250707.hwp`
-- 📄 테이블 명세서: `Global_Go_테이블_명세서_AhaAha_250707.hwp`
+- 📄 기획서: `기획서 Global Go - 소상공인 AI 수출 어드바이저.hwp`
+- 📄 요구사항정의서: `Global Go 요구사항정의서_AhaAha 250704.hwp`
+- 📄 DB 요구사항분석서: `Global Go DB 요구사항분석서_AhaAha 250707.hwp`
+- 📄 테이블 명세서: `Global Go 테이블 명세서_AhaAha 250707.hwp`
 - 📄 화면설계서(PDF): `250708_AhaAha화면설계서_최종.pdf`
 
 ---
 
 ## 🧱 시스템 아키텍처
 
-![아키텍처](./Global_Go/산출문서/Global%20Go%20시스템%20아키텍처_AhaAha)
+![아키텍처](./Global_Go/산출문서/Global%20Go%20시스템%20아키텍처_AhaAha.jpg)
 
 ---
 
@@ -97,7 +97,7 @@
 
 ## 🔎 WBS
 
-![WBS](./assets/wbs.png)
+![WBS](./Global_Go/산출문서/Global_Go_WBS.PNG)
 
 ---
 
