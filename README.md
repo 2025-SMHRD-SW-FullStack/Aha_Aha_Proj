@@ -1,6 +1,6 @@
 # 🌐 Global Go – 소상공인을 위한 AI 수출 어드바이저
 
-![Global Go 로고](./Global_Go/산출문서/Global_Go 로고.png)
+![Global Go 로고](./Global_Go/산출문서/Global_Go%20로고.png)
 
 ---
 
