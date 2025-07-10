@@ -48,7 +48,7 @@
 
 ## 🧱 시스템 아키텍처
 
-![아키텍처](./assets/architecture.jpg)
+![아키텍처](./Global_Go/산출문서/Global_Go20%시스템20%아키텍쳐20%AhaAha.jpg)
 
 ---
 
