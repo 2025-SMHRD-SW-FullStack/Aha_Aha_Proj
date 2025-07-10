@@ -7,7 +7,7 @@ GPT 기반 챗봇과 실시간 추천 기능을 통해, 누구나 손쉽게 글�
 
 ## 📌 프로젝트 소개
 
-- 품목만 입력하면, **관세청·UN 데이터 기반** AI가 수출 유망국가를 자동 추천
+- 품목만 입력하면, **관세청 데이터 기반** AI가 수출 유망국가를 자동 추천
 - 추천된 국가에 따라 **이커머스 플랫폼(Amazon, Shopee)** 가이드 제공
 - 사용자가 입력한 판매글을 AI가 영어로 번역하고, **국내·해외 게시판에 자동 등록**
 - 모든 과정은 챗봇 또는 페이지 양쪽에서 지원
@@ -65,6 +65,7 @@ cd api-server
 ### 3. AI 서버(FastAPI)
 ```bash
 cd ai-server
+pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 
