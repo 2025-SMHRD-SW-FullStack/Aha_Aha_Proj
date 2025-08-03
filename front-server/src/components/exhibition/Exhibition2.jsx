@@ -56,7 +56,7 @@ const Exhibition2 = () => {
 
             } catch (err) {
                 console.error('내 게시글 불러오기 실패:', err)
-                setError('게시글을 불러오는 중 오류가 발생했습니다.')
+                setError('로그인을 해주세요.')
             } finally {
                 setIsLoading(false);
             }

@@ -51,10 +51,10 @@ const Header = () => {
             {/* 메인,로그인,회원가입 페이지 아니면 네비바 보여주기 */}
             {!hideNav &&(   
                 <nav className={styles.nav}>
-                    <NavLink to='/item' className={({isActive}) => isActive ? styles.active : ''}>품목</NavLink>
-                    <NavLink to='/exhibition' className={({isActive}) => isActive ? styles.active : ''}>상품</NavLink>
+                    <NavLink to='/item' className={({isActive}) => isActive ? styles.active : ''}>상품</NavLink>
                     <NavLink to='/platform' className={({isActive}) => isActive ? styles.active : ''}>중개 플랫폼</NavLink>
                     <NavLink to='/chatbot' className={({isActive}) => isActive ? styles.active : ''}>챗봇</NavLink>
+                    <NavLink to='/exhibition' className={({isActive}) => isActive ? styles.active : ''}>전시관</NavLink>
                 </nav>
             )}
         </div>

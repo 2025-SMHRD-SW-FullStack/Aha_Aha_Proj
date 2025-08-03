@@ -230,7 +230,7 @@ const EmailSignUpForm = () => {
                     <select className={styles.selectBox} value={selectedDomain} onChange={domainSelected}>
                         <option value="">직접 입력</option>
                         <option value="naver.com">naver.com</option>
-                        <option value="google.com">google.com</option>
+                        <option value="gmail.com">gmail.com</option>
                         <option value="hanmail.net">hanmail.net</option>
                         <option value="nate.com">nate.com</option>
                         <option value="kakao.com">kakao.com</option>

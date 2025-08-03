@@ -31,8 +31,8 @@ const Main = () => {
                 <div className={styles.left}>
                     <div className={`${styles.box} ${styles.item}`}>
                         <Link to='/item'>
-                            <h2>품목</h2>
-                            <p>품목에 맞는 수출 국가와 성공 확률을 <br />추천해드립니다.</p>
+                            <h2>상품</h2>
+                            <p>상품에 맞는 수출 국가와 성공 확률을 <br />추천해드립니다.</p>
                             <img src={itemImg} alt="품목 이미지" />
                         </Link>
                     </div>
@@ -56,7 +56,7 @@ const Main = () => {
                 <div className={styles.right}>
                     <div className={`${styles.box} ${styles.board}`}>
                         <Link to='/exhibition'>
-                            <h2>상품</h2>
+                            <h2>전시관</h2>
                             <p>Amazon과 Shoppe에 등록한 <br />판매 제품들을 보여줍니다.</p>
                             <img src={productImg} alt="게시판 이미지" />
                         </Link>
