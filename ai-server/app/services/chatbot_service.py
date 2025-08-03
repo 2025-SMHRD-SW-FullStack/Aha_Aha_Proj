@@ -14,6 +14,7 @@ from app.utils.recommend import get_top_country_details
 from app.constants.shopee_countries import SHOPEE_COUNTRIES
 import asyncio
 from app.utils.slide_utils import split_slide_message
+from typing import Optional
 
 # ➕ NEW: JSON 파싱용
 import json
@@ -104,6 +105,140 @@ Translate the following product posting into natural U.S. English and return ONL
 
 반드시 위 JSON 한 줄로만 답하고, 추가 텍스트, 코드블럭, 예시, 주석, 설명, 안내 등은 절대 붙이지 마라.
 """
+    
+def extract_platform_with_gpt(user_id: str, message: str) -> str:
+    system_prompt = """
+너는 사용자의 메시지에서 플랫폼 이름만 뽑는 역할을 해.
+반드시 아래 규칙만 따르도록 해:
+
+- 결과는 반드시 소문자로: 'amazon', 'shopee', 또는 '없음'
+- 설명 없이 결과만 단독으로 출력
+- 예시:
+    - "아마존으로 할래요" → "amazon"
+    - "쇼피 하고 싶어" → "shopee"
+    - "1번요" → "amazon", "2번요" → "shopee"
+    - "몰라요" → "없음"
+"""
+    try:
+        resp = call_chatgpt(
+            user_id=user_id,
+            system_prompt=system_prompt.strip(),
+            user_prompt=message,
+            temperature=0.0
+        )
+        print("📦 GPT 응답 (플랫폼 추출):", repr(resp))
+        
+        platform = str(resp).strip().lower()
+        return platform if platform in ["amazon", "shopee"] else ""
+    except Exception as e:
+        print("❌ 플랫폼 추출 실패:", e)
+        return ""
+   
+    
+def extract_country_with_gpt(user_id: str, message: str) -> str:
+    prompt = f"""
+사용자의 입력: "{message}"
+
+이 문장에서 수출하고자 하는 핵심 '국가명'만 한 단어 또는 짧은 구절로 뽑아줘.
+예시는 다음과 같아:
+
+- "그래 일본 ㄱㄱ" → "일본"
+- "미국에 수출해볼라고" → "미국"
+- "중국에 팔고 싶어" → "중국"
+- "도미니카공화국 돼?" → "도미니카공화국"
+
+조건:
+- 국가명만 짧게 답해. 설명 절대 하지 마
+"""
+
+    try:
+        resp = call_chatgpt(
+            user_id=user_id,
+            system_prompt="""
+넌 사용자의 입력에서 수출 국가를 유추해서 추출하는 역할을 해.
+- 사용자가 바꾸고 싶다고 말하는 경우도 반드시 새 국가로 인식해
+- 예: "아니다 한국 말고 미국으로" → "미국"
+- 오타나 철자 실수가 있어도 최대한 의도를 파악해
+- 예: '비엣남' → '베트남', '유에이이' → 'UAE', '도이칠란드' → '독일'
+- 반드시 국가명 하나만 정확하게 출력하고 설명은 절대 하지 마
+""",
+            user_prompt=prompt,
+            temperature=0.3
+        )
+        extracted = str(resp).strip()
+        print("📦 GPT 추출된 국가:", extracted)
+        return extracted if extracted != "없음" else ""
+    except Exception as e:
+        print(f"❌ GPT 국가 추출 실패: {e}")
+        return ""    
+
+
+def extract_item_with_gpt(user_id: str, message: str) -> str:
+    prompt = f"""
+사용자의 입력: "{message}"
+
+이 문장에서 수출하고자 하는 핵심 '품목명'만 한 단어 또는 짧은 구절로 뽑아줘.
+'중국', '미국', '일본' 등 **국가 이름은 절대 품목으로 착각하지 마**.
+예시는 다음과 같아:
+
+- "그래 화장품 ㄱㄱ" → "화장품"
+- "비누 수출해볼라고" → "비누"
+- "전기자전거 팔고 싶어" → "전기자전거"
+- "건강기능식품도 돼?" → "건강기능식품"
+
+조건:
+- 품목명만 짧게 답해. 설명 절대 하지 마
+- 품목이 없으면 "없음"이라고만 답해.
+"""
+
+    try:
+        resp = call_chatgpt(
+            user_id=user_id,
+            system_prompt="넌 입력 문장에서 수출 품목을 한 단어로 추출하는 역할을 해. 설명 없이 품목만 출력해.",
+            user_prompt=prompt,
+            temperature=0.0
+        )
+        extracted = str(resp).strip()
+        print("📦 GPT 추출된 품목:", extracted)
+        # ✅ 국가명 필터링
+        COUNTRY_LIST = ["중국", "미국", "일본", "베트남", "태국", "프랑스", "영국", "싱가포르", "호주", "말레이시아"]
+        if extracted in COUNTRY_LIST:
+            print("❌ GPT가 국가명을 품목으로 착각함 → 무시")
+            return ""
+        return extracted if extracted != "없음" else ""
+    except Exception as e:
+        print(f"❌ GPT 품목 추출 실패: {e}")
+        return ""
+
+
+
+def is_valid_item_gpt(user_id: str, message: str) -> bool:
+    prompt = f"""
+사용자의 입력: "{message}"
+
+이 문장은 수출 품목(상품명 또는 제품 카테고리)을 의미하나요?
+예시: 화장품, 의류, 비누, 스마트폰 액세서리, 건강식품 등
+
+[조건]
+- 수출 품목이면 "예"만 출력
+- 아니면 "아니오"만 출력
+- 절대 다른 말 하지 마
+"""
+
+    try:
+        resp = call_chatgpt(
+            user_id=user_id,
+            system_prompt="너는 입력이 수출 품목인지 여부만 판단하는 AI야. '예' 또는 '아니오'로만 대답해.",
+            user_prompt=prompt,
+        )
+        response_text = str(resp).strip().lower()
+        print("📥 GPT 응답:", response_text)
+        return "예" in response_text or "네" in response_text  # ← 실무선 네까지 허용
+    except Exception as e:
+        print(f"❌ GPT 판단 오류: {e}")
+        return False
+
+
 
 def parse_gpt_response_to_json(raw):
     # 1. json 문자열이면
@@ -238,18 +373,24 @@ class ChatbotService:
         
         context = get_user_context(user_id)
 
-        # Step6 완료
-        if context.get("stage") == "step6":
-            return self._handle_final_step(db, user_id)
-
         # Step5 게시 요청
         if context.get("stage") == "step5":
-            print("🛠 Step5 진입 확인됨")
-            return self._handle_post_request(db, user_id, message, context)
+            valid_inputs = ["1", "2", "3", "국내", "해외", "둘 다", "둘다", "모두"]
+            msg_norm = message.replace(" ", "")
+            if any(keyword in msg_norm for keyword in valid_inputs):
+                print("🛠 Step5 진입 확인됨")
+                return self._handle_post_request(db, user_id, message, context)
+
 
         # Step3 슬라이드 설명
+        # ✅ 슬라이드 단계 중 "명령어"인 경우에만 슬라이드 핸들링
         if context.get("stage") == "step3" and context.get("platform"):
-            return self._handle_slide_step(db, user_id, context)
+            msg_lower = message.strip().lower()
+            if msg_lower in ["다음", "next", "다음 슬라이드", "넘겨줘"] or \
+            ("슬라이드" in msg_lower and any(kw in msg_lower for kw in ["끝", "종료", "다음", "넘어", "그만"])) or \
+            re.search(r"(슬라이드\s*\d+|slide\s*\d+)", msg_lower):
+                return self._handle_slide_step(db, user_id, context)
+
 
         # GPT 호출 처리
         if context.get("stage") == "step3":
@@ -272,7 +413,6 @@ class ChatbotService:
             if m["type"] == "text":
                 save_chat_message(db, user_id, RoleEnum.assistant, m["content"])
                 add_chat_to_redis(user_id, "assistant", m["content"])
-                break
 
         return {
             "messages": split_messages,
@@ -281,15 +421,13 @@ class ChatbotService:
         }
 
 
-    def _handle_final_step(self, db, user_id):
-        msg = "게시가 완료되었습니다! 수고 많으셨어요 😊"
-        save_chat_message(db, user_id, RoleEnum.assistant, msg)
-        add_chat_to_redis(user_id, "assistant", msg)
-        return {"messages": [{"role": "assistant", "type": "text", "content": msg}]}
-
     def _handle_post_request(self, db, user_id, message, context):
         msg = message.strip().lower()
-        mapping = {"1": "domestic", "국내": "domestic", "2": "foreign", "해외": "foreign", "3": "both", "둘 다": "both"}
+        mapping = {
+            "1": "domestic", "국내": "domestic",
+            "2": "foreign", "해외": "foreign",
+            "3": "both", "둘 다": "both", "둘다": "both", "모두": "both"
+        }
         target = next((v for k, v in mapping.items() if k in msg), None)
         if not target:
             err = "❌ 게시할 대상을 인식하지 못했습니다. (예: 1, 2, 3, 국내, 해외, 둘 다)"
@@ -341,23 +479,23 @@ class ChatbotService:
         print(f"{context} : 확인")
         msg = message.strip().lower()
 
-        if context.get("stage") == "step3" and msg in ["다음", "next", "다음 슬라이드", "넘겨줘"]:
-            current = context.get("slide_idx", 0)
-
-            if is_last_slide(context.get("platform"), current):
-                print("📘 슬라이드 마지막 도달 → step4로 이동")
-                update_user_context(user_id, {"stage": "step4", "slide_idx": 0})
-            else:
-                update_user_context(user_id, {"slide_idx": current + 1})
-                print(f"📸 슬라이드 {current + 1}로 이동")
-            return
-
-        # ✅ step3: 슬라이드 종료 문장 명시적으로 말한 경우
+        # ✅ 1. 슬라이드 제어 먼저 체크
         if context.get("stage") == "step3":
             lower_msg = message.lower()
-            if "슬라이드" in lower_msg and any(kw in lower_msg for kw in ["끝", "종료", "다음", "넘어", "그만"]):
-                update_user_context(user_id, {"stage": "step4", "slide_idx": 0})
+            
+            if msg in ["다음", "next", "다음 슬라이드", "넘겨줘"]:
+                current = context.get("slide_idx", 0)
+                if is_last_slide(context.get("platform"), current):
+                    print("📘 슬라이드 마지막 도달 → step4로 이동")
+                    update_user_context(user_id, {"stage": "step4", "slide_idx": 0})
+                else:
+                    print(f"📸 슬라이드 {current + 1}로 이동")
+                    update_user_context(user_id, {"slide_idx": current + 1})
+                return
+
+            elif "슬라이드" in lower_msg and any(kw in lower_msg for kw in ["끝", "종료", "다음", "넘어", "그만"]):
                 print("📘 슬라이드 종료 문장 감지 → step4로 이동")
+                update_user_context(user_id, {"stage": "step4", "slide_idx": 0})
                 return
 
         # ✅ step4 (제목+내용 입력 처리)
@@ -390,6 +528,7 @@ class ChatbotService:
                 "post_content_kr": content_kr,
                 "translated_title": en_title,
                 "translated_content": en_content,
+                "stage": "step5"
             })
             reply = (
                 f"✅ 번역이 완료되었어요!\n\n"
@@ -400,30 +539,88 @@ class ChatbotService:
             save_chat_message(db, user_id, RoleEnum.assistant, reply)
             add_chat_to_redis(user_id, "assistant", reply)
             return {"messages": [{"role": "assistant", "content": reply}]}
-        
-        # ✅ step4: '이대로 게시할까요?'에 대한 답변 처리
-        if context.get("stage") == "step4" and ("국내" in msg or "해외" in msg or "둘 다" in msg):
-            domestic_list = ["국내", "1", "domestic"]
-            foreign_list = ["해외", "2", "foreign"]
-            both_list = ["둘 다", "3", "both"]
 
-            if any(k in msg for k in domestic_list):
-                update_user_context(user_id, {"stage": "step5"})
-                return  # handle()에서 step5 진입 처리됨
+        # ✅ 2. 플랫폼 변경은 그 외 메시지일 때만 시도
+        if context.get("stage") in ["step2", "step3", "step4", "step5", "step6"]:
+            new_platform = extract_platform_with_gpt(user_id, message)
 
-            elif any(k in msg for k in foreign_list):                
-                update_user_context(user_id, {"stage": "step5"})
-                return  # handle()에서 step5 진입 처리됨
-            elif any(k in msg for k in both_list):                
-                update_user_context(user_id, {"stage": "step5"})
-                return  # handle()에서 step5 진입 처리됨    
+            print("🧠 플랫폼 추출 시도:", repr(message))
+            print("📦 GPT 응답 (플랫폼 추출):", repr(new_platform))
 
-        # Step5: "네/아니요" 대답 → 자동 게시 or 취소
+            old_platform = context.get("platform")
+            context_item = context.get("item")
+            context_country = context.get("country")
+
+            # ✅ 플랫폼이 유효하게 추출되었고, 이전과 다를 경우에만 처리
+            if new_platform and new_platform != old_platform:
+                print(f"🔁 플랫폼 변경: {old_platform} → {new_platform}")
+                update_user_context(user_id, {
+                    "stage": "step3",
+                    "item": context_item,
+                    "country": context_country,
+                    "platform": new_platform,
+                    "page": 1,
+                    "slide_idx": 0
+                })
+
+                # 📘 슬라이드 메시지 + GPT 응답
+                slide_text = self.get_step2_platform_text(context_country)
+                system_prompt = SYSTEM_PROMPT + f"""
+        현재 품목: {context_item} / 선택한 국가: {context_country} / 선택한 플랫폼: {new_platform}
+
+        {slide_text}
+        """
+                gpt_response = call_chatgpt(
+                    user_id=user_id,
+                    system_prompt=system_prompt,
+                    user_prompt=message,
+                    chat_history=[]
+                )
+
+                save_chat_message(db, user_id, RoleEnum.assistant, gpt_response)
+                add_chat_to_redis(user_id, "assistant", gpt_response)
+                return {"messages": [{"role": "assistant", "type": "text", "content": gpt_response}]}
+            else:
+                print("❌ GPT 플랫폼 추출 실패 또는 변경 없음 → 다음 흐름 계속")
+
+
+        # ✅ 사용자가 제목/내용 다시 입력 요청한 경우 → step4로 롤백
         if context.get("stage") == "step5":
-            msg_norm = msg.replace(' ', '')
-            if msg_norm in ["네", "yes", "y"]:
-                # 국내+해외 자동 게시
-                update_user_context(user_id, {"post_target": "both", "stage": "step6"})
+            lower_msg = message.lower()
+            if any(kw in lower_msg for kw in ["제목", "내용", "다시", "재작성", "고쳐", "입력"]):
+                print("🔁 사용자 요청으로 게시글 재작성 흐름 진입 → step4로 복귀")
+                update_user_context(user_id, {
+                    "stage": "step4",
+                    "post_title_kr": None,
+                    "post_content_kr": None,
+                    "translated_title": None,
+                    "translated_content": None
+                })
+                msg = (
+                    "물론이죠! 😊\n"
+                    "제목과 내용을 다시 작성하셔도 괜찮아요.\n\n"
+                    "새롭게 작성하실 제목과 내용을 입력해 주세요.\n"
+                    "작성해주시면 영어 번역도 바로 도와드릴게요!"
+                )
+                save_chat_message(db, user_id, RoleEnum.assistant, msg)
+                add_chat_to_redis(user_id, "assistant", msg)
+                return {"messages": [{"role": "assistant", "content": msg}]}
+
+        
+        # ✅ step5: 게시 대상 입력 (국내 / 해외 / 둘 다) → 게시 처리 + step6 이동
+        if context.get("stage") == "step5":
+            target = None
+            if any(k in msg for k in ["국내", "1", "domestic"]):
+                target = "domestic"
+            elif any(k in msg for k in ["해외", "2", "foreign"]):
+                target = "foreign"
+            elif any(k in msg for k in ["둘 다", "3", "both"]):
+                target = "both"
+
+            if target:
+                update_user_context(user_id, {"post_target": target})
+
+                # 게시 처리
                 success = asyncio.run(post_to_spring_board(
                     user_id=int(user_id),
                     platform=context.get("platform", ""),
@@ -431,59 +628,173 @@ class ChatbotService:
                     content=context.get("post_content_kr", ""),
                     translated_title=context.get("translated_title", ""),
                     translated_content=context.get("translated_content", ""),
-                    target="both"
+                    target=target
                 ))
+
                 if success:
+                    update_user_context(user_id, {"stage": "step6"})
                     res_msg = (
                         f"✅ 게시 완료!\n"
                         f"- 제목(영문): {context['translated_title']}\n"
                         f"- 내용(영문): {context['translated_content']}\n"
-                        f"👉 국내와 해외 게시판에 모두 등록했어요!"
+                        f"👉 [{target}] 게시판에 등록했어요!\n\n"
+                        "💬 다음에 무엇을 도와드릴까요?\n"
+                        "- '처음부터' 다시 시작\n"
+                        "- '국가 바꿔줘', '플랫폼 바꿔줘'\n"
+                        "- '다른 품목으로 해줘'\n"
                     )
                 else:
                     res_msg = "❌ 게시글 등록 중 오류가 발생했어요."
+
                 save_chat_message(db, user_id, RoleEnum.assistant, res_msg)
                 add_chat_to_redis(user_id, "assistant", res_msg)
-                return {"messages": [{"role": "assistant", "content": res_msg}]}
-            else:
-                # 취소
-                update_user_context(user_id, {"stage": "start"})
-                cancel_msg = "게시가 취소되었습니다. 처음부터 다시 시작할 수 있습니다."
-                save_chat_message(db, user_id, RoleEnum.assistant, cancel_msg)
-                add_chat_to_redis(user_id, "assistant", cancel_msg)
-                return {"messages": [{"role": "assistant", "content": cancel_msg}]}
+                return {"messages": [{"role": "assistant", "content": res_msg}]} 
 
+        # ✅ step6: 후속 요청 처리
+        if context.get("stage") == "step6":
+            if "처음" in msg or "다시" in msg:
+                update_user_context(user_id, {"stage": "start"})
+                return {"messages": [{"role": "assistant", "content": "처음부터 다시 시작할게요! 수출 품목을 입력해 주세요."}]}
+
+            elif "국가" in msg:
+                update_user_context(user_id, {"stage": "step1"})
+                return {"messages": [{"role": "assistant", "content": "수출 국가를 다시 선택해 주세요!"}]}
+
+            elif "플랫폼" in msg:
+                update_user_context(user_id, {"stage": "step2"})
+                return {"messages": [{"role": "assistant", "content": "사용할 플랫폼(Amazon 또는 Shopee)을 다시 입력해 주세요!"}]}
+
+            elif "품목" in msg:
+                update_user_context(user_id, {"stage": "start"})
+                return {"messages": [{"role": "assistant", "content": "새로운 수출 품목을 알려주세요!"}]}
+
+            else:
+                return {"messages": [{"role": "assistant", "content": "도움이 더 필요하시면 말씀해 주세요! 😊"}]}
+
+
+        # 품목 추출 시도
+        new_item = extract_item_with_gpt(user_id, message)
+
+        # 품목이 감지된 경우 → 무조건 컨텍스트 리셋
+        if new_item:
+            if new_item != context.get("item"):
+                print(f"🔁 품목 변경 감지: {context.get('item')} → {new_item}")
+            else:
+                print(f"🔁 기존 품목과 동일하지만 강제 리셋: {new_item}")
+            
+            update_user_context(user_id, {
+                "stage": "step1",
+                "item": new_item,
+                "country": None,
+                "platform": None,
+                "page": 1,
+                "slide_idx": 0,
+                "post_title_kr": None,
+                "post_content_kr": None,
+                "translated_title": None,
+                "translated_content": None,
+                "post_target": None
+            })
+
+            slide_text = self.get_step1_country_list_text(new_item)
+            system_prompt = SYSTEM_PROMPT + "\n\n" + slide_text
+
+            gpt_response = call_chatgpt(
+                user_id=user_id,
+                system_prompt=system_prompt,
+                user_prompt=message,
+                chat_history=[]
+            )
+
+            # 응답을 저장하고 반환
+            save_chat_message(db, user_id, RoleEnum.assistant, gpt_response)
+            add_chat_to_redis(user_id, "assistant", gpt_response)
+            return {"messages": [{"role": "assistant", "type": "text", "content": gpt_response}]}
 
         # ✅ 처음 시작: item 입력
         if context.get("stage") in [None, "start"] or "item" not in context:
-            update_user_context(user_id, {"item": message, "stage": "step1"})
-            print("대화 시작 → step1 진입")
+            item_name = extract_item_with_gpt(user_id, message)
+            if not item_name:
+                print("❌ GPT 추출 실패 or 품목 없음 → 저장 안함")
+                return
+
+            update_user_context(user_id, {"item": item_name, "stage": "step1"})
+            print(f"✅ 품목 저장: {item_name}")
             return
 
-        # ✅ step1 → step2: country 저장
+
+
+
+
+
+
+        VALID_COUNTRIES = set(r["국가"] for r in get_top_country_details(context.get("item", "")) or [])
+
+        # ✅ step1: 국가 추출 진입
         if context.get("stage") == "step1" or "country" not in context:
-            update_user_context(user_id, {"country": message, "stage": "step2"})
-            print("🧭 초기 품목 입력 → step1 진입")
-            return
+            print("🌍 국가 선택 요청 처리 중...")
+            country_name = extract_country_with_gpt(user_id, message)
+            if not country_name:
+                print("❌ 국가 추출 실패 → 무시")
+                return
 
-        if context.get("stage") == "step4" or "country" not in context:
-            update_user_context(user_id, {"country": message, "stage": "step2"})
-            print("🧭 초기 품목 입력 → step1 진입")
-            return
+            if country_name not in VALID_COUNTRIES:
+                print(f"❌ 유효하지 않은 국가명 '{country_name}' → 무시")
+                return
 
-        # ✅ step2 → step3: platform 선택
-        if context.get("stage") == "step2" or "platform" not in context:
-            print("🌍 국가 선택 완료 → step3 진입")
-            platform = None
-            if "amazon" in msg or "아마존" in msg or msg == "1":
-                platform = "amazon"
-            elif "shopee" in msg or "쇼피" in msg or msg == "2":
-                platform = "shopee"
+            update_user_context(user_id, {
+                "stage": "step2",
+                "country": country_name,
+                "platform": None,
+                "page": 1,
+                "slide_idx": 0,
+                "item": context.get("item"),
+                "post_title_kr": None,
+                "post_content_kr": None,
+                "translated_title": None,
+                "translated_content": None,
+                "post_target": None
+            })
+            print(f"✅ 국가 저장: {country_name}")
 
-            if platform:
-                update_user_context(user_id, {"platform": platform, "stage": "step3", "slide_idx": 0})
-                print(f"🛒 플랫폼 선택 → {platform} / step3 슬라이드 진입")
-            return
+            response = self.get_step2_platform_text(country_name)
+            save_chat_message(db, user_id, RoleEnum.assistant, response)
+            add_chat_to_redis(user_id, "assistant", response)
+            return {"messages": [{"role": "assistant", "type": "text", "content": response}]}
+
+
+        # ✅ step2 이상 단계에서 국가 재선택 처리
+        if context.get("stage") not in [None, "start", "step1"]:
+            print("🌍 국가 재선택 시도")
+            country_name = extract_country_with_gpt(user_id, message)
+            if not country_name:
+                print("❌ 국가 추출 실패 → 무시")
+                return
+
+            if country_name not in VALID_COUNTRIES:
+                print(f"❌ 유효하지 않은 국가명 '{country_name}' → 무시")
+                return
+
+            print(f"🔁 국가 변경 감지: {context.get('country')} → {country_name}")
+            update_user_context(user_id, {
+                "stage": "step2",  # 🔁 다시 국가 선택 단계로 이동
+                "country": country_name,
+                "platform": None,
+                "page": 1,
+                "slide_idx": 0,
+                "item": context.get("item"),
+                "post_title_kr": None,
+                "post_content_kr": None,
+                "translated_title": None,
+                "translated_content": None,
+                "post_target": None
+            })
+
+            response = self.get_step2_platform_text(country_name)
+            save_chat_message(db, user_id, RoleEnum.assistant, response)
+            add_chat_to_redis(user_id, "assistant", response)
+            return {"messages": [{"role": "assistant", "type": "text", "content": response}]}
+
 
         # ✅ step6 → 다시 등록 요청 시 step5로 복귀
         if context.get("stage") == "step6" and any(kw in msg for kw in ["다시", "재등록", "등록해줘", "한 번 더"]):
