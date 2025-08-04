@@ -1,13 +1,15 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import styles from './Shopee.module.css'
 import step2 from '/src/assets/images/shopee/step2.png'
 import ShopeeContext from '/src/provider/ShopeeFormContext.jsx'
 import translateApi from '../../../service/translateApi'
 import CopyButton from '../../common/CopyButton'
+import ImageModal from '../../chatbot/ImageModal'
 
 
 
 const ShopeeStep2 = () => {
+    const [modalSrc, setModalSrc] = useState(null);
     const { formData, updateField } = useContext(ShopeeContext);
 
     const handleTranslate = async () => {
@@ -150,8 +152,15 @@ const ShopeeStep2 = () => {
                     src={step2}
                     alt="Global SKU 등록"
                     style={{ maxWidth: '100%', marginTop: '16px', borderRadius: '8px' }}
+                    onClick={() => setModalSrc(step2)}
                 />
             </div>
+
+            {/* 하나의 ImageModal로 두 이미지를 모두 핸들링 */}
+            <ImageModal
+                src={modalSrc}
+                onClose={() => setModalSrc(null)}
+            />  
         </div>
     )
 }

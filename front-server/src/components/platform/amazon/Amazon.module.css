@@ -39,7 +39,9 @@
     border-radius: 10px;
     padding: 20px;
     background-color: rgb(246, 246, 246);
-    line-height: 28px;
+    /* border: 2px dotted rgb(189, 189, 189); */
+    line-height: 30px;
+    font-size: 18px;
 }
 
 .infoColor {

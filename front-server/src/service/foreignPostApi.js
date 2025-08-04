@@ -36,3 +36,16 @@ export async function getMyForeignPosts(userId) {
     });
     return response.data;
 }
+
+/**
+ * 🆕 해외 게시글 URL 업데이트
+ * @param {number} postId
+ * @param {{ url: string }} payload
+ */
+export async function updateForeignPostById(postId, payload) {
+    const response = await axiosInstance.put(
+    `/api/foreign-post/${postId}`,
+    payload
+);
+return response.data;
+}

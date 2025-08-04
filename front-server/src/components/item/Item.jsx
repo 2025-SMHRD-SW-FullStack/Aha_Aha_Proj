@@ -5,6 +5,9 @@ import leftArrow from '/src/assets/images/leftArrow.png'
 import rightArrow from '/src/assets/images/rightArrow.png'
 import boxIcon from '/src/assets/images/boxIcon.png'
 import recommendIcon from '/src/assets/images/recommend.png'
+import recommendIcon2 from '/src/assets/images/recommend1.png'
+import recommendIcon3 from '/src/assets/images/recommend2.png'
+import recommendIcon4 from '/src/assets/images/recommend3.png'
 import styles from './Item.module.css'
 
 const Item = () => {
@@ -40,7 +43,7 @@ const Item = () => {
     useEffect(() => {
         if (inputRef.current && spanRef.current) {
             const charLimit = 10;
-            const displayText = inputValue || '품목을 입력해주세요.';
+            const displayText = inputValue || '상품을 입력해주세요.';
             spanRef.current.textContent = displayText;
 
             const spanWidth = spanRef.current.offsetWidth + 10;
@@ -57,45 +60,60 @@ const Item = () => {
 
     return (
         <div className={styles.container}>
-            <div>
-                <img className={styles.recommendImgBox} src={recommendIcon} alt="안내문구" />
-            </div>
-            <div className={styles.searchBox}>
-                <hr/>
-                <div className={styles.itemBox}>
-                    {/* 입력창 + 숨겨진 span */}
-                    <div style={{position: 'relative'}}>
-                        <input
-                            ref={inputRef}
-                            value={inputValue}
-                            onChange={(e) => setInputValue(e.target.value)}
-                            onKeyDown={handleKeyDown} 
-                            placeholder='품목을 입력해주세요.'
-                            style={{
-                                maxWidth: '100%',
-                                fontSize: '23px',
-                                textAlign: 'center',
-                                overflow: 'hidden',
-                                whiteSpace: 'nowrap'
-                            }}
-                        />
-                        <span
-                            ref={spanRef}
-                            style={{
-                                position: 'absolute',
-                                visibility: 'hidden',
-                                whiteSpace: 'pre',
-                                fontSize: '23px',
-                                fontFamily: 'inherit'
-                            }}/>
+
+            <div className={styles.box}>
+
+                <div className={styles.searchBox}>
+                    
+                    <hr/>
+                    <div className={styles.itemBox}>
+                        {/* 입력창 + 숨겨진 span */}
+                        <div style={{position: 'relative'}}>
+                            <input
+                                ref={inputRef}
+                                value={inputValue}
+                                onChange={(e) => setInputValue(e.target.value)}
+                                onKeyDown={handleKeyDown} 
+                                placeholder='상품을 입력해주세요.'
+                                style={{
+                                    maxWidth: '100%',
+                                    fontSize: '23px',
+                                    textAlign: 'center',
+                                    overflow: 'hidden',
+                                    whiteSpace: 'nowrap'
+                                }}
+                            />
+                            <span
+                                ref={spanRef}
+                                style={{
+                                    position: 'absolute',
+                                    visibility: 'hidden',
+                                    whiteSpace: 'pre',
+                                    fontSize: '23px',
+                                    fontFamily: 'inherit'
+                                }}/>
+                        </div>
+                        <img onClick={handleSearch} src={searchIcon} alt='검색 아이콘'/>
                     </div>
-                    <img onClick={handleSearch} src={searchIcon} alt='검색 아이콘'/>
+                    <hr/>
                 </div>
-                <hr/>
+
+                {/* 추천 품목 태그 영역 */}
+                <div className={styles.recommendations}>
+                    {/* <img className={styles.recommendImgBox} src={recommendIcon4} alt="안내문구" /> */}
+                    <br />
+                    <div className={styles.tags}>
+                        {recommendedItems.slice(0, 10).map((item, idx) => (
+                        <span key={idx} className={styles.tag}>#{item}</span>
+                        ))}
+                    </div>
+                </div>
             </div>
 
+
+
             {/* 추천 품목 슬라이드 영역 */}
-            <div className={styles.sliderWrapper}>
+            {/* <div className={styles.sliderWrapper}>
                 <button onClick={() => handleSlide('left')} className={styles.arrowBtn}>
                     <img src={leftArrow} alt="이전" />
                 </button>
@@ -110,7 +128,7 @@ const Item = () => {
                 <button onClick={() => handleSlide('right')} className={styles.arrowBtn}>
                     <img src={rightArrow} alt="다음" />
                 </button>
-            </div>
+            </div> */}
         </div>
     )
 }

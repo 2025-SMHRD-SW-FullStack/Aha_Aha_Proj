@@ -1,12 +1,16 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import styles from './AmazonStep4.module.css'
 import styles2 from './Amazon.module.css'
 import step4 from '/src/assets/images/amazon/step4.png'
 import AmazonFormContext from '/src/provider/AmazonFormContext'
 import ImageBox from '../../common/ImageBox'
 import CopyButton from '/src/components/common/CopyButton.jsx'
+import ImageModal from '../../chatbot/ImageModal'
 
 const NewProductForm = () => {
+    // 모달에 띄울 src 관리
+    const [modalSrc, setModalSrc] = useState(null);
+
     const { formData, updateField } = useContext(AmazonFormContext);
 
     // 체크박스 토글 핸들러 (Product ID 없음)
@@ -377,8 +381,15 @@ const NewProductForm = () => {
                     src={step4}
                     alt="셀러 센트럴 접속"
                     style={{ maxWidth: '100%', marginTop: '16px', borderRadius: '8px' }}
+                    onClick={() => setModalSrc(step4)}
                 />
             </div>
+
+            {/* 하나의 ImageModal로 두 이미지를 모두 핸들링 */}
+            <ImageModal
+                src={modalSrc}
+                onClose={() => setModalSrc(null)}
+            /> 
             
             <br/><br/>
             <hr />

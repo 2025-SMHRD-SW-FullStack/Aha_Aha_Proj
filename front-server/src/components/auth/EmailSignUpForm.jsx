@@ -5,11 +5,13 @@ import logoImg from '/src/assets/images/logo.png'
 import lockIcon from '/src/assets/images/lockIcon.png'
 import checkIcon from '/src/assets/images/checkIcon.png'
 import errorIcon from '/src/assets/images/error.png'
+import searchIcon from '/src/assets/images/search2.png'
 import successIcon from '/src/assets/images/success.png'
 import { loginRequest, sendEmailVerification, signupRequest } from '/src/service/authService'
 import { useSignUpForm } from '/src/hooks/useSignupForm';
 import { useNavigate } from 'react-router-dom';
 import useGoHome from '/src/hooks/useGoHome';
+import { useDaumPostcodePopup } from 'react-daum-postcode';
 
 const EmailSignUpForm = () => {
 
@@ -44,6 +46,9 @@ const EmailSignUpForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // 본사 주소 + 상세 주소 합치기
+        const fullAddress = `${address}${addressDetail ? ' ' + addressDetail : ''}`
+
         try {
             // 회원가입 요청
             const response = await signupRequest({
@@ -57,7 +62,7 @@ const EmailSignUpForm = () => {
                 phone,
                 companyName,     // ✅ 추가
                 businessNumber,
-                address,
+                address: fullAddress,
                 ceoName,
                 industry,
             });
@@ -80,9 +85,69 @@ const EmailSignUpForm = () => {
         }
     }
 
+    // 주소 팝업 state
+    // ① 훅 호출 (scriptUrl은 생략해도 됩니다)
+    const open = useDaumPostcodePopup();
+
+    // ② 주소 선택 완료 핸들러
+    const handleComplete = (data) => {
+        let fullAddress = data.address;
+        let extra = '';
+        if (data.addressType === 'R') {
+        if (data.bname) extra += data.bname;
+        if (data.buildingName) {
+            extra += extra ? `, ${data.buildingName}` : data.buildingName;
+        }
+        fullAddress += extra ? ` (${extra})` : '';
+        }
+        setAddress(fullAddress);
+    };
+
+    // ③ 팝업 실행 함수
+    const handleOpenPostcode = () => {
+        const width = 500;
+        const height = 450;
+        // 화면 전체 크기에서 팝업 크기를 뺀 후 절반을 줘서 중앙 정렬
+        const left = (window.screen.width  - width ) / 2.1;
+        const top  = (window.screen.height - height) / 2.8;
+    
+    open({
+        onComplete: handleComplete,
+        autoClose: true,   // 선택 후 자동 닫기
+        width,             // 팝업 너비
+        height,            // 팝업 높이
+        left,              // 팝업 X 위치 :contentReference[oaicite:0]{index=0}
+        top,               // 팝업 Y 위치 :contentReference[oaicite:1]{index=1}
+    });
+    };
+
+    // 본사 주소 state
+    const [addressDetail, setAddressDetail] = useState('');
+
+    // 이메일 도메인용 state
     const [emailId,setEmailId] = useState('');
     const [emailDomain, setEmailDomain] = useState('');
     const [selectedDomain, setSelectedDomain] = useState('');
+
+    // 휴대폰 번호 분리 입력
+    const [phonePrefix, setPhonePrefix] = useState('010');
+    const [phoneMiddle, setPhoneMiddle] = useState('');
+    const [phoneLast, setPhoneLast] = useState('');
+
+    // 휴대폰 번호 phone으로 동기화
+    useEffect(() => {
+        setPhone(`${phonePrefix}-${phoneMiddle}-${phoneLast}`)
+    },[phonePrefix, phoneMiddle, phoneLast]);
+
+    // 사업자등록번호 분리 입력
+    const [bizPrefix, setBizPrefix] = useState('');
+    const [bizMiddle, setBizMiddle] = useState('');
+    const [bizLast, setBizLast] = useState('');
+
+    // 사업자등록번호 businessNumber로 동기화
+    useEffect(() => {
+        setBusinessNumber(`${bizPrefix}-${bizMiddle}-${bizLast}`)
+    }, [bizPrefix, bizMiddle, bizLast]);
 
     // 이메일 인증 확인 메세지
     const [verificationMessage, setVerificationMessage] = useState('');
@@ -311,24 +376,56 @@ const EmailSignUpForm = () => {
                                 value={gender} onChange={(e) => setGender(e.target.value)} required isRequiredMark/>
                 </div>
 
-                <TextField id="phone" label="휴대전화번호" type="text" required isRequiredMark single
-                                value={phone} onChange={(e) => setPhone(e.target.value)}/>
-
+                {/* 휴대전화번호 */}
+                <div className={styles.phoneBox}>
+                    <select className={styles.selectPhoneBox} value={phonePrefix} onChange={(e) => setPhonePrefix(e.target.value)}>
+                        <option value="010">010</option>
+                        <option value="011">011</option>
+                    </select>
+                    <p>-</p>
+                    <TextField id="phoneMiddle" label="휴대전화 중간" type="text" required isRequiredMark single
+                                    value={phoneMiddle} onChange={(e) => setPhoneMiddle(e.target.value)} maxLength={4}/>
+                    <p>-</p>
+                    <TextField id="phoneLast" label="휴대전화 끝" type="text" required isRequiredMark single
+                                    value={phoneLast} onChange={(e) => setPhoneLast(e.target.value)} maxLength={4}/>
+                </div>
                 {/* 회사 정보 탭 */}
                 <h3>회사 정보 입력</h3>    
                 <p className={styles.inputInfoText}>선택 입력 사항</p>
             
                 <div>
-                    <TextField id="company_name" label="회사명" type="text" singleFirst
-                        value={companyName} onChange={(e) => setCompanyName(e.target.value)}/>
-                    <TextField id="business_number" label="사업자등록번호" type="text" singleMiddle
-                        value={businessNumber} onChange={(e) => setBusinessNumber(e.target.value)}/>
-                    <TextField id="address" label="본사 주소" type="text" singleMiddle
-                        value={address} onChange={(e) => setAddress(e.target.value)}/>
-                    <TextField id="ceo_name" label="대표자명" type="text" singleMiddle
+                    <TextField id="ceo_name" label="대표자명" type="text" singleFirst
                         value={ceoName} onChange={(e) => setCeoName(e.target.value)}/>
+                    <TextField id="company_name" label="회사명" type="text" singleMiddle
+                        value={companyName} onChange={(e) => setCompanyName(e.target.value)}/>
                     <TextField id="industry" label="업종" type="text" singleLast
                         value={industry} onChange={(e) => setIndustry(e.target.value)}/>
+                    <br />
+
+                    {/* 사업자등록번호 */}
+                    <p style={{color:'var(--color-gray70)'}}>사업자등록번호</p>
+                    <div className={styles.bizBox}>
+                        <TextField id="bizPrefix" label="3자리" type="text" single
+                            value={bizPrefix} onChange={(e) => setBizPrefix(e.target.value)} maxLength={3}/>
+                        <p>-</p>
+                        <TextField id="bizMiddle" label="2자리" type="text" single
+                            value={bizMiddle} onChange={(e) => setBizMiddle(e.target.value)} maxLength={2}/>
+                        <p>-</p>
+                        <TextField id="bizLast" label="5자리" type="text" single
+                            value={bizLast} onChange={(e) => setBizLast(e.target.value)} maxLength={5}/>
+                    </div>
+                    <br />
+
+                    {/* 본사 주소 */}
+                    <TextField id="address" label="본사 주소" type="text" singleFirst
+                        value={address}
+                        onClick={handleOpenPostcode }
+                        onChange={(e) => {setAddress(e.target.value); }}
+                        icon={<img src={searchIcon} alt='주소 검색 아이콘'/>} />
+                    <TextField id="addressDetail" label="상세 주소" type="text" singleLast
+                        value={addressDetail} 
+                        onChange={(e) => {setAddressDetail(e.target.value); }}
+                        />
                 </div>
                 
                 {/* 유효성 조건에 따라 활성/비활성화 처리 */}

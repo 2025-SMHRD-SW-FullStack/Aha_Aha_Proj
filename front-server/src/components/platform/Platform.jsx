@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './Platform.module.css'
 import StepContent from './StepContent';
 import amazonLogo from '/src/assets/images/amazon_logo.png'
 import shopeeLogo from '/src/assets/images/shopee_logo.png'
 import toggleIcon from '/src/assets/images/toggle_close.png'
 import { FaBook } from 'react-icons/fa'
+import { useLocation } from 'react-router-dom';
 
 const Platform = () => {
     const sidebarData = {
@@ -33,9 +34,20 @@ const Platform = () => {
         }
     }
 
+    const location = useLocation();
     const [openPlatforms, setOpenPlatforms] = useState([]);
     const [selectedPlatform, setSelectedPlatform] = useState('');
     const [selectedStep, setSelectedStep] = useState('');
+
+    // — mount 시, location.state 에서 platform/step 가져와 초기화
+    useEffect(() => {
+        if (location.state?.platform && location.state?.step) {
+        const { platform, step } = location.state
+        setSelectedPlatform(platform)
+        setOpenPlatforms([platform])
+        setSelectedStep(step)
+        }
+    }, [location.state])
 
     const handleToggle = (platform) => {
         if (openPlatforms.includes(platform)) {
@@ -43,6 +55,7 @@ const Platform = () => {
         } else {
             setOpenPlatforms([...openPlatforms, platform]);
         }
+        setSelectedPlatform(platform)
     }
 
     return (

@@ -6,7 +6,7 @@
   /* min-height: calc(100vh - 200px); */
   width: 100%;
   /* width: 1080px; */
-  margin: 40px auto;
+  margin: 40px 0;
   border: 1px solid #ddd;
   border-radius: 8px;
   background-color: #fff;
@@ -46,7 +46,7 @@
 }
 
 .contentArea {
-  /* width: 75%; */
+  width: 75%;
   /* width: 950px; */
   /* width: 80%;      ✅ 가로폭 고정 */
   /* height: 700px;     ✅ 높이 고정 */

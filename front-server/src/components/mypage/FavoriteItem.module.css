@@ -9,19 +9,20 @@ body {
   max-width: 1200px; 
   margin: 0 auto;
   width: 100%; */
-  width: 1080px;  /* ✅ 고정 너비 */
-  padding: 20px 32px;
+  /* width: 1080px; */
+  /* padding: 20px 32px; */
+  padding: 20px 32px 20px 10px;
   margin: 0 auto;
   background-color: white;
   box-sizing: border-box;
   /* 반응형 방지용 추가 */
-  min-width: 1080px;
-  max-width: 1080px;
+  /* min-width: 1080px; */
+  /* max-width: 1080px; */
 }
 
 /* 제목 */
 .header {
-  width: 75%;
+  /* width: 75%; */
   font-size: 30px;
   font-weight: bold;
   margin-bottom: 24px;
@@ -29,7 +30,7 @@ body {
 
 /* 필터 버튼 영역 */
 .filterBar {
-  width: 75%;
+  /* width: 75%; */
   display: flex;
   gap: 10px;
   margin-bottom: 24px;
@@ -60,7 +61,7 @@ body {
 
 /* 테이블 wrapper 추가 (테이블만 스크롤) */
 .tableWrapper{
-  width: 75%;
+  /* width: 75%; */
   max-height: 440px;
   overflow-y: auto;
   border-top: 1px solid #eee;

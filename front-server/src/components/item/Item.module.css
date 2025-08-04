@@ -14,8 +14,10 @@
 }
 
 .recommendImgBox {
-    margin-top: 50px;
-    height: 70px;
+    /* margin-top: 80px; */
+    margin-bottom: 10px;
+    height: 60px;
+    justify-self: start;
 }
 
 .searchBox>hr:nth-child(1) {
@@ -32,7 +34,7 @@
     width: 100%;
     text-align: center;
     /* height: 30px; */
-    margin-top: 30px;
+    /* margin-top: 30px; */
 }
 
 .itemBox {
@@ -51,12 +53,12 @@
 .itemBox input::placeholder {
     font-size: 23px;
     text-align: center;
-    color: var(--color-gray50);   
+    color: var(--color-gray50);
 }
 
 .itemBox img {
     display: flex;
-    /* height: 30px; */
+    height: 30px;
 }
 
 .itemBox a {
@@ -109,4 +111,35 @@ padding: 5px;
 .boxImgBox {
     height: 100px;
     margin: 10px;
+}
+
+
+.recommendations {
+    /* margin-top: 20px; */
+}
+
+.recommendations p {
+font-size: 20px;
+margin-bottom: 8px;
+/* text-align: center; */
+}
+
+.tags {
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+gap: 8px;
+/* 두 줄만 보이게 높이 제한도 주고 싶다면 아래 주석 해제 */
+/* max-height: calc(1.5em * 2 + 8px); overflow: hidden; */
+}
+
+.tag {
+font-size: 18px;
+background: #f0f0f0;
+padding: 4px 8px;
+border-radius: 12px;
+}
+
+.box {
+    width: 100%;
 }

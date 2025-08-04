@@ -28,6 +28,9 @@ const Chatbot = () => {
 
   const chatBodyRef = useRef(null); // 자동 스크롤
 
+  // [추가] 로딩 플레이스홀더 메시지의 인덱스를 저장할 ref
+  const loadingRef = useRef(null);
+
   // ✅ 메시지가 변경될 때마다 아래로 스크롤
   useEffect(() => {
     if (chatBodyRef.current) {
@@ -69,22 +72,37 @@ const Chatbot = () => {
     e.preventDefault();
     if (!input.trim()) return;
 
+    // [추가] 입력값 즉시 클리어
+    setInput('');
+
     // 사용자 메시지 추가
     addMessage('user', input);
 
-    if (step === 5) {
-      await handleStep5(input);
-      setInput('');
-      return;
-    }
+    // [추가] "잠시만 기다려주세요" 플레이스홀더 추가 및 인덱스 저장
+    setMessages(prev => {
+      loadingRef.current = prev.length;
+      return [
+        ...prev,
+        { role: 'bot', content: '잠시만 기다려주세요', type: 'loading' }
+      ];
+    });
 
-    if (step === 6) {
-      handleStep6(input);
-      setInput('');
-      return;
-    }
-
+    
     try {
+      // 1) Step 5,6 처리
+      if (step === 5) {
+        await handleStep5(input);
+        // setInput('');
+        return;
+      }
+  
+      if (step === 6) {
+        handleStep6(input);
+        // setInput('');
+        return;
+      }
+
+      // 2) AI 호출
       const res = await sendChatToBot({ userId, platform, message: input });
 
       if (!res) {
@@ -94,19 +112,24 @@ const Chatbot = () => {
 
       console.log('백엔드 응답:', res);
 
-      if (res.messages && Array.isArray(res.messages)) {
-        res.messages.forEach((msg) => {
-          addMessage(msg.role, msg.content, msg.type);
-        });
+      // 3) 응답 메시지 배열 준비
+      const botMsgs = [];
+      if (Array.isArray(res.messages)) {
+        res.messages.forEach(m => botMsgs.push({ role: m.role, content: m.content, type: m.type }));
       }
-
       if (res.response) {
-        addMessage('bot', res.response);
+        botMsgs.push({ role: 'bot', content: res.response });
+      }
+      if (res.image) {
+        botMsgs.push({ role: 'bot', content: res.image, type: 'image' });
       }
 
-      if (res.image) {
-        addMessage('bot', res.image, 'image');
-      }
+      // 🔄[추가] 플레이스홀더 위치에 실제 메시지로 **통째로 교체**
+      setMessages(prev => {
+        const before = prev.slice(0, loadingRef.current);
+        const after  = prev.slice(loadingRef.current + 1);
+        return [...before, ...botMsgs, ...after];
+      });
 
       const { step: newStep, context } = res;
       console.log('context:', context);
@@ -141,9 +164,10 @@ const Chatbot = () => {
       setStep(newStep || 1);
     } catch (err) {
       console.error('❌ 오류:', err);
+      // 🔄[추가] 에러 시 플레이스홀더 제거
+      setMessages(prev => prev.filter((_, i) => i !== loadingRef.current));
       addMessage('bot', `❌ 오류: ${err.response?.data?.detail || err.message}`);
     }
-
     setInput('');
   };
 
@@ -250,7 +274,30 @@ const Chatbot = () => {
               />
             ) : (
             <>
-                <Markdown remarkPlugins={[remarkGfm]} components={{
+                { /* 로딩 중일 때만 이 p 가 나타나고, 아니면 Markdown 만 렌더링 */ }
+                {msg.type === 'loading' ? (
+                  <p className={msg.type === 'loading' ? styles.loading : ''}>
+                    {msg.content}
+                    <span className={styles.dots}>
+                      <span>.</span><span>.</span><span>.</span>
+                    </span>
+                  </p>
+                ) : (
+                  <Markdown remarkPlugins={[remarkGfm]} components={{
+                      img: ({ node, ...props }) => (
+                        <img
+                          {...props}
+                          style={{ maxWidth: '100%', cursor: 'pointer' }}
+                          onClick={() => setModalImage(props.src)}
+                          alt={props.alt || 'image'}
+                        />
+                      ),
+                    }}
+                  >
+                    {msg.content}
+                  </Markdown>
+                )}
+                {/* <Markdown remarkPlugins={[remarkGfm]} components={{
                     img: ({ node, ...props }) => (
                       <img
                         {...props}
@@ -262,7 +309,7 @@ const Chatbot = () => {
                   }}
                 >
                   {msg.content}
-                </Markdown>
+                </Markdown> */}
 
                 {modalImage && (
                   <ImageModal
@@ -292,7 +339,10 @@ const Chatbot = () => {
             // Shift+Enter면 그냥 줄 바꿈
           }}
             />
-        <button type="submit" className={styles.button}>전송</button>
+        <button 
+          type="submit" 
+          className={styles.button}
+        >전송</button>
       </form>
     </div>
   );

@@ -8,6 +8,7 @@ import platformImg from '/src/assets/images/platform.png'
 import chatbotImg from '/src/assets/images/chatbot.png'
 import boardImg from '/src/assets/images/board.png'
 import productImg from '/src/assets/images/product.png'
+import exhibitionImg from '/src/assets/images/exhibitionIcon.png'
 
 
 const Main = () => {
@@ -58,7 +59,7 @@ const Main = () => {
                         <Link to='/exhibition'>
                             <h2>전시관</h2>
                             <p>Amazon과 Shoppe에 등록한 <br />판매 제품들을 보여줍니다.</p>
-                            <img src={productImg} alt="게시판 이미지" />
+                            <img style={{opacity:'0.6'}} src={exhibitionImg} alt="게시판 이미지" />
                         </Link>
                     </div>
 

@@ -1,24 +1,26 @@
 body {
   min-width: 1080px;
   overflow-x: auto;
-  /* height: auto; */
 }
 
 /* 전체 너비를 고정하고 중앙 정렬 */
 .wrapper {
-  width: 1080px;  /* ✅ 고정 너비 */
-  padding: 20px 32px;
+  width: 100%;
+  /* width: 1080px; */
+  /* padding: 20px 32px; */
+  padding: 20px 32px 20px 10px;
   margin: 0 auto;
   background-color: white;
   box-sizing: border-box;
   /* 반응형 방지용 추가 */
-  min-width: 1080px;
-  max-width: 1080px;
+  /* min-width: 1080px; */
+  /* max-width: 1080px; */
 }
 
 /* 상단 제목 + 수정 버튼 */
 .headerRow {
-  width: 760px;
+  /* width: 760px; */
+  /* width: 100%; */
   display: flex;
   justify-content: space-between;
   align-items: flex-end;

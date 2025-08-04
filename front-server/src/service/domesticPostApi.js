@@ -36,3 +36,16 @@ const response = await axiosInstance.get('/api/domestic-post/my', {
 });
 return response.data;
 }
+
+/**
+ * 🆕 국내 게시글 URL 업데이트
+ * @param {number} postId
+ * @param {{ url: string }} payload
+ */
+export async function updateDomesticPostById(postId, payload) {
+    const response = await axiosInstance.put(
+    `/api/domestic-post/${postId}`,
+    payload
+);
+return response.data;
+}

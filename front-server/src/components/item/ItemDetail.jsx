@@ -8,6 +8,8 @@ import favoriteDeleteIcon from '/src/assets/images/favorite_delete.png'
 import noResultIcon from '/src/assets/images/no_result.png'
 import typingIcon from '/src/assets/images/typing.png'
 import lodingIcon from '/src/assets/images/platform.png'
+import amazonLogo from '/src/assets/images/amazon_logo.png'
+import shopeeLogo from '/src/assets/images/shopee_logo.png'
 import { useNavigate } from 'react-router-dom'
 import { getRecommendedCountries } from '../../service/recommendService'
 // import { getProductItemIdByName } from '../../service/favoriteService'
@@ -206,7 +208,7 @@ const ItemDetail = ({itemId}) => {
         if (trimmed !== itemId) {
             navigate(`/item/${encodeURIComponent(trimmed)}`);
         } else {
-            console.log("잘못된 품목명이어서 검색을 수행하지 않습니다.");
+            console.log("잘못된 상품명이어서 검색을 수행하지 않습니다.");
             runSearch(trimmed); // 페이지 이동 없이 같은 품목에서 재검색 가능
         }
     };
@@ -223,7 +225,7 @@ const ItemDetail = ({itemId}) => {
         if (!inputRef.current || !spanRef.current) return;
     
         const charLimit = 10;
-        const displayText = inputValue || '품목을 입력해주세요.';
+        const displayText = inputValue || '상품을 입력해주세요.';
         spanRef.current.textContent = displayText;
     
         const spanWidth = spanRef.current.offsetWidth + 10;
@@ -245,7 +247,7 @@ const ItemDetail = ({itemId}) => {
             return (
                 <div className={styles.noDataMessage}>
                     <img className={styles.noResultIcon} src={noResultIcon} alt="검색 결과 없음" />
-                    <p className={`${styles.typingText}`}>❗ 품목을 입력해주세요.</p>
+                    <p className={`${styles.typingText}`}>❗ 상품을 입력해주세요.</p>
                 </div>
             );
         }
@@ -279,7 +281,7 @@ const ItemDetail = ({itemId}) => {
                             <th>국가</th>
                             <th>예상성공률</th>
                             <th>추천 이유</th>
-                            {/* <th>추천 이커머스</th> */}
+                            <th>추천 이커머스</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -303,6 +305,36 @@ const ItemDetail = ({itemId}) => {
                                         ? platformMap[item.country].map(p => p.platform).join(', ')
                                         : '불러오는 중...'}
                                 </td> */}
+
+                                {/* 🆕 추천 이커머스 아이콘 셀 (수직 가운데 정렬) */}
+                                <td
+                                    className={styles.platformCell} /* 🔔 */
+                                    style={{ verticalAlign: 'middle', textAlign: 'center' }}
+                                >
+                                    {/* 기본값: Amazon + Shopee 두 아이콘 간격 추가 */}
+                                    <img 
+                                        src={amazonLogo} 
+                                        alt="Amazon" className={styles.platformIcon} 
+                                        style={{ marginRight: '15px', height:'30px', paddingBottom:'2px' }} 
+                                        onClick={() => navigate('/platform', {
+                                            state: { platform: 'amazon', step: 'amazon_step1' } 
+                                        })}
+                                    />
+                                    <img 
+                                        src={shopeeLogo} 
+                                        alt="Shopee" 
+                                        className={styles.platformIcon}
+                                        onClick={() => navigate('/platform', {
+                                            state: { platform: 'shopee', step: 'shopee_step1' } 
+                                        })}
+                                    />
+                                    {/* 동적 아이콘 렌더링 */}
+                                    {/* {((item.platforms && item.platforms.length) ? item.platforms : ['amazon']).map((plat, i) => {
+                                    if (plat === 'amazon') return <img key={i} src={amazonLogo} alt="Amazon" className={styles.platformIcon} />
+                                    if (plat === 'shopee') return <img key={i} src={shopeeLogo} alt="Shopee" className={styles.platformIcon} />
+                                    return null
+                                    })} */}
+                                </td>
                             </tr>
                         ))}
                     </tbody>
@@ -313,7 +345,7 @@ const ItemDetail = ({itemId}) => {
         return (
             <div className={styles.noDataMessage}>
                 <img className={styles.noResultIcon} src={noResultIcon} alt="검색 결과 없음" />
-                <p>❗ 해당 품목에 대한 수출 유망 국가 정보가 없습니다.</p>
+                <p>❗ 해당 상품에 대한 수출 유망 국가 정보가 없습니다.</p>
             </div>
         );
     }
@@ -341,7 +373,7 @@ const ItemDetail = ({itemId}) => {
                                 value={inputValue}
                                 onChange={(e) => setInputValue(e.target.value)}
                                 onKeyDown={handleKeyDown}
-                                placeholder='품목을 입력해주세요.'
+                                placeholder='상품을 입력해주세요.'
                                 style={{
                                     maxWidth: '100%',
                                     fontSize: '23px',
@@ -366,7 +398,7 @@ const ItemDetail = ({itemId}) => {
                             onClick={handleSearch}
                         />
                     </div>
-                    <button onClick={goToPlatform}>수출하러 가기</button>
+                    {/* <button onClick={goToPlatform}>수출하러 가기</button> */}
                 </div>
                 <hr/>
             </div>

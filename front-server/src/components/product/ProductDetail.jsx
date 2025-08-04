@@ -1,15 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styles from './ProductDetail.module.css'
 import defaultImage from '/src/assets/images/imgIcon.png';
 import amazonLogo from '/src/assets/images/amazon_logo.png';
 import shopeeLogo from '/src/assets/images/shopee_logo.png';
 
-const ProductDetail = ({product, onBack, region}) => {
+const ProductDetail = ({product, onBack, region, onSaveUrl}) => {
     const {username} = product;
     const isDomestic = region === 'domestic';
 
     const title = product.title;
     const content = product.content;
+    const url = product.url;
     
     const priceText = product.price
         ? `${product.price}${isDomestic ? '₩' : '$'}`
@@ -18,6 +19,28 @@ const ProductDetail = ({product, onBack, region}) => {
         : `10$`;
 
     const platform = product.platform || 'amazon';
+
+    // URL 편집 모드 상태
+    const [isEditing, setIsEditing] = useState(false)
+    const [urlInput, setUrlInput] = useState(url || '')
+
+    const handleTitleButton = (e) => {
+        e.stopPropagation();
+        if (isEditing) {
+            console.log('📝 ProductDetail: calling onSaveUrl with', urlInput.trim());
+            onSaveUrl(urlInput.trim()); // 빈 값도 저장되도록 조건 삭제
+            setIsEditing(false);
+        } else {
+            setUrlInput(url || '');
+            setIsEditing(true);
+        }
+    };
+
+    const handleCancel = (e) => {
+    e.stopPropagation()
+    setUrlInput(url || '')
+    setIsEditing(false)
+    }
 
     return (
         <div className={styles.wrapper}>
@@ -34,7 +57,27 @@ const ProductDetail = ({product, onBack, region}) => {
 
                 <div className={styles.contentBox}>
                     <div className={styles.textBox}>
-                        <h2 className={styles.title}>{title || '제목 없음'}</h2>
+                        {/* <h2 className={styles.title}>{title || '제목 없음'}</h2> */}
+
+                        <div className={styles.titleRow}>
+                            <h2 className={styles.title}>{title || '제목 없음'}</h2>
+                            <div>
+                                <button 
+                                    className={styles.editButtonTitle} 
+                                    onClick={handleTitleButton}
+                                >
+                                    {isEditing ? '수정 완료' : '수정'}
+                                </button>
+                                {isEditing && (
+                                    <button
+                                    className={styles.cancelButton}
+                                    onClick={handleCancel}
+                                    >
+                                    취소
+                                    </button>
+                                )}
+                            </div>
+                        </div>
 
                         {/* 여기에 작성자 닉네임 표시 */}
                         {username && (
@@ -47,7 +90,17 @@ const ProductDetail = ({product, onBack, region}) => {
                         <p className={styles.content}>{content || '상품 설명이 없습니다.'}</p>
                     </div>
 
-                    <div className={styles.platformBox}>
+                    {isEditing ? (
+                    <input
+                        type="text"
+                        value={urlInput}
+                        onChange={(e) => setUrlInput(e.target.value)}
+                        placeholder="상품 URL 입력"
+                        className={styles.urlInput}
+                    />
+                    ):(
+                    // <div className={styles.platformBox}>
+                    <div className={`${styles.platformBox} ${url ? styles.platformBoxActive : ''}`}>
                         <div className={styles.platform}>
                                 {platform === 'amazon' && (
                                 <>
@@ -78,6 +131,9 @@ const ProductDetail = ({product, onBack, region}) => {
                         </div>
 
                     </div>
+                    )}
+
+
                 </div>
             </div>
         </div>

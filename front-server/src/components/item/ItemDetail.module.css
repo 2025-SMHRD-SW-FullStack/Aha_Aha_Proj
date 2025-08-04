@@ -1,37 +1,32 @@
+/* 컨테이너 설정 */
 .container {
     width: 100%;
-    /* height: 700px; */
     display: flex;
-    /* align-items: center; */
-    /* justify-content: space-between; */
-    margin-top: 50px;
     flex-direction: column;
+    margin-top: 50px;
     height: calc(100vh - 200px);
     gap: 100px;
 }
 
-.searchBox>hr:nth-child(1) {
+/* 검색 영역 구분선 */
+.searchBox > hr:nth-child(1),
+.searchBox > hr:nth-last-child(1) {
     border: 1px solid var(--color-primary);
-    /* margin-bottom: 10px; */
 }
 
-.searchBox>hr:nth-last-child(1) {
-    border: 1px solid var(--color-primary);
-    /* margin-top: 10px; */
-}
-
+/* 검색 박스 */
 .searchBox {
     width: 100%;
     height: 30px;
     text-align: center;
 }
 
+/* 입력+즐겨찾기 영역 */
 .itemBox {
+    height: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
-    /* margin: 10px 0; */
-    /* gap: 20px; */
 }
 
 .itemBox input {
@@ -42,18 +37,12 @@
 .itemBox input::placeholder {
     font-size: 23px;
     text-align: center;
-    color: var(--color-gray50);   
+    color: var(--color-gray50);
 }
 
 .itemBox img {
-    display: flex;
     height: 30px;
 }
-
-/* .itemBox a {
-    display: flex;
-    align-items: center;
-} */
 
 .itemBox button {
     margin-left: auto;
@@ -69,6 +58,7 @@
     opacity: 0.9;
 }
 
+/* 즐겨찾기 피드백 */
 .feedbackBox {
     position: absolute;
     top: -65px;
@@ -81,6 +71,7 @@
     height: 50px;
 }
 
+/* 즐겨찾기 아이콘 */
 .iconBox {
     position: relative;
     display: inline-block;
@@ -105,19 +96,24 @@
     cursor: pointer;
 }
 
-
-/* 수출유망국가 테이블 */
+/* ---------------------------
+수출유망국가 테이블 스타일
+   --------------------------- */
+/* 1) 레이아웃 고정 */
 .exportTable {
     width: 100%;
+    table-layout: fixed;
     border-collapse: collapse;
     font-size: 20px;
     text-align: center;
 }
 
+/* 2) 헤더/셀 기본 정렬 */
 .exportTable th,
 .exportTable td {
+    vertical-align: middle;
+    padding: 20px 8px;
     border-bottom: 1px solid var(--color-gray10);
-    padding: 25px 0;
     font-weight: 500;
 }
 
@@ -126,12 +122,91 @@
     font-weight: 600;
 }
 
+/* 3) 추천 이유 셀: flex 제거, 폭 지정(필요시) */
+.descriptionTable {
+    /* display: flex;
+    /* align-items, justify-content 삭제됨 */
+    text-align: center;
+    vertical-align: middle;
+    /* background-color: aliceblue; */
+    /* width: 40%; 예시로 필요시 설정 가능 */
+}
+
+.description {
+    padding: 0 8%;
+    /* width: 400px; */
+    line-height: 2;
+    word-break: keep-all;
+}
+
+/* 4) 추천 이커머스 셀 스타일 */
+.platformCell {
+    width: 80px;         /* 아이콘 영역 폭 고정 */
+    vertical-align: middle;
+    text-align: center;
+}
+
+.platformIcon {
+    display: inline-block;
+    max-width: 30%;
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+
+/* .platformIcon {
+    cursor: pointer;
+    height: 30px; 
+    margin: 0 8px; 
+    padding-bottom: 2px;
+    transition: transform 0.2s ease-in-out;
+} */
+
+.platformIcon:hover {
+    transform: scale(1.1);
+    opacity: 0.8;
+}
+
+/* 1) 순위 칼럼 (1열) */
+.exportTable th:nth-child(1),
+.exportTable td:nth-child(1) {
+  width: 70px;    /* 필요에 따라 조절 */
+}
+
+/* 2) 국가 칼럼 (2열) */
+.exportTable th:nth-child(2),
+.exportTable td:nth-child(2) {
+  width: 120px;   /* 필요에 따라 조절 */
+}
+
+/* 3) 예상성공률 칼럼 (3열) */
+.exportTable th:nth-child(3),
+.exportTable td:nth-child(3) {
+  width: 100px;   /* 필요에 따라 조절 */
+}
+
+/* 4) 추천 이유 칼럼 (4열) */
+/* 이미 충분히 넓게 잡으셨다면 그대로 두거나, %, px 로 재조정 */
+.exportTable th:nth-child(4),
+.exportTable td:nth-child(4) {
+  width: 50%;
+  /* background-color: yellow; */
+  /* 또는 고정 px: width: 400px; */
+}
+
+/* 5) 추천 이커머스 칼럼 (5열) */
+.exportTable th:nth-child(5),
+.exportTable td:nth-child(5) {
+  width: 100px;    /* 아이콘 크기에 맞춰 조절 */
+}
+
+/* 스크롤 영역 */
 .scrollableTableWrapper {
     overflow-y: auto;
-    /* margin-top: 50px; */
     max-height: 500px;
 }
 
+/* 입력 상태 메시지 */
 .noDataMessage {
     display: flex;
     flex-direction: column;
@@ -145,13 +220,11 @@
 
 .noResultIcon {
     width: 350px;
-    height: auto;
     opacity: 0.8;
 }
 
 .typingText {
     font-size: 18px;
-    /* font-weight: bold; */
     display: flex;
     align-items: center;
 }
@@ -171,6 +244,7 @@
     100% { content: '...'; }
 }
 
+/* 로딩 애니메이션 */
 .spinWrapper {
     perspective: 800px;
     display: flex;
@@ -181,29 +255,14 @@
 .spin {
     animation: spin 2s linear infinite;
     transform-style: preserve-3d;
-    /* backface-visibility: hidden; */
 }
 
 @keyframes spin {
     0% { transform: rotateY(0deg); }
-    100% { transform: rotateY(360deg); } 
-}
-
-.description {
-    width: 400px;    /* 원하는 높이로 조정 */
-    /* overflow-y: auto; */
-    line-height: 1.4;    /* 가독성 향상 */
-    word-break: keep-all;/* 단어가 중간에 잘리지 않게 */
-}
-
-.descriptionTable {
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    100% { transform: rotateY(360deg); }
 }
 
 /* 순위 아이콘 한 줄 처리 */
 .rankIcon {
     white-space: nowrap;
-} 
+}

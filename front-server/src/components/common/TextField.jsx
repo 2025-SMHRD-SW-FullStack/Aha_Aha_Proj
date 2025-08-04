@@ -21,6 +21,7 @@ const TextField = ({
     single,
     icon,
     children,
+    readOnly = false,
     ...rest
 }) => {
     const className = [styles.field];
@@ -59,9 +60,11 @@ const TextField = ({
                         onChange={onChange}
                         ref={inputRef}
                         required={required}
+                        readOnly={readOnly} 
                         placeholder=' '
                         // minLength={type === 'password' ? 8 : undefined}
-                        maxLength={type === 'password' ? 30 : id === 'birth' ? 6 : undefined}
+                        // maxLength={type === 'password' ? 30 : id === 'birth' ? 6 : undefined}
+                        maxLength={maxLength ?? (type === 'password' ? 30 : id === 'birth' ? 6 : undefined)}
                         {...rest}
                     />
                     <label htmlFor={id}>

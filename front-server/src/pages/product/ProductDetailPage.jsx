@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import ProductDetail from './../../components/product/ProductDetail';
 import Header from '../../components/layouts/Header';
-import { getDomesticPostById } from '../../service/domesticPostApi';
-import { getForeignPostById } from '../../service/foreignPostApi';
+import { getDomesticPostById, updateDomesticPostById } from '../../service/domesticPostApi';
+import { getForeignPostById, updateForeignPostById } from '../../service/foreignPostApi';
 
 const ProductDetailPage = () => {
     const { id, region } = useParams();
@@ -66,10 +66,28 @@ const ProductDetailPage = () => {
 
     if (!product) return <p>로딩 중…</p>
 
+    // URL 저장 시 호출될 함수
+    const handleSaveUrl = async (newUrl) => {
+        console.log('🎯 handleSaveUrl – 시도하는 URL:', newUrl);
+    
+        try {
+            if (region === 'domestic') {
+                await updateDomesticPostById(id, { url: newUrl });
+            } else {
+                await updateForeignPostById(id, { url: newUrl });
+            }
+    
+            setProduct(prev => ({ ...prev, url: newUrl }));
+        } catch (err) {
+            console.error('URL 업데이트 실패:', err);
+        }
+    };
+
     return (
         <div>
             <Header/>
-            <ProductDetail product={product} region={region} onBack={() => navigate(-1)} />
+            <ProductDetail product={product} region={region} onBack={() => navigate(-1)} 
+                    onSaveUrl={handleSaveUrl}/>
         </div>
     )
 }

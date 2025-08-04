@@ -4,17 +4,17 @@ body {
 }
 
 .wrapper {
-    padding: 32px;
-    max-width: 1080px;
+    /* padding: 32px; */
+    padding: 20px 10px 20px 0;
     margin: 0 auto;
     background-color: white;
-      /* 반응형 방지용 추가 */
-    min-width: 1080px;
-    max-width: 1080px;
+    
+    /* min-width: 1080px; */
+    /* max-width: 1080px; */
 }
 
 .headerRow {
-    width: 75%;
+    /* width: 75%; */
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
@@ -52,7 +52,8 @@ body {
 
 /* ✅ 여기 중요 */
 .grid {
-    width: 100px;
+    /* width: 100px; */
+    width: 100%;
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* 한 줄에 4개 */
     gap: 20px;
@@ -67,7 +68,7 @@ body {
     border-radius: 8px;
     padding: 20px;
     text-align: center;
-    width: 180px;
+    /* width: 175px; */
 
     /* ✅ 그림자 효과 추가 */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
@@ -157,7 +158,7 @@ body {
     /* background-color: white; */
     width: 100%;
     height: 100%;
-    object-fit: contain; /* 비율 유지하며 잘 맞춤 */
+    object-fit: fill;
     display: block;
 }
 

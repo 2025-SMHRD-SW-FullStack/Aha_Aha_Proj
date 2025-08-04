@@ -1,9 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styles from './Amazon.module.css'
 import step3_1 from '/src/assets/images/amazon/step3_1.png'
 import step3_2 from '/src/assets/images/amazon/step3_2.png'
+import ImageModal from '../../chatbot/ImageModal'
 
 const AmazonStep3 = () => {
+    // 모달에 띄울 src 관리
+    const [modalSrc, setModalSrc] = useState(null);
+
     return (
         <div>
             <h2>3단계: 카테고리 선택</h2>
@@ -27,6 +31,7 @@ const AmazonStep3 = () => {
                     src={step3_1}
                     alt="새 상품 등록"
                     style={{ maxWidth: '100%', marginTop: '16px', borderRadius: '8px' }}
+                    onClick={() => setModalSrc(step3_1)}
                     />
             </div> 
             <br />
@@ -45,8 +50,15 @@ const AmazonStep3 = () => {
                     src={step3_2}
                     alt="기존 상품 등록"
                     style={{ maxWidth: '100%', marginTop: '16px', borderRadius: '8px' }}
+                    onClick={() => setModalSrc(step3_2)}
                 />
-            </div> 
+            </div>
+
+            {/* 하나의 ImageModal로 두 이미지를 모두 핸들링 */}
+            <ImageModal
+                src={modalSrc}
+                onClose={() => setModalSrc(null)}
+            /> 
         </div>
     )
 }
