@@ -56,11 +56,24 @@ def recommend_core(item: str, page: int = 1, size: int = 10) -> dict:
     new_score = 20 + (original_score * 0.7)
     ranked_countries_df['recommendationScore'] = (round(new_score, 1)).astype(str) + '%'
 
-    display_columns = ['국가', 'key_factor', 'recommendationScore']
-    display_df = ranked_countries_df[display_columns].rename(columns={'국가': 'country'})
+    
+    display_df = ranked_countries_df.rename(columns={'국가': 'country'})
+
+    # 추천 이커머스 컬럼 추가
+    shopee_markets = ["싱가폴", "말레이시아", "필리핀", "베트남", "태국", "대만", "브라질", "멕시코"]
+    display_df['ecommerce'] = display_df['country'].apply(
+        lambda c: "쇼피" if c in shopee_markets else "아마존"
+    )
+    
+    # 순위(rank) 컬럼 추가
     display_df = display_df.reset_index(drop=True)
     display_df['rank'] = display_df.index + 1
-    display_df = display_df[['rank', 'country', 'key_factor', 'recommendationScore']]
+
+    # 최종적으로 JSON에 포함할 컬럼들을 선택하고 순서 지정
+    final_columns = ['rank', 'country', 'key_factor', 'recommendationScore', 'ecommerce']
+    display_df = display_df[final_columns]
+    
+    
     
     total_items = len(display_df)
     start_index = (page - 1) * size

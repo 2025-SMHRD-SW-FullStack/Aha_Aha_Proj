@@ -2,17 +2,22 @@ import mysql.connector
 import os
 import json
 
-with open('hscode_map.json', encoding='utf-8') as f:
-    hscode_map = json.load(f)
+try:
+    with open('hscode_map.json', encoding='utf-8') as f:
+        hscode_map = json.load(f)
+except FileNotFoundError:
+    hscode_map = {}
+    print("[WARN] hscode_map.json 파일을 찾을 수 없습니다.")
+
 
 def save_search_result_to_db(item_name: str, result_dict: dict):
     """
-    - 품목명(item_name)과 일치하는 HS코드가 있으면 product_item.code에 자동 저장
-    - 신규 품목이면 code값도 함께 INSERT
-    - result_dict는 기존 로직과 동일
+    - product_sort 테이블에 percent, reason, ecommerce 컬럼으로 저장
     """
     item_name = item_name.strip()
     
+    conn = None
+    cur = None
     try:
         conn = mysql.connector.connect(
             host=os.environ.get("DB_HOST"),
@@ -24,20 +29,18 @@ def save_search_result_to_db(item_name: str, result_dict: dict):
         # 1. product_item에서 품목명 확인
         cur.execute("SELECT id, code FROM product_item WHERE name = %s", (item_name,))
         row = cur.fetchone()
-        hs_code = hscode_map.get(item_name.strip(), '')  # 매핑 없으면 ''(빈값)
+        hs_code = hscode_map.get(item_name.strip(), '')
 
         if row:
             item_id, current_code = row
-            # code가 비어 있으면 자동 업데이트
             if (current_code is None or current_code == '') and hs_code:
                 cur.execute("UPDATE product_item SET code = %s WHERE id = %s", (hs_code, item_id))
                 conn.commit()
         else:
-            # 신규 품목은 code까지 함께 저장
             cur.execute("INSERT INTO product_item (name, code) VALUES (%s, %s)", (item_name, hs_code))
             item_id = cur.lastrowid
 
-        # (이하 product_sort 등 기존 로직과 동일)
+        # 2. product_sort 데이터 준비
         table_data = result_dict.get('tableData', [])
         params = []
         for rec in table_data:
@@ -46,22 +49,25 @@ def save_search_result_to_db(item_name: str, result_dict: dict):
                 item_name,
                 rec['country'],
                 rec['rank'],
-                rec['recommendationScore'],
-                rec['key_factor']
+                rec['recommendationScore'], # 앱에서 사용하는 키
+                rec['key_factor'],          # 앱에서 사용하는 키
+                rec.get('ecommerce')
             ))
 
         if not params:
             print(f"'{item_name}' tableData가 비어있어 저장하지 않음.")
             return
 
+        # 3. product_sort 테이블에 저장 (✨ DB 컬럼명에 맞게 SQL 수정)
         upsert_sql = """
         INSERT INTO product_sort
-            (product_item_id, product_item_name, country, `rank`, percent, reason)
-        VALUES (%s, %s, %s, %s, %s, %s)
+            (product_item_id, product_item_name, country, `rank`, percent, reason, ecommerce)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
         ON DUPLICATE KEY UPDATE
             `rank` = VALUES(`rank`),
             percent = VALUES(percent),
-            reason = VALUES(reason)
+            reason = VALUES(reason),
+            ecommerce = VALUES(ecommerce)
         """
         cur.executemany(upsert_sql, params)
         conn.commit()
@@ -69,11 +75,16 @@ def save_search_result_to_db(item_name: str, result_dict: dict):
     except Exception as e:
         print(f"DB 저장 오류: {e}")
     finally:
-        try: cur.close(); conn.close()
-        except: pass
+        if cur: cur.close()
+        if conn: conn.close()
         
 def get_search_result_from_db(item_name: str):
+    """
+    - product_sort 테이블에서 percent, reason 컬럼으로 조회 후 앱에서 사용하는 키로 매핑
+    """
     item_name = item_name.strip()
+    conn = None
+    cur = None
     try:
         conn = mysql.connector.connect(
             host=os.environ.get("DB_HOST"),
@@ -89,17 +100,24 @@ def get_search_result_from_db(item_name: str):
             return None
         item_id = row["id"]
 
-        # 2) product_sort 결과 모두 읽기
+        # 2) product_sort 결과 모두 읽기 (✨ DB 컬럼명에 맞게 SQL 수정)
         cur.execute(
-            "SELECT percent, reason, country, `rank`"
-            "FROM product_sort WHERE product_item_id = %s ORDER BY `rank` ASC",(item_id,)
+            "SELECT percent, reason, country, `rank`, ecommerce "
+            "FROM product_sort WHERE product_item_id = %s ORDER BY `rank` ASC", (item_id,)
         )
         rows = cur.fetchall()
         if not rows:
             return None
 
+        # 3) 최종 결과 포맷팅 (✨ DB 컬럼을 앱에서 사용하는 키로 매핑)
         tableData = [
-            {"rank": r["rank"], "country": r["country"], "recommendationScore": r["percent"], "key_factor": r["reason"]}
+            {
+                "rank": r["rank"], 
+                "country": r["country"], 
+                "recommendationScore": r["percent"], 
+                "key_factor": r["reason"],
+                "ecommerce": r["ecommerce"]
+            }
             for r in rows
         ]
 
@@ -112,8 +130,9 @@ def get_search_result_from_db(item_name: str):
         print(f"DB 캐시 조회 오류: {e}")
         return None
     finally:
-        try: cur.close(); conn.close()
-        except: pass
+        if cur: cur.close()
+        if conn: conn.close()
+
 
 def add_favorite(user_id: int, product_item_id: int):
     try:
