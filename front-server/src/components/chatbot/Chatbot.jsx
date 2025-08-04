@@ -141,13 +141,22 @@ const Chatbot = () => {
       // if (context?.title) setTitle(context.title);
       // if (context?.content) setContent(context.content);
 
-      if (context?.item) setItem(context.item);
-      if (context?.country) setCountry(context.country);
-      if (context?.platform) setPlatform(context.platform);
-      if (context?.post_title_kr) setTitle(context.post_title_kr);
-      if (context?.post_content_kr) setContent(context.post_content_kr);
-      if (context?.translated_title) setTranslatedTitle(context.translated_title);
-      if (context?.translated_content) setTranslatedContent(context.translated_content);
+      // if (context?.item) setItem(context.item);
+      // if (context?.country) setCountry(context.country);
+      // if (context?.platform) setPlatform(context.platform);
+      // if (context?.post_title_kr) setTitle(context.post_title_kr);
+      // if (context?.post_content_kr) setContent(context.post_content_kr);
+      // if (context?.translated_title) setTranslatedTitle(context.translated_title);
+      // if (context?.translated_content) setTranslatedContent(context.translated_content);
+
+      // [추가] 내려온 context 값이 없으면 이전 상태를 그대로 유지
+      setItem(              context.item             ?? item);
+      setCountry(           context.country          ?? country);
+      setPlatform(          context.platform         ?? platform);
+      setTitle(             context.post_title_kr    ?? title);
+      setContent(           context.post_content_kr  ?? content);
+      setTranslatedTitle(   context.translated_title ?? translatedTitle);
+      setTranslatedContent( context.translated_content ?? translatedContent);
 
       if (newStep === 4) {
         addMessage('bot', '📝 판매글 제목과 내용을 입력해주세요. 예: 제목 | 내용');

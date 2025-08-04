@@ -307,33 +307,29 @@ const ItemDetail = ({itemId}) => {
                                 </td> */}
 
                                 {/* 🆕 추천 이커머스 아이콘 셀 (수직 가운데 정렬) */}
-                                <td
-                                    className={styles.platformCell} /* 🔔 */
-                                    style={{ verticalAlign: 'middle', textAlign: 'center' }}
-                                >
-                                    {/* 기본값: Amazon + Shopee 두 아이콘 간격 추가 */}
-                                    <img 
-                                        src={amazonLogo} 
-                                        alt="Amazon" className={styles.platformIcon} 
-                                        style={{ marginRight: '15px', height:'30px', paddingBottom:'2px' }} 
-                                        onClick={() => navigate('/platform', {
-                                            state: { platform: 'amazon', step: 'amazon_step1' } 
-                                        })}
+                                <td className={styles.platformCell} style={{ verticalAlign: 'middle', textAlign: 'center' }}>
+                                {item.ecommerce === '아마존' && (
+                                    <img
+                                    src={amazonLogo}
+                                    alt="Amazon"
+                                    className={styles.platformIcon}
+                                    style={{ height: '30px', paddingBottom: '2px', cursor: 'pointer' }}
+                                    onClick={() => navigate('/platform', {
+                                        state: { platform: 'amazon', step: 'amazon_step1' }
+                                    })}
                                     />
-                                    <img 
-                                        src={shopeeLogo} 
-                                        alt="Shopee" 
-                                        className={styles.platformIcon}
-                                        onClick={() => navigate('/platform', {
-                                            state: { platform: 'shopee', step: 'shopee_step1' } 
-                                        })}
+                                )}
+                                {item.ecommerce === '쇼피' && (
+                                    <img
+                                    src={shopeeLogo}
+                                    alt="Shopee"
+                                    className={styles.platformIcon}
+                                    style={{ height: '30px', paddingBottom: '2px', cursor: 'pointer' }}
+                                    onClick={() => navigate('/platform', {
+                                        state: { platform: 'shopee', step: 'shopee_step1' }
+                                    })}
                                     />
-                                    {/* 동적 아이콘 렌더링 */}
-                                    {/* {((item.platforms && item.platforms.length) ? item.platforms : ['amazon']).map((plat, i) => {
-                                    if (plat === 'amazon') return <img key={i} src={amazonLogo} alt="Amazon" className={styles.platformIcon} />
-                                    if (plat === 'shopee') return <img key={i} src={shopeeLogo} alt="Shopee" className={styles.platformIcon} />
-                                    return null
-                                    })} */}
+                                )}
                                 </td>
                             </tr>
                         ))}
