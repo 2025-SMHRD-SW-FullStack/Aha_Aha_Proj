@@ -87,20 +87,20 @@ const Chatbot = () => {
       ];
     });
 
+    // 1) Step 5,6 처리
+    if (step === 5) {
+      await handleStep5(input);
+      // setInput('');
+      return;
+    }
+
+    if (step === 6) {
+      handleStep6(input);
+      // setInput('');
+      return;
+    }
     
     try {
-      // 1) Step 5,6 처리
-      if (step === 5) {
-        await handleStep5(input);
-        // setInput('');
-        return;
-      }
-  
-      if (step === 6) {
-        handleStep6(input);
-        // setInput('');
-        return;
-      }
 
       // 2) AI 호출
       const res = await sendChatToBot({ userId, platform, message: input });
@@ -114,8 +114,8 @@ const Chatbot = () => {
 
       // 3) 응답 메시지 배열 준비
       const botMsgs = [];
-      if (Array.isArray(res.messages)) {
-        res.messages.forEach(m => botMsgs.push({ role: m.role, content: m.content, type: m.type }));
+      if (res.messages && Array.isArray(res.messages)) {
+        res.messages.forEach(msg => botMsgs.push({ role: msg.role, content: msg.content, type: msg.type }));
       }
       if (res.response) {
         botMsgs.push({ role: 'bot', content: res.response });
@@ -285,15 +285,10 @@ const Chatbot = () => {
                     </span>
                   </p>
                 ) : (
-                  <Markdown remarkPlugins={[remarkGfm]} components={{
-                      img: ({ node, ...props }) => (
-                        <img
-                          {...props}
-                          style={{ maxWidth: '100%', cursor: 'pointer' }}
-                          onClick={() => setModalImage(props.src)}
-                          alt={props.alt || 'image'}
-                        />
-                      ),
+                  <Markdown 
+                    remarkPlugins={[remarkGfm]} 
+                    components={{
+                      img: () => null, // ✅ 마크다운 내 이미지 태그 무시해서 중복 방지
                     }}
                   >
                     {msg.content}

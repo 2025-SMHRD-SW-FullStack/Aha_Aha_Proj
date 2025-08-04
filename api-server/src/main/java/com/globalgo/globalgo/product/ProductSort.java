@@ -29,4 +29,7 @@ public class ProductSort {
 
     @Column(name="product_item_name")
     private String product_item_name;
+
+    @Column(name = "ecommerce")
+    private String ecommerce;
 }
