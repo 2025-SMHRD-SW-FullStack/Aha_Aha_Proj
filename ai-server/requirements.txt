@@ -8,3 +8,4 @@ PyJWT
 redis
 pymysql
 mysql-connector-python
+chroma_db

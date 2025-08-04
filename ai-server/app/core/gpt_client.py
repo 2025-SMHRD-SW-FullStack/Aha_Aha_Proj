@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-def call_chatgpt(user_id: int, system_prompt: str, user_prompt: str, chat_history: list[dict] = None, force_json: bool = False) -> str:
+def call_chatgpt(user_id: int, system_prompt: str, user_prompt: str, chat_history: list[dict] = None, force_json: bool = False, temperature: float = 0.7) -> str:
     print("🔵 GPT 호출 중...")
 
     # ✅ system 프롬프트를 외부에서 받음
@@ -18,7 +18,7 @@ def call_chatgpt(user_id: int, system_prompt: str, user_prompt: str, chat_histor
         response = client.chat.completions.create(
             model="gpt-4.1",  # 또는 "gpt-4.1"
             messages=messages,
-            temperature=0.7,
+            temperature=temperature,
             max_tokens=2048  # ✅ 혹시 몰라서 길이도 넉넉히 설정
         )
         result = response.choices[0].message.content.strip()

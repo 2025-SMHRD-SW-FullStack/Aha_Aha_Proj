@@ -67,4 +67,13 @@ public class ForeignPost {
                 .build();
     }
 
+    public void update(String title, String content, String img, String url, String platform, String yourPrice) {
+        this.title = title;
+        this.content = content;
+        this.img = img;
+        this.url = url;
+        this.platform = platform;
+        this.yourPrice = yourPrice;
+    }
+
 }

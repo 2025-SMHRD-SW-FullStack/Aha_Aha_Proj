@@ -262,12 +262,14 @@ const Chatbot = () => {
         <strong className={styles.stepBox}>5단계</strong><span className={styles.stepSpanBox}>번역 기능 ex)제목: 비누팝니다 , 내용: 비누팔아요~)</span>
         <strong className={styles.stepBox}>6단계</strong><span className={styles.stepSpanBox}>판매 글 게시(국내/해외/둘다)</span> */}
       </div>
+      
       <div className={styles.chatBody} ref={chatBodyRef}>
         {messages.map((msg, i) => (
           <div key={i} className={`${styles.message} ${styles[msg.role]}`}>
-            {msg.type === 'image' ? (
+            {/* ✅ 이미지 타입이고, content가 유효할 때만 렌더링 */}
+            {msg.type === 'image' && msg.content ? (
               <img
-                src={`${msg.content}`}
+                src={msg.content}
                 alt="slide"
                 className={styles.chatImage}
                 onClick={() => setModalImage(msg.content)}
@@ -306,6 +308,11 @@ const Chatbot = () => {
                         alt={props.alt || 'image'}
                       />
                     ),
+              <>
+                <Markdown
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    img: () => null, // ✅ 마크다운 내 이미지 태그 무시해서 중복 방지
                   }}
                 >
                   {msg.content}
@@ -322,6 +329,7 @@ const Chatbot = () => {
           </div>
         ))}
       </div>
+
 
       <form className={styles.chatFooter} onSubmit={handleSubmit}>
         <textarea

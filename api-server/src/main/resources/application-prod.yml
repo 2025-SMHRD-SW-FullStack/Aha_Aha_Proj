@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://project-db-campus.smhrd.com:3310/campus_25SW_FS_p2_1?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mysql://project-db-campus.smhrd.com:3307/campus_25SW_FS_p2_1?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: campus_25SW_FS_p2_1
     password: ${PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver

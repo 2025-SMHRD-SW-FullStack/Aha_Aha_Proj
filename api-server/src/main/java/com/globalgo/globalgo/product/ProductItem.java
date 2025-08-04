@@ -20,7 +20,7 @@ public class ProductItem {
     private String name;
 
     // HS 코드 (예: "8708", "3304" 등)
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String code;
 
     // 상품 상세 설명 (옵션)
