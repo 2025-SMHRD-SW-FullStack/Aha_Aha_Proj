@@ -3,7 +3,6 @@ from app.core.gpt_client import call_chatgpt  # GPT 호출 분리
 import pandas as pd
 
 def calculate_recommendation_score(df: pd.DataFrame) -> pd.DataFrame:
-    """국가별로 데이터를 집계하고, 2가지 핵심 요소를 기반으로 점수를 계산합니다."""
     if df.empty: return pd.DataFrame()
     agg_rules = {'수출 금액': 'sum', '무역수지': 'sum'}
     country_agg_df = df.groupby('국가').agg(agg_rules).reset_index()
@@ -26,7 +25,7 @@ def generate_report_with_llm(item_name: str, ranked_df: pd.DataFrame) -> dict:
         prompt = f"""
 '{item_name}' 품목의 수출 데이터를 기반으로 각 국가별 핵심 강점을 요약해줘.
 
-다음은 상위 국가들의 수출 데이터입니다:
+다음은 상위 국가들의 수출 데이터야:
 
 {top_countries_str}
 
