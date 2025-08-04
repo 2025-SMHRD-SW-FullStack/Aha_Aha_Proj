@@ -1,5 +1,7 @@
 package com.globalgo.globalgo.post.foreign;
 
+import com.globalgo.globalgo.post.domestic.DomesticPost;
+import com.globalgo.globalgo.post.domestic.dto.DomesticPostRequest;
 import com.globalgo.globalgo.post.foreign.dto.ForeignPostRequest;
 import com.globalgo.globalgo.post.foreign.dto.ForeignPostResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -85,5 +87,45 @@ public class ForeignPostController {
                 .map(ForeignPostResponse::from)
                 .toList();
         return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "해외 게시글 수정", description = "기존 게시글을 수정합니다.")
+    @PatchMapping("/{postId}")
+    public ResponseEntity<String> updatePost(
+            @Parameter(description = "게시글 ID", example = "1")
+            @PathVariable Long postId,
+            @org.springframework.web.bind.annotation.RequestBody
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "수정할 게시글 정보",
+                    required = true,
+                    content = @Content(schema = @Schema(implementation = DomesticPostRequest.class))
+            )
+            ForeignPostRequest request) {
+
+        ForeignPost post = foreignPostRepository.findById(postId).orElseThrow();
+        post.update(
+                request.getTitle(),
+                request.getContent(),
+                request.getImg(),
+                request.getUrl(),
+                request.getPlatform(),
+                request.getYourPrice()
+        );
+        foreignPostRepository.save(post);
+        return ResponseEntity.ok("게시글이 수정되었습니다.");
+    }
+
+    @Operation(summary = "해외 게시글 삭제", description = "게시글 ID로 게시글을 삭제합니다.")
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<String> deletePost(
+            @Parameter(description = "게시글 ID", example = "1")
+            @PathVariable Long postId) {
+
+        if (!foreignPostRepository.existsById(postId)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        foreignPostRepository.deleteById(postId);
+        return ResponseEntity.ok("게시글이 삭제되었습니다.");
     }
 }

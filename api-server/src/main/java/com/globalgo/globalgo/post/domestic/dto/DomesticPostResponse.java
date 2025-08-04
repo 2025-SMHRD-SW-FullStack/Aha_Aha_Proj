@@ -19,8 +19,8 @@ public class DomesticPostResponse {
     private String username;
     private LocalDateTime createdAt;
 
-    public static com.globalgo.globalgo.post.domestic.dto.DomesticPostResponse from(DomesticPost post) {
-        return new com.globalgo.globalgo.post.domestic.dto.DomesticPostResponse(
+    public static DomesticPostResponse from(DomesticPost post) {
+        return new DomesticPostResponse(
                 post.getId(),
                 post.getTitle(),
                 post.getContent(),
