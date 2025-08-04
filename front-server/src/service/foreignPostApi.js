@@ -38,14 +38,20 @@ export async function getMyForeignPosts(userId) {
 }
 
 /**
- * 🆕 해외 게시글 URL 업데이트
- * @param {number} postId
- * @param {{ url: string }} payload
+ * 해외 게시글 부분 수정
+ * @param {number} postId - 수정할 게시글 ID
+ * @param {Partial<{ userId: number; title: string; content: string; img: string; url: string; platform: string; yourPrice: string }>} updatedData
  */
-export async function updateForeignPostById(postId, payload) {
-    const response = await axiosInstance.put(
-    `/api/foreign-post/${postId}`,
-    payload
-);
-return response.data;
+export async function updateForeignPostById(postId, updatedData) {
+    const response = await axiosInstance.patch(`/api/foreign-post/${postId}`, updatedData);
+    return response.data;
+}
+
+/**
+ * 해외 게시글 삭제
+ * @param {number} postId - 삭제할 게시글 ID
+ */
+export async function deleteForeignPostById(postId) {
+    const response = await axiosInstance.delete(`/api/foreign-post/${postId}`);
+    return response.data;
 }

@@ -59,7 +59,7 @@ const Main = () => {
                         <Link to='/exhibition'>
                             <h2>전시관</h2>
                             <p>Amazon과 Shoppe에 등록한 <br />판매 제품들을 보여줍니다.</p>
-                            <img style={{opacity:'0.6'}} src={exhibitionImg} alt="게시판 이미지" />
+                            <img style={{opacity:'0.8'}} src={exhibitionImg} alt="게시판 이미지" />
                         </Link>
                     </div>
 

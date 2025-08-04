@@ -1,6 +1,6 @@
 import React, { createContext, useState } from 'react'
 
-const AmazonFormContext = createContext();
+export const AmazonFormContext = createContext();
 
 export const AmazonFormProvider = ({children}) => {
     const [formData, setFormData] = useState({
@@ -18,7 +18,9 @@ export const AmazonFormProvider = ({children}) => {
 
         // 💲 Offer
         yourPrice: '',              // 💲 판매가
+        yourPriceEn: '',              // 💲 판매가
         listPrice: '',              // 💲 정가
+        listPriceEn: '',              // 💲 정가
         itemCondition: '',          // 🔽 select (new / used)
         maxOrderQty: '',            // 🔢 최대 주문 수량
         fulfillment: '',            // 🔘 radio (fbm / fba)

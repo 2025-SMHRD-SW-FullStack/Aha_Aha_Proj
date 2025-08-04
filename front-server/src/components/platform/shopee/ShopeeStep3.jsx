@@ -27,7 +27,9 @@ const ShopeeStep3 = () => {
                 'images',
                 'imagesEn',
                 'video',
-                'videoEn'
+                'videoEn',
+                'yourPrice',
+                'yourPriceEn'
             ];
     
             // productName, description은 제외하고 ~~En 필드만 번역 대상 수집
@@ -45,6 +47,13 @@ const ShopeeStep3 = () => {
             // 🔄 productName, description은 원본을 따로 포함
             toTranslate.productName = formData.productName;
             toTranslate.description = formData.description;
+
+            // KRW → USD 변환 로직
+            const USD_PER_KRW = 0.00072;
+            const rawPrice = (formData.yourPrice || '').replace(/[^0-9.-]/g, '');
+            const krwValue = Number(rawPrice) || 0;
+            const usdValue = (krwValue * USD_PER_KRW).toFixed(2);
+            updateField('yourPriceEn', usdValue);
     
             const translatedData = await translateApi(toTranslate);
     

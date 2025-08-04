@@ -13,29 +13,41 @@ const ExistingProductForm = () => {
             <h3>📦 Offer</h3>
             <h4>배송, 재고 관리, 판매가 등 판매 관련 필수 정보</h4><br/>
 
-            <div className={styles.userInputBox}>
-                <label className={styles.customLabel}>Your Price:</label>
-                <span className={styles.priceBox}>MXN$</span> 
-                <input className={styles.customInput}
-                    type="text" 
-                    name="yourPrice"
-                    value={formData.yourPrice || ''}
-                    onChange={(e) => updateField('yourPrice', e.target.value)}
-                    placeholder="Ex: 50.00" 
-                /><br/>
-                {/* 복사 버튼 (입력값 복사) */}
-                <div style={{
-                    position: 'absolute',
-                    right: '8px',
-                    top: '60%',
-                    transform: 'translateY(-50%)'
-                    }}>
-                    <CopyButton text={formData.yourPrice} />
+                {/* Offer 섹션 가격 입력 */}
+                <div className={styles.userInputBox}>
+                {/* KRW 입력 필드 */}
+                <label className={styles.customLabel}>Your Price (KRW):</label>
+                <span className={styles.priceBox}>₩</span>
+                <input
+                    className={styles.customInput}
+                    type="text"
+                    value={formData.yourPrice}
+                    onChange={(e) => {
+                        const x = e.target.value;
+                        updateField('yourPrice', x);
+                        if (x === '') updateField('yourPriceEn', '');
+                    }}
+                    placeholder="번역하기 누르면 환산됩니다."
+                />
+                {/* 복사 버튼 */}
+                <div style={{ position: 'absolute', right: '8px', top: '60%', transform: 'translateY(-50%)' }}>
+                    <CopyButton text={formData.yourPriceEn} />
                 </div>
+                <br/>
+
+                {/* USD 환산 결과 (읽기 전용) */}
+                <label className={styles.customLabel}>Converted Price (USD):</label>
+                <span className={styles.priceBox}>$</span>
+                <input
+                    className={styles.customInput}
+                    type="text"
+                    value={formData.yourPriceEn}
+                    readOnly
+                    placeholder=" "
+                />
+                <br/>
             </div>
-            <p className={styles.infoBox}>
-                · 판매 상품의 기준 가격을 입력
-            </p>
+            <p className={styles.infoBox}>· 판매 상품의 기준 가격을 입력</p>
             <br/>
 
             <div className={styles.userInputBox}>

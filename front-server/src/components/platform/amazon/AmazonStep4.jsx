@@ -22,7 +22,11 @@ const AmazonStep4 = () => {
                 'images',
                 'imagesEn',
                 'video',
-                'videoEn'
+                'videoEn',
+                'yourPrice',
+                'yourPriceEn',
+                'listPrice',
+                'listPriceEn'
             ];
     
             // productName, description은 제외하고 ~~En 필드만 번역 대상 수집
@@ -40,6 +44,35 @@ const AmazonStep4 = () => {
             // 🔄 productName, description은 원본을 따로 포함
             toTranslate.productName = formData.productName;
             toTranslate.description = formData.description;
+            // toTranslate.yourPrice = formData.yourPrice;
+            // toTranslate.listPrice = formData.listPrice;
+
+            // [추가]
+            // 가격 환산 로직 추가 : KRW -> USD 계산하여 yourPriceEn에 저장
+            const USD_PER_KRW = 0.00072;
+            // yourPrice 환산
+            // const rawYourPrice = formData.yourPrice || '';
+            // const yourKrw = Number(rawYourPrice.replace(/[^0-9.-]/g, '')) || 0;
+            // const yourUsd = (yourKrw * USD_PER_KRW).toFixed(2);
+            // updateField('yourPriceEn', yourUsd);
+
+            // // listPrice 환산
+            // const rawListPrice = formData.listPrice || '';
+            // const listKrw = Number(rawListPrice.replace(/[^0-9.-]/g, '')) || 0;
+            // const listUsd = (listKrw * USD_PER_KRW).toFixed(2);
+            // updateField('listPriceEn', listUsd);
+
+            // yourPrice 환산
+            const rawYour = formData.yourPrice.replace(/[^0-9.-]/g, '') || '0';
+            const yourUsd = (Number(rawYour) * USD_PER_KRW).toFixed(2);
+            updateField('yourPriceEn', yourUsd);
+
+            // listPrice 환산 (listPrice 값이 있을 때만)
+            if (formData.listPrice) {
+            const rawList = formData.listPrice.replace(/[^0-9.-]/g, '') || '0';
+            const listUsd = (Number(rawList) * USD_PER_KRW).toFixed(2);
+            updateField('listPriceEn', listUsd);
+}
     
             const translatedData = await translateApi(toTranslate);
     
@@ -49,6 +82,11 @@ const AmazonStep4 = () => {
                     updateField('productNameEn', value);
                 } else if (key === 'description') {
                     updateField('descriptionEn', value);
+                // } else if (key === 'yourPrice') {
+                //     // 번역 결과가 numeric string일 경우 yourPriceEn에 저장
+                //     updateField('yourPriceEn', value);
+                // } else if (key === 'listPrice') {
+                //     updateField('listPriceEn', value);
                 } else {
                     updateField(key, value); // brandNameEn 등은 그대로 덮어쓰기
                 }
@@ -106,7 +144,8 @@ const AmazonStep4 = () => {
             <h2>4단계 : 상품 정보 입력</h2>
             <div className={styles.step4InfoBox}>
                 <p>
-                    · 아마존에서 상품 정보를 입력할 때, 기본적으로 <strong>Required Attributes(필수 항목만 보기)</strong>로 되어있어 일부 필드만 표시됩니다.<br/>
+                    · 아마존에서 상품 정보를 입력할 때, 기본적으로 <strong>Required Attributes(필수 항목만 보기)</strong>로 
+                    <div style={{marginLeft:'12px'}}>되어있어 일부 필드만 표시됩니다.</div>
                     · 하지만 실제 등록할 때는 <strong>All Attribute(모든 항목 보기)</strong>로 전환해서 입력하는 것이 좋습니다. <br/>
                     · 해당 설정은 상품 등록 페이지 왼측 메뉴 내 <strong>[Attributes]</strong>를 <strong>[All attributes]</strong>로 선택하면 됩니다.
                 </p>

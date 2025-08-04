@@ -16,6 +16,7 @@ export const ShopeeFormProvider = ({children}) => {
 
         // 💰 ShopeeStep4
         yourPrice: '',              // 💲 가격
+        yourPriceEn: '',              // 💲 가격
         Stock: '',              // 📦 재고
         Name: '',               // 🏷️ 옵션 이름 (예: Color)
         NameEn: '',               // 🏷️ 옵션 이름 (예: Color)

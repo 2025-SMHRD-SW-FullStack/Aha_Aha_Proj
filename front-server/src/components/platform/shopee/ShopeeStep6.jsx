@@ -24,10 +24,16 @@ const ShopeeStep6 = () => {
         console.log("📦 formData 상태:", formData);
 
         // 필수값 확인
-        if (!formData.productName || !formData.description || !formData.yourPrice) {
-            alert("상품명과 상세내용, 상품 가격을 입력해주세요.");
-            return;
+        if ((!formData.productName && !formData.productNameEn) ||
+        (!formData.description && !formData.descriptionEn) ||
+        (!formData.yourPrice && !formData.yourPriceEn)) {
+        alert("상품명과 상세내용, 상품 가격을 입력해주세요.");
+        return;
         }
+        // if (!formData.productName || !formData.description || !formData.yourPrice) {
+        //     alert("상품명과 상세내용, 상품 가격을 입력해주세요.");
+        //     return;
+        // }
 
         // 🧠 sessionStorage에 정보 저장 (DB 연동 대신)
         // const id = Date.now();
@@ -68,7 +74,7 @@ const ShopeeStep6 = () => {
     // API 전송용 공통 데이터
     const commonData = {
         userId: getUserIdFromToken(),                                          // 상세내용
-        yourPrice: formData.yourPrice,  
+        // yourPrice: formData.yourPrice,  
         img: imgData,                                                          // 이미지 URL or 빈 문자열
         url: formData.externalUrl ?? '',                                       // 외부 판매 링크
         platform: 'shopee',                                                    // 플랫폼 구분
@@ -77,6 +83,7 @@ const ShopeeStep6 = () => {
     // 국내 게시판용
     const domesticPost = {
         ...commonData,
+        yourPrice : formData.yourPrice,
         title: formData.productName,
         content: formData.description,
     }
@@ -84,6 +91,7 @@ const ShopeeStep6 = () => {
     // 해외 게시판용
     const foreignPost = {
         ...commonData,
+        yourPrice : formData.yourPriceEn,
         title: formData.productNameEn,
         content: formData.descriptionEn,
     }

@@ -27,7 +27,9 @@ const ShopeeStep4 = () => {
                 'images',
                 'imagesEn',
                 'video',
-                'videoEn'
+                'videoEn',
+                'yourPrice',
+                'yourPriceEn'
             ];
     
             // productName, description은 제외하고 ~~En 필드만 번역 대상 수집
@@ -45,6 +47,13 @@ const ShopeeStep4 = () => {
             // 🔄 productName, description은 원본을 따로 포함
             toTranslate.productName = formData.productName;
             toTranslate.description = formData.description;
+
+            // KRW → USD 변환 로직
+            const USD_PER_KRW = 0.00072;
+            const rawPrice = (formData.yourPrice || '').replace(/[^0-9.-]/g, '');
+            const krwValue = Number(rawPrice) || 0;
+            const usdValue = (krwValue * USD_PER_KRW).toFixed(2);
+            updateField('yourPriceEn', usdValue);
     
             const translatedData = await translateApi(toTranslate);
     
@@ -87,7 +96,8 @@ const ShopeeStep4 = () => {
             <h2>4단계: 판매 정보 입력 (Sales Information)</h2>
             <div className={styles.infoBox}>
                 · 이 단계에서는 기본 가격과 재고를 입력하고, 필요 시 <strong>옵션(Variations)</strong>
-                기능을 활성화하여 색상/사이즈 등 다양한 상품 구성을 설정합니다.
+                기능을 활성화하여 
+                <div style={{marginLeft:'12px'}}>색상/사이즈 등 다양한 상품 구성을 설정합니다.</div>
             </div>
             <br/>
 

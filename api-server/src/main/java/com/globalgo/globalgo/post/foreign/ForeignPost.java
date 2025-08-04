@@ -67,13 +67,30 @@ public class ForeignPost {
                 .build();
     }
 
-    public void update(String title, String content, String img, String url, String platform, String yourPrice) {
-        this.title = title;
-        this.content = content;
-        this.img = img;
-        this.url = url;
-        this.platform = platform;
-        this.yourPrice = yourPrice;
+//    public void update(String title, String content, String img, String url, String platform, String yourPrice) {
+//        this.title = title;
+//        this.content = content;
+//        this.img = img;
+//        this.url = url;
+//        this.platform = platform;
+//        this.yourPrice = yourPrice;
+//    }
+
+    /**
+     * 부분 업데이트용: null인 값은 건너뜁니다.
+     */
+    public void update(String title,
+                       String content,
+                       String img,
+                       String url,
+                       String platform,
+                       String yourPrice) {
+        if (title     != null) this.title      = title;
+        if (content   != null) this.content    = content;
+        if (img       != null) this.img        = img;
+        if (url       != null) this.url        = url;
+        if (platform  != null) this.platform   = platform;
+        if (yourPrice != null) this.yourPrice  = yourPrice;
     }
 
 }

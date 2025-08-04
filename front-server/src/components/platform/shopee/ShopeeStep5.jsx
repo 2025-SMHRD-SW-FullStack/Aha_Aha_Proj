@@ -101,7 +101,8 @@ const ShopeeStep5 = () => {
                 <strong>Shopee 제공 배송 옵션 (SSL)</strong>
                 <div className={styles.sslBox}>
                     · <strong>Shopee Supported Logistics (SSL)</strong>
-                    를 활성화하면 Shopee가 지원하는 배송 파트너 선택 가능<br/>
+                    를 활성화하면 Shopee가 지원하는 배송 파트너 선택 
+                    <div style={{marginLeft:'12px'}}>가능</div>
                     · 배송비는 <strong>무게 또는 부피 무게 중 높은 쪽</strong>
                     을 기준으로 계산됨<br/>
                 </div>

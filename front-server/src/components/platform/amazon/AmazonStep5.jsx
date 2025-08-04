@@ -1,10 +1,10 @@
 import React, { useContext } from 'react'
 import styles from './AmazonStep5.module.css'
-import AmazonFormContext from '/src/provider/AmazonFormContext'
 import { useNavigate } from 'react-router-dom';
 import { getUserIdFromToken } from './../../../util/jwt';
 import { createDomesticPost } from '../../../service/domesticPostApi';
 import { createForeignPost } from '../../../service/foreignPostApi';
+import AmazonFormContext from '../../../provider/AmazonFormContext';
 const AmazonStep5 = () => {
     // useEffect(() => {
     //     console.log("📦 Step5 진입 시 formData 상태:", formData);
@@ -26,7 +26,7 @@ const AmazonStep5 = () => {
 
         if ((!formData.productName && !formData.productNameEn) ||
         (!formData.description && !formData.descriptionEn) ||
-        !formData.yourPrice) {
+        (!formData.yourPrice && !formData.yourPriceEn)) {
         alert("상품명과 상세내용, 상품 가격을 입력해주세요.");
         return;
         }
@@ -73,7 +73,7 @@ const AmazonStep5 = () => {
         // 2) API 전송용 공통 데이터
         const commonData = {
         userId:   getUserIdFromToken(),        // 로그인된 유저 ID
-        yourPrice: formData.yourPrice,         // 가격
+        // yourPrice: formData.yourPrice,         // 가격
         img:      imgData,                     // base64 이미지 (또는 빈 문자열)
         url:      formData.externalUrl ?? '',  // 외부 링크
         platform: 'amazon',                    // 플랫폼
@@ -82,6 +82,7 @@ const AmazonStep5 = () => {
         // 2-1) 국내 게시판용
         const domesticPost = {
             ...commonData,
+            yourPrice : formData.yourPrice,
             title: formData.productName,
             content: formData.description,
         }
@@ -89,6 +90,7 @@ const AmazonStep5 = () => {
         // 2-2) 해외 게시판용
         const foreignPost = {
             ...commonData,
+            yourPrice : formData.yourPriceEn,
             title: formData.productNameEn,
             content: formData.descriptionEn,
         }
@@ -118,8 +120,8 @@ const AmazonStep5 = () => {
             <h4>모든 사항 작성 후 <strong>[Save and finish]</strong> 클릭</h4>
             <br />
             <p className={styles.infoBox}>
-            · 주문 처리 방식으로 FBA를 선택하셨다면, 리스팅 된 상품의 재고를 아마존 주문처리 센터로 보내야 합니다.
-            본 프로세스에 대한 상세 안내는 별도 가이드를 참고해주세요.
+            · 주문 처리 방식으로 FBA를 선택하셨다면, 리스팅 된 상품의 재고를 아마존 주문처리 센터로 
+            <div style={{marginLeft:'12px'}}>보내야 합니다. 본 프로세스에 대한 상세 안내는 별도 가이드를 참고해주세요.</div>
             </p>
             <br />
 

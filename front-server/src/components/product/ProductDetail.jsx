@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './ProductDetail.module.css'
 import defaultImage from '/src/assets/images/imgIcon.png';
 import amazonLogo from '/src/assets/images/amazon_logo.png';
@@ -10,19 +10,25 @@ const ProductDetail = ({product, onBack, region, onSaveUrl}) => {
 
     const title = product.title;
     const content = product.content;
-    const url = product.url;
     
     const priceText = product.price
         ? `${product.price}${isDomestic ? '₩' : '$'}`
         : isDomestic
         ? `1000₩`
         : `10$`;
-
+    
     const platform = product.platform || 'amazon';
+
+    const {url} = product;
 
     // URL 편집 모드 상태
     const [isEditing, setIsEditing] = useState(false)
     const [urlInput, setUrlInput] = useState(url || '')
+
+    // product.url이 바뀔 때마다 urlInput도 초기화
+    useEffect(() => {
+        setUrlInput(url || '');
+    }, [url])
 
     const handleTitleButton = (e) => {
         e.stopPropagation();

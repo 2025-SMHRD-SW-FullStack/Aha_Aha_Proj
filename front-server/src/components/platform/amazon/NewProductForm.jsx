@@ -172,7 +172,8 @@ const NewProductForm = () => {
                 </div>
             </div>
             <div className={styles.infoBox}>
-                · 상품의 비/상표 여부 및 상표권 보유 여부에 따른 상품 등록 권고 절차가 상이하므로 이어지는 페이지를 통해 개별 상세 케이스 필수 참고 <br />
+                · 상품의 비/상표 여부 및 상표권 보유 여부에 따른 상품 등록 권고 절차가 상이하므로 이어지는 
+                <div style={{marginLeft:'13px'}}>페이지를 통해 개별 상세 케이스 필수 참고</div>
                 · 브랜드 레지스트리에 등록한 브랜드 명 입력해야 함 <br />
                 · 브랜드 이름 없으면 <strong>[This product does not have a brand name]</strong> 체크 박스 선택
             </div>
@@ -185,51 +186,75 @@ const NewProductForm = () => {
             <h3>📦 Offer</h3>
             <h4>배송, 재고 관리, 판매가 등 판매 관련 필수 정보</h4><br/>
 
+                {/* Offer 섹션 가격 입력 */}
             <div className={styles.userInputBox}>
-                <label className={styles.customLabel}>Your Price:</label>
-                <span className={styles.priceBox}>USD$</span> 
-                <input className={styles.customInput}
-                    type="text" 
-                    value={formData.yourPrice} 
-                    onChange={(e) => updateField('yourPrice', e.target.value)}
-                    placeholder="Ex: 50.00" 
+                {/* KRW 입력 필드 */}
+                <label className={styles.customLabel}>Your Price (KRW):</label>
+                <span className={styles.priceBox}>₩</span>
+                <input
+                    className={styles.customInput}
+                    type="text"
+                    value={formData.yourPrice}
+                    onChange={(e) => {
+                        const v = e.target.value;
+                        updateField('yourPrice', v);
+                        if (v === '') updateField('yourPriceEn', '');
+                    }}
+                    placeholder="번역하기 누르면 환산됩니다."
+                />
+                {/* 복사 버튼 */}
+                <div style={{ position: 'absolute', right: '8px', top: '60%', transform: 'translateY(-50%)' }}>
+                    <CopyButton text={formData.yourPriceEn} />
+                </div>
+                <br/>
+
+                {/* USD 환산 결과 (읽기 전용) */}
+                <label className={styles.customLabel}>Converted Price (USD):</label>
+                <span className={styles.priceBox}>$</span>
+                <input
+                    className={styles.customInput}
+                    type="text"
+                    value={formData.yourPriceEn}
+                    readOnly
+                    placeholder=" "
                 />
                 <br/>
-                {/* 복사 버튼 (입력값 복사) */}
-                <div style={{
-                    position: 'absolute',
-                    right: '8px',
-                    top: '60%',
-                    transform: 'translateY(-50%)'
-                    }}>
-                    <CopyButton text={formData.yourPrice} />
-                </div>
             </div>
-            <p className={styles.infoBox}>
-                · 판매 상품의 기준 가격을 입력
-            </p>
+            <p className={styles.infoBox}>· 판매 상품의 기준 가격을 입력</p>
             <br/>
 
+            {/* List Price */}
             <div className={styles.userInputBox}>
-                <label className={styles.customLabel}>List Price:</label>
-                <span className={styles.priceBox}>USD$</span> 
-                <input className={styles.customInput}
-                    type="text" 
-                    value={formData.listPrice} 
-                    onChange={(e) => updateField('listPrice', e.target.value)}
-                    placeholder="Ex: 50.00" 
+                <label className={styles.customLabel}>List Price (KRW):</label>
+                <span className={styles.priceBox}>₩</span>
+                <input
+                    className={styles.customInput}
+                    type="text"
+                    value={formData.listPrice}
+                    onChange={(e) => {
+                        const w = e.target.value;
+                        updateField('listPrice', w);
+                        if (w === '') updateField('listPriceEn', '');
+                    }}
+                    placeholder="번역하기 누르면 환산됩니다."
+                />
+                <div style={{ position: 'absolute', right: '8px', top: '60%', transform: 'translateY(-50%)' }}>
+                    <CopyButton text={formData.listPriceEn} />
+                </div>
+                <br/>
+
+                <label className={styles.customLabel}>Converted List Price (USD):</label>
+                <span className={styles.priceBox}>$</span>
+                <input
+                    className={styles.customInput}
+                    type="text"
+                    value={formData.listPriceEn}
+                    readOnly
+                    placeholder=" "
                 />
                 <br/>
-                {/* 복사 버튼 (입력값 복사) */}
-                <div style={{
-                    position: 'absolute',
-                    right: '8px',
-                    top: '60%',
-                    transform: 'translateY(-50%)'
-                    }}>
-                    <CopyButton text={formData.listPrice} />
-                </div>
             </div>
+
             <div className={styles.infoBox}>
                 · 세금을 포함하여 판매 상품의 정가를 입력 <br />
                 <div className={styles.infoColor}>
@@ -474,7 +499,8 @@ const NewProductForm = () => {
             <h3>📄 Compliance</h3>
             <h4>상품에 대한 신뢰도를 제고해볼 수 있는 상품 관련 인증 정보</h4>
             <div className={styles.step4InfoBox}>
-                · 상품 관련 인증 정보의 경우, 판매 카테고리에 따른 종류가 상이하므로, 인증을 요하는 대표 카테고리의 주요 인증 시험/마크 내역을 참고드립니다. <br/>    
+                · 상품 관련 인증 정보의 경우, 판매 카테고리에 따른 종류가 상이하므로, 인증을 요하는 대표 
+                <div style={{marginLeft:'12px'}}>카테고리의 주요 인증 시험/마크 내역을 참고드립니다.  </div>
             </div>
 
             <div className={styles.infoBox}>
@@ -683,7 +709,8 @@ const NewProductForm = () => {
             <h3>🔹 Variations</h3>
             <h4>색상, 패턴, 사이즈와 길이 동일 상품에 대한 상세 옵션 정보</h4><br/>
             <div className={styles.infoBox}>
-                · <strong>[Product Identity] - [Variations]</strong> 속성 값으로 <strong>[YES]</strong>로 체크했다면, <strong>[Variations]</strong> 탭에서 상품의 세부 선택사항 관련 정보를 제공해야 함 <br/>
+                · <strong>[Product Identity] - [Variations]</strong> 속성 값으로 <strong>[YES]</strong>로 체크했다면, <strong>[Variations]</strong> 탭에서 
+                <div style={{marginLeft:'12px'}}>상품의 세부 선택사항 관련 정보를 제공해야 함</div>
                 <p className={styles.infoColor}>
                 ※ 세부 선택사항 항목은 등록 상품의 카테고리에 따라 다르게 제공됩니다. <br/>
                 ※ Variation 등록 방법의 경우 별도 가이드를 통해 참고 부탁드립니다.
@@ -699,7 +726,8 @@ const NewProductForm = () => {
             <h4>상품과 관련된 기타 추가 정보</h4>
 
             <div className={styles.step4InfoBox}>
-                · 상품 관련 기타 상세 정보의 경우, 판매 카테고리에 따른 종류가 상이하므로, 상품 카테고리 별 염두해주셔야 하는 속성값을 아래와 같이 확인드립니다. <br/>    
+                · 상품 관련 기타 상세 정보의 경우, 판매 카테고리에 따른 종류가 상이하므로, 상품 카테고리 별 
+                <div style={{marginLeft:'12px'}}>염두해주셔야 하는 속성값을 아래와 같이 확인드립니다.</div>   
             </div>
 
             <div className={styles.infoBox}>

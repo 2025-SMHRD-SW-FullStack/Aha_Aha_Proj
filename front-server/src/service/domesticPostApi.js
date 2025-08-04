@@ -38,14 +38,21 @@ return response.data;
 }
 
 /**
- * 🆕 국내 게시글 URL 업데이트
- * @param {number} postId
- * @param {{ url: string }} payload
+ * 국내 게시글 수정 (부분 수정)
+ * @param {number} postId - 수정할 게시글 ID
+ * @param {{ userId: number; title: string; content: string; img: string; url: string; platform: string; yourPrice: string }} updatedData
  */
-export async function updateDomesticPostById(postId, payload) {
-    const response = await axiosInstance.put(
-    `/api/domestic-post/${postId}`,
-    payload
-);
-return response.data;
+export async function updateDomesticPostById(postId, updatedData) {
+    const response = await axiosInstance.patch(`/api/domestic-post/${postId}`, updatedData);
+    return response.data;
 }
+
+/**
+ * 국내 게시글 삭제
+ * @param {number} postId - 삭제할 게시글 ID
+ */
+export async function deleteDomesticPostById(postId) {
+    const response = await axiosInstance.delete(`/api/domestic-post/${postId}`);
+    return response.data;
+}
+

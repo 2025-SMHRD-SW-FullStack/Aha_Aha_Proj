@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import ProductDetail from './../../components/product/ProductDetail';
 import Header from '../../components/layouts/Header';
-import { getDomesticPostById, updateDomesticPostById } from '../../service/domesticPostApi';
-import { getForeignPostById, updateForeignPostById } from '../../service/foreignPostApi';
+import { getDomesticPostById, updateDomesticPostById} from '../../service/domesticPostApi';
+import { getForeignPostById, updateForeignPostById} from '../../service/foreignPostApi';
 
 const ProductDetailPage = () => {
     const { id, region } = useParams();
@@ -71,13 +71,12 @@ const ProductDetailPage = () => {
         console.log('🎯 handleSaveUrl – 시도하는 URL:', newUrl);
     
         try {
-            if (region === 'domestic') {
-                await updateDomesticPostById(id, { url: newUrl });
-            } else {
-                await updateForeignPostById(id, { url: newUrl });
-            }
-    
-            setProduct(prev => ({ ...prev, url: newUrl }));
+            // 국내,해외 각각에 PATCH 요청
+            await Promise.all([
+                updateDomesticPostById(id, { url: newUrl }),
+                updateForeignPostById(id, { url: newUrl})
+            ]);
+            setProduct(prev => ({...prev, url: newUrl}));
         } catch (err) {
             console.error('URL 업데이트 실패:', err);
         }
