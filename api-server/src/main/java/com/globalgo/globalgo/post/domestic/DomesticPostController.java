@@ -53,7 +53,7 @@ public class DomesticPostController {
     }
 
     @Operation(summary = "전체 국내 게시글 조회", description = "모든 국내 게시글을 최신순으로 조회합니다.")
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<List<DomesticPostResponse>> getAllPosts() {
         List<DomesticPost> posts = domesticPostRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
         List<DomesticPostResponse> response = posts.stream()

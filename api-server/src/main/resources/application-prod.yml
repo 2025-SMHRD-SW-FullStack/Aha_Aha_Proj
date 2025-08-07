@@ -24,3 +24,10 @@ spring:
   jackson:
     serialization:
       fail-on-empty-beans: false
+  
+  jwt:
+  secret: UqZ7E8G3DpA5OaWTdpFh4wYJmCtVzj9qTnVrpKmci8Ocf+8whKZQLqD1dZpgMq3W
+
+  openai:
+  api-key: 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
+  
